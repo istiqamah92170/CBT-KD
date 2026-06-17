@@ -1,0 +1,3137 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>CBT Kabut Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-arab:20px;
+  --blue-deep:#064E3B; --blue-main:#059669; --blue-mid:#10B981;
+  --blue-light:#D1FAE5; --blue-pale:#ECFDF5;
+  --green:#1B8A4C; --green-light:#E6F7EE;
+  --red:#C0392B; --red-light:#FDECEA;
+  --orange:#D4550A; --orange-light:#FFF3E8;
+  --yellow:#B8860B; --yellow-light:#FFFBEA;
+  --gray-dark:#1E2B3A; --gray-mid:#4A5568; --gray-soft:#8896A5;
+  --gray-line:#DDE3EC; --gray-bg:#F3F6FA; --white:#FFFFFF;
+  --r-sm:6px; --r-md:10px; --r-lg:16px;
+  --sh-sm:0 1px 4px rgba(10,53,102,.08);
+  --sh-md:0 4px 16px rgba(10,53,102,.10);
+  --sh-lg:0 8px 32px rgba(10,53,102,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:var(--gray-dark);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px;}
+
+/* ── ISOLASI LAYAR — satu layar sepenuh lebar, tidak berdampingan ── */
+#portal-screen,
+#portal-cbt-screen,
+#portal-riwayat-screen,
+#portal-detail-screen,
+#portal-profil-screen,
+#portal-backup-screen {
+  width: 100%;
+  max-width: 440px;
+  display: none; /* dikontrol JS */
+}
+.login-wrap   { display: none; } /* dikontrol JS */
+.hasil-wrap   { width: 100%; max-width: 640px; display: none; }
+.exam-wrap    { display: none; width: 100%; max-width: 1120px; gap: 20px; align-items: flex-start; }
+
+/* ── LOGIN ─────────────────────────────────── */
+.login-wrap{width:100%;max-width:440px;margin:40px auto 0;}
+.login-card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-lg);overflow:hidden;}
+.login-head{background:linear-gradient(135deg,#064E3B,#10B981);padding:28px 32px 22px;text-align:center;color:white;}
+.login-head .ico{font-size:44px;display:block;margin-bottom:8px;}
+.login-head h1{font-size:20px;font-weight:800;margin-bottom:4px;}
+.login-head p{font-size:12px;opacity:.8;font-weight:500;}
+.login-body{padding:28px 32px 32px;}
+
+/* ── STATUS BAR ─────────────────────────────── */
+.status-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--r-sm);font-size:12px;font-weight:600;margin-bottom:20px;border:1px solid transparent;transition:all .3s;}
+.status-bar.loading{background:#FFF8E1;border-color:#FFE082;color:var(--yellow);}
+.status-bar.ok{background:var(--green-light);border-color:#A8D5BB;color:var(--green);}
+.status-bar.error{background:var(--red-light);border-color:#F5B7B1;color:var(--red);}
+.status-bar.retry{background:#FFF3E8;border-color:#F5C6A0;color:var(--orange);}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;animation:pulse 1.5s infinite;}
+.status-bar.loading .sdot,.status-bar.retry .sdot{background:var(--yellow);}
+.status-bar.ok .sdot{background:var(--green);animation:none;}
+.status-bar.error .sdot{background:var(--red);animation:none;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── LOADING OVERLAY ── */
+.load-overlay{position:absolute;inset:0;background:rgba(243,246,250,.85);border-radius:var(--r-lg);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.load-overlay.hide{display:none;}
+.spin{width:36px;height:36px;border:3px solid var(--blue-light);border-top-color:var(--blue-mid);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-overlay p{font-size:13px;font-weight:600;color:var(--gray-mid);text-align:center;padding:0 20px;}
+.btn-refresh{margin-top:4px;padding:8px 18px;background:var(--blue-main);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.btn-refresh:hover{opacity:.88;}
+.login-card{position:relative;}
+
+/* ── SUDAH MENGERJAKAN BANNER ── */
+.sudah-banner{background:var(--orange-light);border:1.5px solid #F5C6A0;border-radius:var(--r-md);padding:16px 18px;margin-bottom:20px;display:none;}
+.sudah-banner h4{font-size:14px;font-weight:800;color:var(--orange);margin-bottom:6px;}
+.sudah-banner p{font-size:12px;color:var(--gray-mid);line-height:1.5;margin-bottom:10px;}
+.btn-lihat-hasil{width:100%;padding:11px;background:var(--blue-main);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.btn-lihat-hasil:hover{opacity:.88;}
+
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.fg select,.fg input{width:100%;padding:11px 14px;border:1.5px solid var(--gray-line);border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--gray-dark);background:var(--white);transition:border-color .2s,box-shadow .2s;}
+.fg select:focus,.fg input:focus{outline:none;border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(26,115,232,.15);}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#059669,#10B981);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:opacity .2s,transform .1s;}
+.btn-login:hover{opacity:.92;transform:translateY(-1px);}
+.btn-login:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+
+/* ── EXAM ────────────────────────────────────*/
+.left-panel{flex:1;min-width:0;background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-md);padding:24px;}
+.exam-hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:2px solid var(--blue-light);margin-bottom:20px;}
+.exam-ttl{font-size:16px;font-weight:800;color:var(--blue-deep);}
+.timer{display:flex;align-items:center;gap:6px;background:var(--red);color:white;padding:6px 14px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;transition:background .3s;}
+.timer.warn{background:var(--orange);animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
+
+.soal-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.no-lbl{font-size:18px;font-weight:800;color:var(--blue-deep);}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge.pg_teks{background:var(--blue-light);color:var(--blue-main);border:1px solid #BDD4F5;}
+.badge.pg_gambar{background:#EEF0FF;color:#3730A3;border:1px solid #C7CAF7;}
+.badge.esai{background:var(--orange-light);color:var(--orange);border:1px solid #F5C6A0;}
+.poin-b{margin-left:auto;display:flex;align-items:center;gap:4px;background:var(--yellow-light);color:var(--yellow);border:1px solid #E8D48A;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+
+.box-gambar{background:var(--gray-bg);border:1.5px solid var(--gray-line);border-radius:var(--r-md);margin-bottom:20px;position:relative;overflow:hidden;min-height:160px;}
+.zoom-tb{position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:10;}
+.zoom-tb button{border:none;background:var(--blue-main);color:white;width:34px;height:34px;border-radius:var(--r-sm);cursor:pointer;font-size:14px;font-weight:700;transition:background .2s;}
+.zoom-tb button:hover{background:var(--blue-deep);}
+.img-scroll{overflow:auto;padding:12px;padding-top:48px;touch-action:pan-x pan-y;}
+.img-soal{display:block;width:100%;height:auto;border-radius:var(--r-sm);transform-origin:top left;transition:width .15s;user-select:none;}
+.img-load{padding:40px;text-align:center;color:var(--gray-soft);font-size:13px;}
+
+.box-teks{background:var(--blue-pale);border:1.5px solid var(--blue-light);border-radius:var(--r-md);padding:18px 20px;margin-bottom:14px;font-size:15px;font-weight:500;line-height:1.75;white-space:pre-wrap;word-break:break-word;width:100%;box-sizing:border-box;min-height:80px;}
+.arab-txt{font-size:var(--font-arab);line-height:1.8;font-family:'Scheherazade New','Traditional Arabic','Amiri',serif;}
+.teks-ilustrasi{max-width:100%;border-radius:var(--r-sm);border:1px solid var(--gray-line);display:block;margin:10px 0;}
+
+.options-grid{display:grid;gap:10px;margin-bottom:24px;}
+.btn-opt{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--gray-line);background:var(--white);border-radius:var(--r-md);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:500;color:var(--gray-dark);transition:all .18s;line-height:1.5;text-align:left;}
+.btn-opt:hover{border-color:var(--blue-mid);background:var(--blue-pale);}
+.btn-opt.selected{border-color:var(--blue-main);background:var(--blue-light);color:var(--blue-deep);font-weight:700;box-shadow:0 0 0 3px rgba(26,115,232,.15);}
+.opt-ltr{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--gray-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gray-mid);transition:all .18s;}
+.btn-opt.selected .opt-ltr{background:var(--blue-main);border-color:var(--blue-main);color:white;}
+.opt-img{max-width:100%;max-height:120px;border-radius:var(--r-sm);border:1px solid var(--gray-line);display:block;}
+.opt-content{flex:1;min-width:0;}
+
+/* ── OPSI HORIZONTAL (PG Gambar: A B C D satu baris) ── */
+.options-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:nowrap;}
+.btn-opt-row{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 8px;border:1.5px solid var(--gray-line);background:var(--white);border-radius:var(--r-md);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--gray-dark);transition:all .18s;min-width:0;}
+.btn-opt-row:hover{border-color:var(--blue-mid);background:var(--blue-pale);}
+.btn-opt-row.selected{border-color:var(--blue-main);background:var(--blue-light);color:var(--blue-deep);box-shadow:0 0 0 3px rgba(26,115,232,.15);}
+.btn-opt-row .opt-ltr{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--gray-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gray-mid);transition:all .18s;}
+.btn-opt-row.selected .opt-ltr{background:var(--blue-main);border-color:var(--blue-main);color:white;}
+
+.esai-info{background:var(--orange-light);border:1px solid #F5C6A0;border-radius:var(--r-sm);padding:10px 14px;font-size:12px;color:var(--orange);font-weight:600;margin-bottom:12px;line-height:1.5;}
+.esai-textarea{width:100%;min-height:150px;padding:14px;border:1.5px solid #F5C6A0;border-radius:var(--r-md);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.7;color:var(--gray-dark);background:#FFFDF8;resize:vertical;transition:border-color .2s;}
+.esai-textarea:focus{outline:none;border-color:var(--orange);background:white;}
+.esai-textarea.terisi{border-color:var(--green);background:var(--green-light);}
+.esai-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-soft);margin-top:4px;}
+.kirim-ind{display:flex;align-items:center;gap:4px;}
+.kirim-ind.ok{color:var(--green);} .kirim-ind.sending{color:var(--yellow);} .kirim-ind.err{color:var(--red);}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+.btn-nav{padding:10px 22px;background:var(--gray-dark);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.btn-nav:hover{opacity:.85;}
+.btn-ragu{background:var(--yellow-light);color:var(--yellow);border:1.5px solid #E8D48A;}
+.btn-ragu.aktif{background:#FFDE8A;border-color:var(--yellow);}
+.btn-ragu-hidden{visibility:hidden;}
+
+.right-panel{width:240px;flex-shrink:0;background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-md);padding:20px;position:sticky;top:24px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.right-panel h3{font-size:13px;font-weight:800;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.6px;padding-bottom:10px;border-bottom:1.5px solid var(--gray-line);margin-bottom:12px;}
+.legenda{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.leg-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--gray-mid);}
+.leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.skor-live{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--r-sm);padding:10px;margin-bottom:12px;font-size:11px;color:var(--blue-main);font-weight:600;text-align:center;}
+.grid-nomor{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
+.btn-no{aspect-ratio:1;border:1.5px solid var(--gray-line);background:var(--white);border-radius:var(--r-sm);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:var(--gray-dark);transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.btn-no:hover{border-color:var(--blue-mid);background:var(--blue-pale);}
+.btn-no.aktif{border-color:var(--blue-main);box-shadow:0 0 0 2px rgba(26,115,232,.3);}
+.btn-no.dijawab{background:var(--green);color:white;border-color:var(--green);}
+.btn-no.ragu{background:#FFDE8A;border-color:var(--yellow);color:var(--gray-dark);}
+.btn-no.esai-m{border-left:3px solid var(--orange);}
+.btn-no.esai-m.dijawab{background:var(--green);color:white;}
+.btn-selesai{width:100%;padding:11px;background:linear-gradient(135deg,#B71C1C,var(--red));color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:opacity .2s;}
+.btn-selesai:hover{opacity:.88;}
+
+/* ── HASIL ── */
+.hasil-card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-lg);overflow:hidden;}
+.hasil-head{background:linear-gradient(135deg,#064E3B,#10B981);padding:32px;text-align:center;color:white;}
+.hasil-head h2{font-size:22px;font-weight:800;margin-bottom:6px;}
+.hasil-head p{font-size:14px;opacity:.85;}
+.hasil-body{padding:28px;}
+.skor-box{text-align:center;margin:0 auto 24px;padding:24px;background:linear-gradient(135deg,#064E3B,#10B981);border-radius:var(--r-lg);color:white;}
+.skor-angka{font-size:68px;font-weight:800;line-height:1;letter-spacing:-2px;}
+.skor-sub{font-size:13px;opacity:.8;margin-top:4px;}
+.skor-pred{margin-top:10px;padding:5px 18px;background:rgba(255,255,255,.2);border-radius:20px;font-size:16px;font-weight:700;display:inline-block;}
+.poin-info{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--blue-deep);}
+.esai-note{background:var(--orange-light);border:1px solid #F5C6A0;border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;}
+.esai-note h4{font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px;}
+.esai-note p{font-size:12px;color:var(--gray-mid);line-height:1.5;}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;}
+.stat-c{padding:14px;border-radius:var(--r-md);text-align:center;}
+.stat-c.benar{background:var(--green-light);} .stat-c.salah{background:var(--red-light);}
+.stat-c.ragu{background:var(--yellow-light);} .stat-c.esai{background:var(--orange-light);}
+.stat-num{font-size:30px;font-weight:800;}
+.stat-c.benar .stat-num{color:var(--green);} .stat-c.salah .stat-num{color:var(--red);}
+.stat-c.ragu .stat-num{color:var(--yellow);} .stat-c.esai .stat-num{color:var(--orange);}
+.stat-lbl{font-size:12px;color:var(--gray-mid);margin-top:2px;}
+.aksi-col{display:flex;flex-direction:column;gap:10px;}
+.btn-aksi{width:100%;padding:14px;border:none;border-radius:var(--r-md);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .1s;}
+.btn-aksi:hover{opacity:.9;transform:translateY(-1px);}
+.btn-aksi.analisis{background:var(--gray-soft);color:white;cursor:not-allowed;opacity:.7;}.btn-aksi.analisis.buka{background:var(--blue-main);color:white;cursor:pointer;opacity:1;}
+
+/* ── SPLIT SCREEN LOCK OVERLAY ── */
+#split-lock-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#064E3B,#1a1a2e);
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;text-align:center;
+}
+#split-lock-overlay.aktif{display:flex;}
+.split-lock-ikon{font-size:64px;margin-bottom:20px;animation:spin-slow 3s linear infinite;}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
+.split-lock-judul{font-size:20px;font-weight:800;color:#ffffff;margin-bottom:12px;line-height:1.3;}
+.split-lock-pesan{font-size:14px;color:rgba(255,255,255,.75);line-height:1.7;max-width:320px;margin-bottom:28px;}
+.split-lock-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);
+  border-radius:24px;padding:10px 20px;
+  font-size:13px;font-weight:700;color:#10B981;
+  animation:pulse-badge 1.8s ease-in-out infinite;
+}
+@keyframes pulse-badge{0%,100%{opacity:1}50%{opacity:.5}}
+.split-lock-dot{width:10px;height:10px;border-radius:50%;background:#10B981;}
+
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(10,20,40,.65);z-index:999;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.aktif{display:flex;}
+.modal-box{background:var(--white);border-radius:var(--r-lg);padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg);}
+.modal-wide{max-width:780px;}
+.modal-box h3{font-size:18px;font-weight:800;padding-bottom:12px;border-bottom:1.5px solid var(--gray-line);margin-bottom:16px;}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.sum-c{text-align:center;padding:12px 8px;border-radius:var(--r-md);}
+.sum-c.t{background:var(--blue-pale);} .sum-c.d{background:var(--green-light);} .sum-c.b{background:var(--yellow-light);}
+.sum-num{font-size:26px;font-weight:800;}
+.sum-c.t .sum-num{color:var(--blue-main);} .sum-c.d .sum-num{color:var(--green);} .sum-c.b .sum-num{color:var(--yellow);}
+.sum-lbl{font-size:11px;color:var(--gray-soft);margin-top:2px;}
+.warn{border-radius:var(--r-sm);padding:12px 14px;margin-bottom:10px;font-size:12px;line-height:1.5;}
+.warn.ragu{background:var(--yellow-light);border:1px solid #E8D48A;color:var(--yellow);}
+.warn.belum{background:var(--red-light);border:1px solid #F5B7B1;color:var(--red);}
+.warn.esai{background:var(--orange-light);border:1px solid #F5C6A0;color:var(--orange);}
+.pill-wrap{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.pill{padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;}
+.pill.r{background:#FFE082;color:#6B4C00;} .pill.b{background:#EF9A9A;color:#7B1111;} .pill.e{background:#FFCC80;color:#7B3200;}
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--gray-bg);border-radius:var(--r-sm);border:1px solid var(--gray-line);margin:16px 0;cursor:pointer;}
+.chk-row input{width:16px;height:16px;margin-top:2px;flex-shrink:0;}
+.chk-row span{font-size:13px;color:var(--gray-mid);line-height:1.5;}
+.konfirm-btns{display:flex;gap:8px;}
+.btn-batal{flex:1;padding:12px;background:var(--gray-bg);color:var(--gray-dark);border:1.5px solid var(--gray-line);border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.btn-batal:hover{background:var(--gray-line);}
+.btn-yakin{flex:2;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.btn-yakin:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── ANALISIS ── */
+.ana-list{display:flex;flex-direction:column;gap:12px;}
+.ana-item{border:1.5px solid var(--gray-line);border-radius:var(--r-md);overflow:hidden;}
+.ana-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;}
+.ana-head.benar{background:var(--green-light);} .ana-head.salah{background:var(--red-light);}
+.ana-head.kosong{background:var(--gray-bg);} .ana-head.esai-p{background:var(--orange-light);}
+.ana-no{font-size:14px;font-weight:800;}
+.ana-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;}
+.ana-badge.benar{background:var(--green);color:white;} .ana-badge.salah{background:var(--red);color:white;}
+.ana-badge.kosong{background:var(--gray-soft);color:white;} .ana-badge.esai-p{background:var(--orange);color:white;}
+.ana-teks{padding:12px 14px;background:var(--blue-pale);font-size:13px;line-height:1.6;border-top:1px solid var(--blue-light);white-space:pre-wrap;word-break:break-word;}
+.ana-img{padding:10px 14px;background:var(--gray-bg);border-top:1px solid var(--gray-line);}
+.ana-img img{max-width:100%;border-radius:var(--r-sm);}
+.ana-opsi{padding:10px 14px;border-top:1px solid var(--gray-line);background:var(--white);}
+.ana-opsi-ttl{font-size:11px;font-weight:700;color:var(--gray-soft);margin-bottom:6px;text-transform:uppercase;}
+.opsi-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;}
+.opsi-row.kunci{font-weight:700;color:var(--green);}
+.opsi-row.salah-mark{color:var(--red);text-decoration:line-through;opacity:.7;}
+.opsi-ltr{width:30px;height:30px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:var(--gray-bg);color:var(--gray-mid);border:1.5px solid var(--gray-line);}
+.opsi-row.kunci .opsi-ltr{background:var(--green);color:white;border-color:var(--green);}
+.opsi-row.salah-mark .opsi-ltr{background:var(--red-light);color:var(--red);border-color:var(--red);}
+.opsi-img-sm{max-height:60px;border-radius:4px;border:1px solid var(--gray-line);}
+.kunci-bar{padding:10px 14px;background:var(--blue-pale);border-top:1px solid var(--blue-light);font-size:13px;font-weight:700;color:var(--blue-main);}
+.pemb-bar{padding:12px 14px;background:var(--green-light);border-top:1px solid #A8D5BB;font-size:13px;color:var(--gray-dark);line-height:1.6;}
+.pemb-bar strong{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;display:block;margin-bottom:4px;}
+.rubrik-bar{padding:10px 14px;background:#E8F4FF;border-top:1px solid #B3D4F5;font-size:12px;color:var(--blue-main);}
+.esai-ans{padding:12px 14px;background:#FFFDF5;border-top:1px solid #FFE082;font-size:13px;}
+.esai-ans strong{color:var(--orange);display:block;margin-bottom:4px;}
+.esai-ans .teks{padding:10px;background:white;border:1px solid #FFE082;border-radius:var(--r-sm);line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.poin-bar{padding:6px 14px;background:var(--yellow-light);border-top:1px solid #E8D48A;font-size:11px;font-weight:700;color:var(--yellow);}
+.btn-tutup{width:100%;padding:12px;margin-top:8px;background:var(--gray-bg);color:var(--gray-dark);border:1.5px solid var(--gray-line);border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+.btn-tutup:hover{background:var(--gray-line);}
+
+/* ── PRINT PDF PEMBAHASAN ── */
+.btn-print-analisis{width:100%;padding:12px;margin-top:0;margin-bottom:10px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-print-analisis:hover{opacity:.88;}
+
+
+/* ── RESET GURU TOKEN ── */
+.reset-guru{margin-top:12px;text-align:center;}
+.reset-guru a{font-size:11px;color:var(--gray-soft);cursor:pointer;text-decoration:underline;}
+.reset-guru a:hover{color:var(--blue-mid);}
+
+@media(max-width:768px){
+  .exam-wrap{flex-direction:column;}
+  .right-panel{width:100%;position:static;max-height:none;}
+  .grid-nomor{grid-template-columns:repeat(6,1fr);}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PORTAL SISWA — CSS
+   Semua class menggunakan prefix .p- untuk hindari konflik CBT
+   ═══════════════════════════════════════════════════════════ */
+.p-wrap{width:100%;max-width:440px;margin:0 auto;padding:16px 0 48px;}
+
+/* ── Header portal ── */
+.p-header{background:linear-gradient(135deg,#064E3B 0%,#059669 60%,#10B981 100%);
+  border-radius:var(--r-lg);padding:24px 24px 20px;color:white;margin-bottom:16px;
+  box-shadow:var(--sh-lg);position:relative;overflow:hidden;}
+.p-header::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;
+  border-radius:50%;background:rgba(255,255,255,.07);}
+.p-header::after{content:'';position:absolute;bottom:-20px;left:-10px;width:80px;height:80px;
+  border-radius:50%;background:rgba(255,255,255,.05);}
+.p-header-top{display:flex;align-items:center;gap:14px;margin-bottom:16px;position:relative;z-index:1;}
+.p-logo{font-size:38px;flex-shrink:0;}
+.p-brand h1{font-size:18px;font-weight:800;margin:0 0 2px;}
+.p-brand p{font-size:11px;opacity:.75;margin:0;}
+.p-profil-aktif{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:var(--r-md);padding:10px 14px;display:flex;align-items:center;gap:10px;
+  position:relative;z-index:1;}
+.p-profil-aktif .avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
+  flex-shrink:0;}
+.p-profil-aktif .info{flex:1;min-width:0;}
+.p-profil-aktif .info .label{font-size:10px;opacity:.7;font-weight:600;text-transform:uppercase;
+  letter-spacing:.5px;}
+.p-profil-aktif .info .nama{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;}
+.p-profil-aktif .info .no-profil{font-size:11px;opacity:.6;font-style:italic;}
+.p-profil-ganti{font-size:10px;background:rgba(255,255,255,.2);border:none;color:white;
+  border-radius:20px;padding:4px 10px;cursor:pointer;font-weight:600;flex-shrink:0;}
+
+/* ── Menu grid ── */
+.p-menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.p-menu-item{background:var(--white);border-radius:var(--r-md);padding:16px 14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  box-shadow:var(--sh-sm);cursor:pointer;border:1.5px solid var(--gray-line);
+  transition:all .2s;text-align:center;user-select:none;}
+.p-menu-item:active{transform:scale(.97);}
+.p-menu-item.primary{background:linear-gradient(135deg,#064E3B,#059669);color:white;
+  border-color:transparent;box-shadow:var(--sh-md);grid-column:1/-1;}
+.p-menu-item .ico{font-size:28px;line-height:1;}
+.p-menu-item.primary .ico{font-size:32px;}
+.p-menu-item .lbl{font-size:12px;font-weight:700;color:var(--gray-dark);}
+.p-menu-item.primary .lbl{font-size:14px;color:white;}
+.p-menu-item .sub{font-size:10px;color:var(--gray-soft);}
+.p-menu-item.primary .sub{color:rgba(255,255,255,.75);}
+
+/* ── Card generic ── */
+.p-card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-md);overflow:hidden;margin-bottom:12px;}
+.p-card-head{background:linear-gradient(135deg,#064E3B,#10B981);padding:18px 20px 14px;color:white;}
+.p-card-head h2{font-size:16px;font-weight:800;margin:0 0 2px;}
+.p-card-head p{font-size:11px;opacity:.75;margin:0;}
+.p-card-body{padding:20px;}
+
+/* ── Tombol portal ── */
+.p-btn{width:100%;padding:13px;border:none;border-radius:var(--r-md);font-size:14px;
+  font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:8px;}
+.p-btn:last-child{margin-bottom:0;}
+.p-btn.primary{background:linear-gradient(135deg,#064E3B,#059669);color:white;box-shadow:var(--sh-sm);}
+.p-btn.secondary{background:var(--gray-bg);color:var(--gray-dark);border:1.5px solid var(--gray-line);}
+.p-btn.danger{background:var(--red-light);color:var(--red);border:1.5px solid #F5B7B1;}
+.p-btn.warning{background:var(--orange-light);color:var(--orange);border:1.5px solid #F5C6A0;}
+.p-btn:disabled{opacity:.5;cursor:not-allowed;}
+.p-btn:active:not(:disabled){transform:scale(.98);}
+
+/* ── Form portal ── */
+.p-fg{margin-bottom:14px;}
+.p-fg label{display:block;font-size:12px;font-weight:700;color:var(--gray-mid);margin-bottom:6px;
+  text-transform:uppercase;letter-spacing:.4px;}
+.p-fg input,.p-fg select{width:100%;padding:11px 14px;border:1.5px solid var(--gray-line);
+  border-radius:var(--r-sm);font-size:14px;font-family:inherit;outline:none;
+  background:var(--white);transition:border-color .2s;}
+.p-fg input:focus,.p-fg select:focus{border-color:var(--blue-main);}
+
+/* ── Autocomplete dropdown ── */
+.p-autocomplete{position:relative;}
+.p-ac-list{position:absolute;top:100%;left:0;right:0;background:var(--white);
+  border:1.5px solid var(--blue-main);border-top:none;border-radius:0 0 var(--r-sm) var(--r-sm);
+  z-index:100;max-height:160px;overflow-y:auto;box-shadow:var(--sh-md);}
+.p-ac-item{padding:10px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--gray-line);}
+.p-ac-item:last-child{border-bottom:none;}
+.p-ac-item:hover,.p-ac-item.aktif{background:var(--blue-pale);color:var(--blue-main);font-weight:600;}
+
+/* ── Back button ── */
+.p-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;
+  color:var(--blue-main);cursor:pointer;margin-bottom:14px;background:none;border:none;
+  padding:0;font-family:inherit;}
+.p-back:hover{opacity:.75;}
+
+/* ── Riwayat list ── */
+.p-riwayat-list{display:flex;flex-direction:column;gap:10px;}
+.p-riwayat-item{background:var(--white);border:1.5px solid var(--gray-line);border-radius:var(--r-md);
+  padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:all .2s;box-shadow:var(--sh-sm);}
+.p-riwayat-item:active{transform:scale(.98);}
+.p-riwayat-item .r-nilai{width:52px;height:52px;border-radius:var(--r-sm);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;}
+.p-riwayat-item .r-nilai.A{background:var(--green-light);color:var(--green);}
+.p-riwayat-item .r-nilai.B{background:var(--blue-pale);color:var(--blue-main);}
+.p-riwayat-item .r-nilai.C{background:var(--yellow-light);color:var(--yellow);}
+.p-riwayat-item .r-nilai.D,.p-riwayat-item .r-nilai.E{background:var(--red-light);color:var(--red);}
+.p-riwayat-item .r-info{flex:1;min-width:0;}
+.p-riwayat-item .r-judul{font-size:14px;font-weight:700;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-riwayat-item .r-meta{font-size:11px;color:var(--gray-soft);}
+.p-riwayat-item .r-arrow{font-size:18px;color:var(--gray-soft);}
+.p-riwayat-kosong{text-align:center;padding:40px 20px;color:var(--gray-soft);}
+.p-riwayat-kosong .ico{font-size:40px;display:block;margin-bottom:10px;}
+
+/* ── Profil list ── */
+.p-profil-list{display:flex;flex-direction:column;gap:8px;}
+.p-profil-item{background:var(--white);border:1.5px solid var(--gray-line);border-radius:var(--r-md);
+  padding:12px 14px;display:flex;align-items:center;gap:12px;transition:all .2s;}
+.p-profil-item.aktif-profil{border-color:var(--blue-main);background:var(--blue-pale);}
+.p-profil-item .p-av{width:38px;height:38px;border-radius:50%;background:var(--blue-light);
+  display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;
+  color:var(--blue-main);flex-shrink:0;}
+.p-profil-item.aktif-profil .p-av{background:var(--blue-main);color:white;}
+.p-profil-item .p-info{flex:1;min-width:0;}
+.p-profil-item .p-pnama{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-profil-item .p-pbadge{font-size:10px;font-weight:700;color:var(--blue-main);
+  background:var(--blue-pale);padding:1px 7px;border-radius:8px;margin-top:2px;display:inline-block;}
+.p-profil-aksi{display:flex;gap:6px;}
+.p-profil-aksi button{padding:5px 10px;font-size:11px;font-weight:700;border-radius:6px;
+  border:1px solid var(--gray-line);background:var(--gray-bg);cursor:pointer;font-family:inherit;}
+.p-profil-aksi .pilih{background:var(--blue-main);color:white;border-color:var(--blue-main);}
+.p-profil-aksi .hapus{background:var(--red-light);color:var(--red);border-color:#F5B7B1;}
+
+/* ── Modal portal ── */
+.p-modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;
+  align-items:center;justify-content:center;padding:20px;}
+.p-modal-ov.aktif{display:flex;}
+.p-modal-box{background:var(--white);border-radius:var(--r-lg);padding:24px;width:100%;
+  max-width:380px;box-shadow:var(--sh-lg);}
+.p-modal-box h3{font-size:16px;font-weight:800;margin:0 0 6px;}
+.p-modal-box p{font-size:13px;color:var(--gray-mid);margin:0 0 16px;line-height:1.6;}
+.p-modal-btns{display:flex;gap:8px;margin-top:16px;}
+.p-modal-btns button{flex:1;padding:11px;border:none;border-radius:var(--r-sm);font-size:13px;
+  font-weight:700;cursor:pointer;font-family:inherit;}
+.p-modal-btns .batal{background:var(--gray-bg);color:var(--gray-dark);border:1.5px solid var(--gray-line);}
+.p-modal-btns .ya{background:var(--blue-main);color:white;}
+.p-modal-btns .ya.merah{background:var(--red);}
+
+/* ── Kode CBT screen ── */
+.p-kode-hint{font-size:12px;color:var(--gray-soft);line-height:1.6;margin-top:4px;}
+.p-profil-pilih-aktif{background:var(--blue-pale);border:1.5px solid var(--blue-main);
+  border-radius:var(--r-md);padding:10px 14px;display:flex;align-items:center;gap:10px;
+  margin-bottom:16px;}
+.p-profil-pilih-aktif .av{width:32px;height:32px;border-radius:50%;background:var(--blue-main);
+  color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
+.p-profil-pilih-aktif .info{flex:1;}
+.p-profil-pilih-aktif .info .nm{font-size:13px;font-weight:700;}
+.p-profil-pilih-aktif .info .sub{font-size:11px;color:var(--gray-soft);}
+
+/* ── Backup screen ── */
+.p-backup-info{background:var(--blue-pale);border:1.5px solid var(--blue-light);
+  border-radius:var(--r-md);padding:12px 14px;font-size:12px;color:var(--blue-main);
+  margin-bottom:16px;line-height:1.7;}
+.p-backup-info strong{font-weight:800;}
+
+/* ── Iklan / Promosi (slot) ── */
+.p-ad-slot{display:none;background:var(--gray-bg);border:1.5px dashed var(--gray-line);
+  border-radius:var(--r-md);padding:16px;text-align:center;color:var(--gray-soft);
+  font-size:12px;margin-bottom:12px;}
+.p-ad-slot.aktif{display:block;}
+
+/* ── Version badge ── */
+.p-version{text-align:center;font-size:10px;color:var(--gray-soft);margin-top:8px;letter-spacing:.5px;}
+</style>
+<meta name="description" content="Cbt bagus idaman guru dan murid"><meta name="theme-color" content="#2c8f2e"><link rel="manifest" href="./manifest.json"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="CBT Kabut Digital"><link rel="apple-touch-icon" href="./icons/icon-192.png"></head>
+<body><div id="_pwa_banner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2c8f2e;color:#fff;padding:14px 20px;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.25);z-index:99999;font-family:system-ui,sans-serif;font-size:14px;align-items:center;gap:12px;max-width:calc(100vw - 32px)"><span>📲 Instal CBT Kabut Digital</span><button onclick="_pwaInstall()" style="background:#fff;color:#2c8f2e;border:none;padding:7px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px">Instal</button><button onclick="this.parentElement.style.display='none'" style="background:rgba(255,255,255,.25);color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer">✕</button></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PORTAL SISWA — HTML
+     ═══════════════════════════════════════════════════════════ -->
+
+<!-- ── BERANDA PORTAL ── -->
+<div id="portal-screen" style="display:none;">
+  <div class="p-wrap">
+
+    <!-- IKLAN / PROMOSI — Slot Beranda (non-ujian) -->
+    <div class="p-ad-slot" id="ad-slot-home">📢 Slot Iklan / Promosi — Beranda</div>
+
+    <div class="p-header">
+      <div class="p-header-top">
+        <div class="p-logo">🎓</div>
+        <div class="p-brand">
+          <h1>CBT OMI</h1>
+          <p>Portal Siswa · Kabut Digital</p>
+        </div>
+      </div>
+      <!-- Profil Aktif -->
+      <div class="p-profil-aktif" id="p-header-profil">
+        <div class="avatar" id="p-header-av">?</div>
+        <div class="info">
+          <div class="label">Profil Aktif</div>
+          <div class="nama" id="p-header-nama">Belum ada profil</div>
+          <div class="no-profil" id="p-header-sub"></div>
+        </div>
+        <button class="p-profil-ganti" onclick="pTampil('portal-profil-screen')">Ganti</button>
+      </div>
+    </div>
+
+    <!-- Menu Utama -->
+    <div class="p-menu">
+      <div class="p-menu-item primary" onclick="pTampilMasukUjian()">
+        <div class="ico">🚀</div>
+        <div class="lbl">Masuk Ujian</div>
+        <div class="sub">Ikuti tes CBT sekarang</div>
+      </div>
+      <div class="p-menu-item" onclick="pTampil('portal-riwayat-screen');pMuatRiwayat()">
+        <div class="ico">📚</div>
+        <div class="lbl">Riwayat Ujian</div>
+        <div class="sub" id="p-riwayat-badge">-- ujian tersimpan</div>
+      </div>
+      <div class="p-menu-item" onclick="pTampil('portal-profil-screen')">
+        <div class="ico">👥</div>
+        <div class="lbl">Kelola Profil</div>
+        <div class="sub">Tambah / ubah / hapus</div>
+      </div>
+      <div class="p-menu-item" onclick="pTampil('portal-backup-screen')">
+        <div class="ico">💾</div>
+        <div class="lbl">Backup &amp; Pemulihan</div>
+        <div class="sub">Ekspor &amp; impor data</div>
+      </div>
+    </div>
+
+    <div class="p-version">CBT Kabut Digital · v7.1.0 · Portal Siswa</div>
+  </div>
+</div>
+
+<!-- ── MASUK UJIAN — Input Kode CBT ── -->
+<div id="portal-cbt-screen" style="display:none;">
+  <div class="p-wrap">
+    <button class="p-back" onclick="pTampil('portal-screen')">← Kembali</button>
+    <div class="p-card">
+      <div class="p-card-head">
+        <h2>🚀 Masuk Ujian</h2>
+        <p>Masukkan kode atau URL CBT dari guru</p>
+      </div>
+      <div class="p-card-body">
+
+        <!-- Profil yang akan digunakan -->
+        <div class="p-profil-pilih-aktif" id="p-cbt-profil-box">
+          <div class="av" id="p-cbt-av">?</div>
+          <div class="info">
+            <div class="nm" id="p-cbt-nama">Belum ada profil</div>
+            <div class="sub">Profil aktif yang akan digunakan</div>
+          </div>
+        </div>
+
+        <div class="p-fg">
+          <label>Kode CBT / URL Google Apps Script</label>
+          <input type="text" id="p-inp-kode" placeholder="Contoh: IPA-VII-2026 atau URL GAS..." oninput="pKodeInput(this.value)">
+          <div class="p-kode-hint" id="p-kode-hint"></div>
+        </div>
+
+        <button class="p-btn primary" onclick="pValidasiKode()" id="p-btn-lanjut" disabled="">
+          Lanjut →
+        </button>
+        <button class="p-btn secondary" onclick="pTampil('portal-screen')">Batal</button>
+
+        <!-- Pilihan kelas (Premium — hidden by default) -->
+        <div id="p-premium-pilihan" style="display:none;margin-top:16px;">
+          <div class="p-fg">
+            <label>Pilih Kelas</label>
+            <select id="p-sel-kelas">
+              <option value="">-- Pilih Kelas --</option>
+              <option value="VII">Kelas VII</option>
+              <option value="VIII">Kelas VIII</option>
+              <option value="IX">Kelas IX</option>
+            </select>
+          </div>
+          <button class="p-btn primary" onclick="pMasukCBT()">Mulai Ujian →</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIWAYAT UJIAN ── -->
+<div id="portal-riwayat-screen" style="display:none;">
+  <div class="p-wrap">
+    <button class="p-back" onclick="pTampil('portal-screen')">← Kembali</button>
+
+    <!-- IKLAN / PROMOSI — Slot Riwayat (non-ujian) -->
+    <div class="p-ad-slot" id="ad-slot-riwayat">📢 Slot Iklan / Promosi — Riwayat</div>
+
+    <div class="p-card">
+      <div class="p-card-head">
+        <h2>📚 Riwayat Ujian</h2>
+        <p>Hasil ujian yang tersimpan di perangkat ini</p>
+      </div>
+      <div class="p-card-body">
+        <div class="p-riwayat-list" id="p-riwayat-list">
+          <div class="p-riwayat-kosong"><span class="ico">📭</span>Belum ada riwayat ujian.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DETAIL RIWAYAT ── -->
+<div id="portal-detail-screen" style="display:none;">
+  <div class="p-wrap">
+    <button class="p-back" onclick="pTampil('portal-riwayat-screen');pMuatRiwayat()">← Riwayat</button>
+
+    <!-- IKLAN / PROMOSI — Slot Detail Riwayat (non-ujian) -->
+    <div class="p-ad-slot" id="ad-slot-detail">📢 Slot Iklan / Promosi</div>
+
+    <div class="p-card" id="p-detail-card">
+      <div class="p-card-head" id="p-detail-head">
+        <h2 id="p-det-judul">--</h2>
+        <p id="p-det-tgl">--</p>
+      </div>
+      <div class="p-card-body">
+        <div class="skor-box" style="text-align:center;padding:20px 0 16px;">
+          <div class="skor-angka" id="p-det-nilai">--</div>
+          <div class="skor-pred" id="p-det-pred">--</div>
+        </div>
+        <div class="stat-grid" id="p-det-stat" style="margin-bottom:16px;"></div>
+        <div id="p-det-info" style="font-size:12px;color:var(--gray-soft);margin-bottom:16px;line-height:1.7;"></div>
+        <button class="p-btn primary" id="p-btn-buka-pemb" onclick="pBukaAnalisisRiwayat()">
+          📖 Lihat Pembahasan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── KELOLA PROFIL ── -->
+<div id="portal-profil-screen" style="display:none;">
+  <div class="p-wrap">
+    <button class="p-back" onclick="pTampil('portal-screen')">← Kembali</button>
+    <div class="p-card">
+      <div class="p-card-head">
+        <h2>👥 Kelola Profil</h2>
+        <p>Profil tersimpan di perangkat ini</p>
+      </div>
+      <div class="p-card-body">
+        <!-- Tambah profil -->
+        <div class="p-fg">
+          <label>Tambah / Edit Nama Profil</label>
+          <div class="p-autocomplete">
+            <input type="text" id="p-inp-profil" placeholder="Ketik nama lengkap..." oninput="pAcInput(this.value)" autocomplete="off">
+            <div class="p-ac-list" id="p-ac-list" style="display:none;"></div>
+          </div>
+        </div>
+        <button class="p-btn primary" onclick="pSimpanProfil()">💾 Simpan Profil</button>
+
+        <hr style="border:none;border-top:1px solid var(--gray-line);margin:16px 0;">
+
+        <!-- Daftar profil -->
+        <div style="font-size:11px;font-weight:700;color:var(--gray-soft);text-transform:uppercase;
+          letter-spacing:.5px;margin-bottom:10px;">Profil Tersimpan</div>
+        <div class="p-profil-list" id="p-profil-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BACKUP & PEMULIHAN ── -->
+<div id="portal-backup-screen" style="display:none;">
+  <div class="p-wrap">
+    <button class="p-back" onclick="pTampil('portal-screen')">← Kembali</button>
+    <div class="p-card">
+      <div class="p-card-head">
+        <h2>💾 Backup &amp; Pemulihan</h2>
+        <p>Data tersimpan di perangkat — kendali penuh di tangan Anda</p>
+      </div>
+      <div class="p-card-body">
+        <div class="p-backup-info" id="p-backup-info">Menghitung data...</div>
+        <button class="p-btn primary" onclick="pEkspor()">📤 Ekspor Backup</button>
+        <button class="p-btn secondary" onclick="pImpor()">📥 Impor Backup</button>
+        <input type="file" id="p-file-impor" accept=".json" style="display:none;" onchange="pFileImpor(this)">
+
+        <hr style="border:none;border-top:1px solid var(--gray-line);margin:16px 0;">
+
+        <button class="p-btn danger" onclick="pHapusSemua()">🗑 Hapus Semua Data Portal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal konfirmasi portal (generic) -->
+<div class="p-modal-ov" id="p-modal">
+  <div class="p-modal-box">
+    <h3 id="p-modal-judul">Konfirmasi</h3>
+    <p id="p-modal-pesan"></p>
+    <div id="p-modal-extra"></div>
+    <div class="p-modal-btns">
+      <button class="batal" onclick="pModalTutup()">Batal</button>
+      <button class="ya" id="p-modal-ya" onclick="">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal impor preview -->
+<div class="p-modal-ov" id="p-modal-impor">
+  <div class="p-modal-box">
+    <h3>📥 Backup Ditemukan</h3>
+    <p id="p-impor-info"></p>
+    <div class="p-modal-btns" style="flex-direction:column;gap:8px;">
+      <button class="ya" onclick="pImpor_Gabung()">Gabungkan</button>
+      <button class="ya merah" onclick="pImpor_Ganti()">Ganti Semua</button>
+      <button class="batal" onclick="pModalImpTutup()">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="login-head">
+      <span class="ico">🎓</span>
+      <h1>CBT Kabut Digital</h1>
+      <p>Jujur dalam Ujian, Mulia dalam Akhlak, Unggul dalam Ilmu</p>
+    </div>
+    <div class="login-body">
+      <div class="status-bar loading" id="load-bar">
+        <div class="sdot"></div>
+        <span id="load-txt">Menghubungi server soal...</span>
+      </div>
+
+      <!-- Banner sudah mengerjakan -->
+      <div class="sudah-banner" id="sudah-banner" style="display:none;"></div>
+
+      <div id="form-login-area">
+        <div class="fg">
+          <label>Madrasah / Sekolah</label>
+          <select id="sel-madrasah">
+            <option value="">-- Pilih Madrasah Anda --</option>
+            <option value="MTs Darul Istiqamah Kanreapia">MTs Darul Istiqamah Kanreapia</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Nama Lengkap Siswa</label>
+          <input type="text" id="inp-nama" placeholder="Ketik nama lengkap Anda...">
+        </div>
+        <div class="fg">
+          <label>Token Ujian</label>
+          <input type="text" id="inp-token" placeholder="Token dari guru..." style="font-family:'JetBrains Mono',monospace;letter-spacing:2px;">
+        </div>
+        <button class="btn-login" id="btn-login" onclick="mulaiUjian()" disabled="">▶ Mulai Ujian</button>
+        <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--gray-soft);letter-spacing:0.5px;">v7.1.0</div>
+      </div>
+    </div>
+
+    <!-- Overlay kunci form selama fetch -->
+    <div class="load-overlay" id="load-overlay">
+      <div class="spin"></div>
+      <p id="overlay-txt">Memuat soal dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Harap tunggu, ini mungkin memakan waktu 5–15 detik</small></p>
+    </div>
+  </div>
+</div>
+
+<!-- SPLIT SCREEN LOCK OVERLAY -->
+<div id="split-lock-overlay">
+  <div class="split-lock-ikon">⛔</div>
+  <div class="split-lock-judul">Mode Split Screen Terdeteksi</div>
+  <div class="split-lock-pesan">
+    Sesi ujian dikunci sementara.<br>
+    Keluar dari mode Split Screen untuk melanjutkan ujian.<br>
+    <em style="font-size:12px;opacity:.7;">Jawaban Anda tetap tersimpan.</em>
+  </div>
+  <div class="split-lock-badge">
+    <div class="split-lock-dot"></div>
+    Menunggu layar penuh kembali...
+  </div>
+</div>
+
+<!-- EXAM -->
+<div class="exam-wrap" id="exam-screen">
+  <div class="left-panel">
+    <div class="exam-hdr">
+      <span class="exam-ttl" id="exam-ttl">CBT — Persiapan OMI 2026</span>
+      <div class="timer" id="timer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg><span id="timer-txt">--:--:--</span></div>
+    </div>
+    <div class="soal-bar">
+      <span class="no-lbl" id="no-lbl">SOAL --</span>
+      <span class="badge pg_teks" id="badge-tipe">PG Teks</span>
+      <span class="poin-b" id="badge-poin">-- poin</span>
+    </div>
+
+    <div class="box-gambar" id="box-gambar" style="display:none;">
+      <div class="zoom-tb">
+        <button onclick="zoomOut()">−</button>
+        <button onclick="resetZoom()">↻</button>
+        <button onclick="zoomIn()">+</button>
+      </div>
+      <div class="img-scroll">
+        <img class="img-soal" id="img-soal" src="" alt="Soal">
+      </div>
+      <div class="img-load" id="img-load" style="display:none;">Memuat gambar soal...</div>
+    </div>
+
+    <div id="box-teks" style="display:none;width:100%;">
+      <div id="teks-img-wrap" class="box-gambar" style="display:none;margin-bottom:14px;">
+        <div class="zoom-tb">
+          <button onclick="zoomTeksImg(-1)">−</button>
+          <button onclick="zoomTeksImg(0)">↻</button>
+          <button onclick="zoomTeksImg(1)">+</button>
+        </div>
+        <div class="img-scroll">
+          <img class="img-soal" id="teks-img" src="" alt="">
+        </div>
+      </div>
+      <div class="box-teks" id="teks-q"></div>
+    </div>
+
+    <div id="area-pg" style="display:none;">
+      <div class="options-grid" id="options-grid"></div>
+      <div class="options-row" id="options-row" style="display:none;"></div>
+    </div>
+
+    <div id="area-esai" style="display:none;">
+      <div class="esai-info">✎ <strong>Soal Esai</strong> — Tulis jawaban Anda di bawah. Akan dikirim &amp; diperiksa guru secara manual.</div>
+      <textarea class="esai-textarea" id="esai-ta" placeholder="Tuliskan jawaban Anda di sini..." oninput="simpanEsai(this)" rows="7"></textarea>
+      <div class="esai-meta">
+        <span id="esai-char">0 karakter</span>
+        <span class="kirim-ind" id="kirim-ind"></span>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prevSoal()">← Kembali</button>
+      <button class="btn-nav btn-ragu" id="btn-ragu" onclick="toggleRagu()">Ragu-ragu</button>
+      <button class="btn-nav" onclick="nextSoal()">Lanjut →</button>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <h3>Navigasi Soal</h3>
+    <div class="legenda">
+      <div class="leg-row"><div class="leg-dot" style="background:var(--green);"></div>Sudah dijawab</div>
+      <div class="leg-row"><div class="leg-dot" style="background:#FFE082;border:1px solid var(--yellow);"></div>Ragu-ragu</div>
+      <div class="leg-row"><div class="leg-dot" style="background:white;border:1.5px solid var(--gray-line);"></div>Belum dijawab</div>
+      <div class="leg-row"><div class="leg-dot" style="background:white;border:1.5px solid var(--gray-line);border-left:3px solid var(--orange);"></div>Esai</div>
+    </div>
+    <div class="skor-live" id="skor-live" style="display:none;">Poin PG: <strong>0</strong> / <span id="poin-max-live">0</span></div>
+    <div class="grid-nomor" id="grid-nomor"></div>
+    <button class="btn-selesai" onclick="bukaKonfirmasi()">⏹ Selesai Ujian</button>
+  </div>
+</div>
+
+<!-- HASIL -->
+<div class="hasil-wrap" id="hasil-screen">
+  <div class="hasil-card">
+    <div class="hasil-head" id="hasil-head-div">
+      <div id="h-ikon" style="font-size:52px;margin-bottom:10px;">🎓</div>
+      <h2 id="h-judul">Ujian Selesai!</h2>
+      <p>Terima kasih, <strong id="h-nama"></strong></p>
+      <p style="font-size:12px;opacity:.7;margin-top:4px;" id="h-sekolah"></p>
+      <div id="h-pesan-jujur" style="display:none;margin-top:10px;background:rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.6;"></div>
+    </div>
+    <div class="hasil-body">
+      <div class="skor-box">
+        <div class="skor-angka" id="h-nilai">--</div>
+        <div class="skor-sub" id="h-nilai-sub">Nilai Sementara (PG)</div>
+        <div class="skor-pred" id="h-pred">--</div>
+      </div>
+      <div class="poin-info">Poin diperoleh: <strong id="h-poin-dapat">0</strong> / <span id="h-poin-max">0</span> poin (PG+Esai)</div>
+      <div class="esai-note" id="esai-note-blok">
+        <h4>✎ Soal Esai / Isian</h4>
+        <p>Nomor <strong id="h-esai-list">--</strong> sudah dikirim ke guru &amp; tercatat di Google Sheet untuk diperiksa manual.</p>
+        <p id="h-esai-poin-info" style="margin-top:6px;font-size:12px;color:#059669;font-weight:600;"></p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-c benar"><div class="stat-num" id="h-benar">--</div><div class="stat-lbl">Benar (PG)</div></div>
+        <div class="stat-c salah"><div class="stat-num" id="h-salah">--</div><div class="stat-lbl">Salah (PG)</div></div>
+        <div class="stat-c ragu"><div class="stat-num" id="h-ragu">--</div><div class="stat-lbl">Ragu-ragu</div></div>
+        <div class="stat-c esai"><div class="stat-num" id="h-esai">--</div><div class="stat-lbl" id="h-esai-lbl">Esai (menunggu)</div></div>
+      </div>
+      <div class="aksi-col">
+        <button class="btn-aksi analisis" id="btn-analisis" onclick="cobaAnalisis()">📊 Analisis &amp; Pembahasan Soal</button>
+        <button class="btn-aksi" style="background:var(--orange);color:white;" onclick="resetDevice()">🔄 Reset Perangkat Ujian</button>
+        <!-- B.2 — Kembali ke Portal tanpa refresh -->
+        <button class="btn-aksi" style="background:var(--gray-soft);color:white;margin-top:6px;" onclick="pTampil('portal-screen')">← Kembali ke Portal</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI -->
+<div class="modal-ov" id="modal-konfirmasi">
+  <div class="modal-box">
+    <h3>⚠ Konfirmasi Selesai Ujian</h3>
+    <div class="sum-grid" id="sum-grid"></div>
+    <div id="w-esai" class="warn esai" style="display:none;"><strong>Esai belum diisi:</strong><div class="pill-wrap" id="w-esai-list"></div></div>
+    <div id="w-ragu" class="warn ragu" style="display:none;"><strong>Masih ragu-ragu:</strong><div class="pill-wrap" id="w-ragu-list"></div></div>
+    <div id="w-belum" class="warn belum" style="display:none;"><strong>PG belum dijawab:</strong><div class="pill-wrap" id="w-belum-list"></div></div>
+    <label class="chk-row"><input type="checkbox" id="chk-setuju" onchange="toggleYakin()"><span>Saya memahami bahwa setelah klik <b>"Ya, Kunci Jawaban"</b>, jawaban tidak dapat diubah kembali.</span></label>
+    <div class="konfirm-btns">
+      <button class="btn-batal" onclick="tutupKonfirmasi()">Kembali</button>
+      <button class="btn-yakin" id="btn-yakin" onclick="selesaiFinal()" disabled="">✓ Ya, Kunci Jawaban</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ANALISIS -->
+<div class="modal-ov" id="modal-analisis">
+  <div class="modal-box modal-wide">
+    <h3>📊 Analisis &amp; Pembahasan Soal</h3>
+    <p style="font-size:12px;color:var(--gray-soft);margin-top:-10px;margin-bottom:12px;">Kunci PG ditandai hijau · Pembahasan dari guru · Esai menunggu koreksi</p>
+    <button class="btn-print-analisis no-print" onclick="printAnalisis()">🖶 Cetak / Simpan PDF Pembahasan</button>
+    <div class="ana-list" id="ana-list"></div>
+    <button class="btn-tutup no-print" onclick="document.getElementById('modal-analisis').classList.remove('aktif')">Tutup</button>
+  </div>
+</div>
+
+
+
+<script>
+// ═══════════════════════════════════════════════
+//  KONFIGURASI
+// ═══════════════════════════════════════════════
+// ── Baca URL GAS dari parameter ?gas= jika ada ──────────────────────
+const _gasParam = new URLSearchParams(window.location.search).get('gas');
+const URL_SCRIPT  = _gasParam
+  ? decodeURIComponent(_gasParam)
+  : "https://script.google.com/macros/s/AKfycbwWAOOimIzR-lFcfErtZc3vgzCGxLVTkvp90GckAP2FHaBZlOTtB6QRp4N87drThDOTFg/exec";
+const TIMEOUT_MS  = 15000;
+const MAX_RETRY   = 2;
+const LS_KEY      = "cbt_omi_2026_selesai";  // localStorage key (ujian selesai)
+const LS_DRAFT    = "cbt_omi_2026_draft";     // localStorage key (draft jawaban selama ujian)
+const LS_DEVICE   = "cbt_omi_2026_device";    // localStorage key (device id & login count)
+
+// URL GAS aktif untuk sesi ini — diset portal sebelum muatSoal dipanggil.
+// Semua fetch (soal, kirimBatch, rekapAkhir, getHasilSiswa) WAJIB pakai ini.
+let _urlGasAktif  = URL_SCRIPT;
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let soalData   = [];
+let tokenSheet = "";
+let poinEsaiKoreksi = 0;   // poin esai yang sudah dikoreksi guru (dari GAS)
+let BOBOT_PG   = 70;       // bobot PG (dari konfigurasi)
+let FONT_ARAB  = 20;       // ukuran font pertanyaan arab (px)
+let _wakeLock  = null;      // Wake Lock agar layar tidak mati
+
+async function aktifkanWakeLock() {
+  if (!('wakeLock' in navigator)) return; // tidak didukung browser
+  try {
+    _wakeLock = await navigator.wakeLock.request('screen');
+    _wakeLock.addEventListener('release', function() { _wakeLock = null; });
+  } catch(e) { /* silent — izin ditolak atau tidak didukung */ }
+}
+
+let _teksImgScale = 1;
+function zoomTeksImg(arah) {
+  let img = document.getElementById('teks-img');
+  if (!img) return;
+  if (arah === 1)       _teksImgScale = Math.min(3, _teksImgScale + 0.2);
+  else if (arah === -1) _teksImgScale = Math.max(0.5, _teksImgScale - 0.2);
+  else                  _teksImgScale = 1;
+  img.style.transform = 'scale(' + _teksImgScale + ')';
+  img.style.transformOrigin = 'top left';
+}
+
+function matikanWakeLock() {
+  if (_wakeLock) { _wakeLock.release(); _wakeLock = null; }
+}
+
+// Re-aktifkan wake lock jika tab kembali aktif
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && ujianAktif) aktifkanWakeLock();
+});
+
+// Render teks pertanyaan: teks Arab dibungkus span khusus
+function renderTeksQ(el, teks) {
+  if (!teks) { el.textContent = ''; return; }
+  let arabRe = new RegExp('[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]+', 'g');
+  let safe = teks.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                 .replace(arabRe, '<span class="arab-txt">$&</span>');
+  el.innerHTML = safe;
+}
+let BOBOT_ESAI = 30;       // bobot Esai (dari konfigurasi)
+let resetToken = "";   // token khusus reset perangkat (dari sheet Konfigurasi: reset_token)
+let DURASI     = 90;
+let JUDUL      = "CBT — Persiapan OMI 2026";
+let soalReady  = false;
+
+let idx        = 0;
+let jawPG      = {};
+let jawEsai    = {};
+let raguMap    = {};
+let namaSiswa  = "";
+let namaSekolah= "";
+let detik      = 0;
+let timerID    = null;
+let pelanggar  = 0;
+let MAKS_P     = 3;
+let PESAN_1    = "";
+let PESAN_2    = "";
+let PESAN_3    = "";
+let ACAK_SOAL  = false;
+let BUKA_PEMB  = false;   // true = tampil pembahasan
+let TOKEN_PEL  = "";      // reset token khusus pelanggaran
+let ujianSelesai = false;  // flag: anti-curang nonaktif setelah selesai
+let ujianAktif   = false;  // flag: ujian sedang berjalan (untuk wake lock)
+let tMulai=null, tSelesai=null;
+let dbEsai=null;
+let zoom=1;
+let hasilSimpan = null;
+let deviceId    = "";    // ID unik perangkat (disimpan di localStorage)
+let loginCount  = 0;     // berapa kali device ini login
+
+// ═══════════════════════════════════════════════
+//  CEK SUDAH MENGERJAKAN (1 DEVICE = 1 KALI)
+// ═══════════════════════════════════════════════
+function cekSudahMengerjakan() {
+  try {
+    let data = localStorage.getItem(LS_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch(e) { return null; }
+}
+
+function simpanStatusSelesai(data) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function resetDevice() {
+  let token = prompt("Masukkan token reset dari guru:");
+  if (!token) return;
+  let tok = token.trim();
+  if (tok === tokenSheet) {
+    alert("Token reset tidak valid. Hubungi guru.");
+    return;
+  }
+  // Cek apakah siswa ini punya catatan pelanggaran
+  let _dsLS  = cekSudahMengerjakan();
+  let _paksa = _dsLS && _dsLS.paksa_selesai;
+  if (_paksa) {
+    // Dihentikan paksa: wajib pakai TOKEN_PEL
+    if (!TOKEN_PEL || tok !== TOKEN_PEL) {
+      alert("🚫 Ujian ini dihentikan karena pelanggaran. Gunakan token reset khusus pelanggaran dari guru.");
+      return;
+    }
+    try { localStorage.removeItem(LS_KEY); localStorage.removeItem(LS_DRAFT); } catch(e) {}
+    alert("✅ Reset berhasil. Siswa bisa mengerjakan ulang. ⚠️ Harap ingatkan untuk tetap jujur.");
+  } else {
+    // Reset biasa: pakai resetToken
+    if (tok !== resetToken) {
+      alert("Token reset salah! Reset tidak berhasil.");
+      return;
+    }
+    try { localStorage.removeItem(LS_KEY); localStorage.removeItem(LS_DRAFT); } catch(e) {}
+    alert("✅ Perangkat berhasil di-reset. Siswa bisa mengerjakan ulang.");
+  }
+  document.getElementById('modal-analisis').classList.remove('aktif');
+  document.getElementById('hasil-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('form-login-area').style.display = 'block';
+  location.reload();
+}
+
+function tampilHasilSaja() {
+  // Sudah tidak dipakai - hasil langsung dari muatSoal
+}
+
+// ═══════════════════════════════════════════════
+//  FETCH DENGAN TIMEOUT + RETRY
+// ═══════════════════════════════════════════════
+function fetchDenganTimeout(url, opsi, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const ctrl = new AbortController();
+    const tid  = setTimeout(() => ctrl.abort(), timeoutMs);
+    fetch(url, { ...opsi, signal: ctrl.signal, redirect: 'follow' })
+      .then(r => { clearTimeout(tid); resolve(r); })
+      .catch(e => { clearTimeout(tid); reject(e); });
+  });
+}
+
+async function fetchDenganRetry(url, opsi, timeoutMs, maxRetry) {
+  let percobaan = 0;
+  while (percobaan <= maxRetry) {
+    try {
+      if (percobaan > 0) {
+        setOverlay(`Percobaan ke-${percobaan + 1} dari ${maxRetry + 1}...<br><small style="font-weight:400;color:var(--gray-soft);">Server sedang booting, harap sabar</small>`);
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      const resp = await fetchDenganTimeout(url, opsi, timeoutMs);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      return resp;
+    } catch (e) {
+      percobaan++;
+      if (percobaan > maxRetry) throw e;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  LOAD SOAL
+// ═══════════════════════════════════════════════
+window.onload = function() {
+  portalInit(); // ← Portal yang mengendalikan kapan muatSoal dipanggil
+};
+
+function getOrInitDevice() {
+  try {
+    let raw = localStorage.getItem(LS_DEVICE);
+    let d = raw ? JSON.parse(raw) : null;
+    if (!d || !d.id) {
+      d = { id: "dev_" + Math.random().toString(36).slice(2,10) + Date.now(), count: 0 };
+    }
+    return d;
+  } catch(e) { return { id: "dev_unknown", count: 0 }; }
+}
+
+function muatSoal() {
+  soalReady = false;
+  document.getElementById('btn-login').disabled = true;
+  setBar('loading', 'Menghubungi server soal...');
+  setOverlay('Memuat soal dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Harap tunggu, ini mungkin memakan waktu 5&#8211;15 detik</small>');
+  document.getElementById('load-overlay').classList.remove('hide');
+
+  fetchDenganRetry(_urlGasAktif + "?action=getDataSoal", {}, TIMEOUT_MS, MAX_RETRY)
+    .then(r => r.json())
+    .then(data => {
+      tokenSheet = (data.token||"KSM23KAB").trim();
+      resetToken = (data.reset_token||data.token||"KSM23KAB").trim();
+      DURASI     = parseInt(data.durasi_menit||90);
+      JUDUL      = data.judul||"CBT — Persiapan OMI 2026";
+      MAKS_P     = parseInt(data.maks_pelanggaran||3);
+      PESAN_1    = (data.pesan_1||'').trim();
+      PESAN_2    = (data.pesan_2||'').trim();
+      PESAN_3    = (data.pesan_3||'').trim();
+      ACAK_SOAL  = data.acak_soal === true;
+      BUKA_PEMB  = data.buka_pembahasan === true;
+      TOKEN_PEL  = (data.reset_token_pel||'').trim();
+      BOBOT_PG   = parseFloat(data.bobot_pg   || 70);
+      BOBOT_ESAI = parseFloat(data.bobot_esai || 30);
+      FONT_ARAB  = parseInt(data.font_arab || 20);
+      document.documentElement.style.setProperty('--font-arab', FONT_ARAB + 'px');
+      if (Array.isArray(data.soal) && data.soal.length > 0) {
+        let _rawSoal = data.soal.map(s => ({
+          no              : parseInt(s.no),
+          tipe            : (s.tipe||"pg_gambar").toLowerCase().trim(),
+          poin            : parseFloat(s.poin)||1,
+          pertanyaan      : (s.pertanyaan||"").trim(),
+          url_gambar      : (s.url_gambar||"").trim(),
+          opsi_a          : (s.opsi_a||"").trim(),
+          opsi_b          : (s.opsi_b||"").trim(),
+          opsi_c          : (s.opsi_c||"").trim(),
+          opsi_d          : (s.opsi_d||"").trim(),
+          kunci           : (s.kunci||"").trim().toUpperCase(),
+          pembahasan      : (s.pembahasan||"").trim(),
+          url_pemb_gambar : (s.url_pemb_gambar||"").trim()
+        }));
+        if(ACAK_SOAL){
+          let _pg=_rawSoal.filter(s=>s.tipe!=='esai');
+          let _es=_rawSoal.filter(s=>s.tipe==='esai');
+          for(let _i=_pg.length-1;_i>0;_i--){let _j=Math.floor(Math.random()*(_i+1));[_pg[_i],_pg[_j]]=[_pg[_j],_pg[_i]];}
+          soalData=[..._pg,..._es];
+        }else{soalData=_rawSoal;}
+        soalReady = true;
+        let pm = soalData.filter(s => s.tipe !== 'esai').reduce((a,s) => a + s.poin, 0);
+        document.getElementById('poin-max-live').textContent = pm;
+
+        // Cek apakah device ini sudah pernah mengerjakan
+        let sudah = cekSudahMengerjakan();
+        if (sudah) {
+          setBar('ok', 'Soal berhasil dimuat. Kamu sudah pernah mengerjakan ujian ini.');
+          document.getElementById('load-overlay').classList.add('hide');
+          // Isi state dari localStorage lalu langsung tampil hasil
+          namaSiswa   = sudah.nama    || '';
+          namaSekolah = sudah.sekolah || '';
+          jawPG       = sudah.jawPG   || {};
+          jawEsai     = sudah.jawEsai || {};
+          raguMap     = sudah.raguMap || {};
+          tMulai      = sudah.tMulai   ? new Date(sudah.tMulai)   : null;
+          tSelesai    = sudah.tSelesai ? new Date(sudah.tSelesai) : null;
+          document.getElementById('login-screen').style.display = 'none';
+          tampilHasilAkhir();
+        } else {
+          setBar('ok', '✅ ' + soalData.length + ' soal berhasil dimuat. Silakan login.');
+          document.getElementById('btn-login').disabled = false;
+          document.getElementById('load-overlay').classList.add('hide');
+          // Pre-isi nama dari profil aktif portal
+          let _pAktif = pProfilAktif();
+          if (_pAktif) {
+            let _inpN = document.getElementById('inp-nama');
+            if (_inpN && !_inpN.value) _inpN.value = _pAktif.nama;
+          }
+        }
+      } else {
+        setBar('error', '⚠ Soal belum tersedia di Sheet. Hubungi guru.');
+        tampilTombolRefresh('Data soal kosong. Hubungi guru atau coba refresh.');
+      }
+    })
+    .catch(e => {
+      console.error(e);
+      let pesan = e.name === 'AbortError'
+        ? '⏱ Timeout setelah ' + MAX_RETRY + ' percobaan. Server tidak merespons.'
+        : '❌ Gagal memuat soal: ' + (e.message||'periksa koneksi internet.');
+      setBar('error', pesan);
+      tampilTombolRefresh(pesan);
+    });
+}
+
+function setOverlay(html) {
+  document.getElementById('overlay-txt').innerHTML = html;
+}
+
+function tampilTombolRefresh(pesan) {
+  setOverlay(pesan + '<br><br>');
+  const ov = document.getElementById('load-overlay');
+  const spin = ov.querySelector('.spin');
+  if (spin) spin.remove();
+  if (!ov.querySelector('.btn-refresh')) {
+    const btn = document.createElement('button');
+    btn.className = 'btn-refresh';
+    btn.textContent = 'Coba Lagi';
+    btn.onclick = function() {
+      const old = ov.querySelector('.spin');
+      if (!old) {
+        const s = document.createElement('div');
+        s.className = 'spin';
+        ov.insertBefore(s, ov.firstChild);
+      }
+      btn.remove();
+      let bkPortal = ov.querySelector('.btn-back-portal');
+      if (bkPortal) bkPortal.remove();
+      muatSoal();
+    };
+    ov.appendChild(btn);
+  }
+  // B.1 — Tombol kembali ke Portal agar siswa tidak terjebak
+  if (!ov.querySelector('.btn-back-portal')) {
+    const bk = document.createElement('button');
+    bk.className = 'btn-back-portal';
+    bk.textContent = '← Kembali ke Portal';
+    bk.style.cssText = 'margin-top:10px;background:none;border:1.5px solid rgba(255,255,255,.4);' +
+      'color:rgba(255,255,255,.85);border-radius:8px;padding:10px 20px;font-size:13px;' +
+      'font-weight:700;cursor:pointer;font-family:inherit;display:block;width:100%;';
+    bk.onclick = function() {
+      ov.classList.add('hide');
+      pTampil('portal-screen');
+    };
+    ov.appendChild(bk);
+  }
+}
+
+function setBar(t, m) {
+  let b = document.getElementById('load-bar'), tx = document.getElementById('load-txt');
+  b.className = 'status-bar ' + t; tx.textContent = m;
+}
+function isEsai(no)  { return soalData.find(s => s.no === no)?.tipe === 'esai'; }
+function getSoal()   { return soalData[idx]; }
+function isUrl(s)    { return s && (s.startsWith('http://') || s.startsWith('https://')); }
+function gdrive(u)   {
+  if (!u) return u;
+  let id = u.match(/[?&]id=([a-zA-Z0-9_-]+)/)?.[1]
+           || u.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/)?.[1]
+           || u.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
+  return id ? 'https://drive.google.com/thumbnail?id=' + id + '&sz=s4000' : u;
+}
+
+// ═══════════════════════════════════════════════
+//  ZOOM
+// ═══════════════════════════════════════════════
+function applyZoom() { document.getElementById('img-soal').style.width = (zoom * 100) + '%'; }
+function zoomIn()    { zoom = Math.min(zoom + .25, 4); applyZoom(); }
+function zoomOut()   { zoom = Math.max(zoom - .25, 1); applyZoom(); }
+function resetZoom() { zoom = 1; applyZoom(); let w = document.querySelector('.img-scroll'); if(w) { w.scrollTop=0; w.scrollLeft=0; } }
+document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive:false });
+
+// ═══════════════════════════════════════════════
+//  MULAI UJIAN
+// ═══════════════════════════════════════════════
+function mulaiUjian() {
+  namaSekolah = document.getElementById('sel-madrasah').value;
+  namaSiswa   = document.getElementById('inp-nama').value.trim();
+  let tok     = document.getElementById('inp-token').value.trim();
+  if (!namaSekolah)  { alert('Pilih Madrasah!'); return; }
+  if (!namaSiswa)    { alert('Isi Nama Lengkap!'); return; }
+  if (!soalReady || soalData.length === 0) { alert('Soal belum siap. Tunggu atau klik Coba Lagi.'); return; }
+  // Cek apakah siswa ini dihentikan karena pelanggaran
+  let _lsKey   = 'cbt_' + namaSiswa.replace(/\s+/g,'_');
+  let _draftRaw = localStorage.getItem(_lsKey + '_rekap');
+  let _draftRekap = null;
+  try { _draftRekap = _draftRaw ? JSON.parse(_draftRaw) : null; } catch(e){}
+  let _isPel = _draftRekap && _draftRekap.paksa_selesai === true;
+  if (_isPel) {
+    if (!TOKEN_PEL || tok !== TOKEN_PEL) {
+      alert('Ujian Anda sebelumnya dihentikan karena pelanggaran.\n'          + 'Gunakan token khusus dari guru untuk melanjutkan.');
+      return;
+    }
+  } else {
+    if (tok !== tokenSheet) { alert('Token salah!'); return; }
+  }
+  // Cek sekali lagi apakah device sudah mengerjakan
+  if (cekSudahMengerjakan()) {
+    alert('Perangkat ini sudah pernah mengerjakan ujian. Hubungi guru untuk reset.');
+    return;
+  }
+  // Inisialisasi/update device ID dan login count
+  let devData = getOrInitDevice();
+  deviceId   = devData.id;
+  loginCount = devData.count + 1;
+  devData.count = loginCount;
+  try { localStorage.setItem(LS_DEVICE, JSON.stringify(devData)); } catch(e) {}
+  // Jika login ke-2 atau lebih, reset hitungan pelanggaran ke nol
+  if (loginCount >= 2) { pelanggar = 0; }
+  tMulai = new Date(); detik = DURASI * 60;
+  // Muat draft jika ada (siswa yang tiba-tiba keluar bisa lanjut)
+  let adaDraft = muatDraft();
+  if (adaDraft) {
+    console.log('Draft jawaban ditemukan, melanjutkan sesi sebelumnya.');
+  }
+  document.getElementById('exam-ttl').textContent = JUDUL;
+  // Sembunyikan semua layar portal dan login
+  P_SCREENS.forEach(s => { let el=document.getElementById(s); if(el) el.style.display='none'; });
+  document.getElementById('hasil-screen').style.display = 'none';
+  document.getElementById('exam-screen').style.display  = 'flex';
+  buatGrid();
+  tampil();
+  mulaiTimer();
+  fullscreen();
+  antiCheat();
+}
+
+// ═══════════════════════════════════════════════
+//  TAMPIL SOAL
+// ═══════════════════════════════════════════════
+function buatGrid() {
+  let g = document.getElementById('grid-nomor'); g.innerHTML = '';
+  soalData.forEach((s,i) => {
+    let b = document.createElement('button');
+    b.className = 'btn-no' + (s.tipe === 'esai' ? ' esai-m' : '');
+    b.textContent = s.no; b.id = 'nn' + i;
+    b.onclick = () => { idx = i; tampil(); };
+    g.appendChild(b);
+  });
+}
+
+function tampil() {
+  let s = getSoal(), no = s.no, tipe = s.tipe;
+  document.getElementById('no-lbl').textContent = 'SOAL ' + no;
+  let bd = document.getElementById('badge-tipe');
+  if (tipe==='pg_teks')        { bd.className='badge pg_teks';   bd.textContent='PG Teks'; }
+  else if (tipe==='pg_gambar') { bd.className='badge pg_gambar'; bd.textContent='PG Gambar'; }
+  else                          { bd.className='badge esai';      bd.textContent='Esai'; }
+  document.getElementById('badge-poin').textContent = s.poin + ' poin';
+  ['box-gambar','box-teks','area-pg','area-esai'].forEach(id => document.getElementById(id).style.display='none');
+  document.getElementById('teks-img-wrap').style.display = 'none';
+  document.getElementById('teks-img').src = '';
+  document.getElementById('teks-img').style.transform = '';
+  _teksImgScale = 1;
+  document.getElementById('btn-ragu').classList.remove('btn-ragu-hidden');
+
+  if (tipe === 'pg_gambar') {
+    document.getElementById('box-gambar').style.display = 'block';
+    document.getElementById('area-pg').style.display = 'block';
+    document.getElementById('options-grid').style.display = 'none';
+    document.getElementById('options-row').style.display = 'flex';
+    muatGambar(s.url_gambar);
+    renderOpsiRow(s, no);
+  } else if (tipe === 'pg_teks') {
+    document.getElementById('box-teks').style.display = 'block';
+    document.getElementById('area-pg').style.display = 'block';
+    document.getElementById('options-grid').style.display = 'grid';
+    document.getElementById('options-row').style.display = 'none';
+    renderTeksQ(document.getElementById('teks-q'), s.pertanyaan);
+    if (s.url_gambar) { document.getElementById('teks-img-wrap').style.display='block'; document.getElementById('teks-img').src=gdrive(s.url_gambar); }
+    else              { document.getElementById('teks-img-wrap').style.display='none'; }
+    renderOpsi(s, no);
+  } else {
+    if (s.pertanyaan) { document.getElementById('box-teks').style.display='block'; renderTeksQ(document.getElementById('teks-q'),s.pertanyaan); }
+    if (s.url_gambar) { document.getElementById('box-gambar').style.display='block'; muatGambar(s.url_gambar); }
+    document.getElementById('area-esai').style.display = 'block';
+    let ta = document.getElementById('esai-ta');
+    ta.value = jawEsai[no] || '';
+    ta.className = 'esai-textarea' + (ta.value.trim() ? ' terisi' : '');
+    document.getElementById('esai-char').textContent = ta.value.length + ' karakter';
+    document.getElementById('kirim-ind').textContent = '';
+    document.getElementById('btn-ragu').classList.add('btn-ragu-hidden');
+  }
+  if (tipe !== 'esai') document.getElementById('btn-ragu').classList.toggle('aktif', !!raguMap[no]);
+  updateGrid();
+  updateLive();
+}
+
+function muatGambar(url) {
+  resetZoom();
+  let img = document.getElementById('img-soal'), ld = document.getElementById('img-load');
+  img.style.display = 'none'; ld.style.display = 'block';
+  ld.className = 'img-load'; ld.textContent = 'Memuat gambar soal...';
+  img.onload  = () => { ld.style.display='none'; img.style.display='block'; };
+  img.onerror = () => { ld.textContent = 'Gagal memuat gambar soal'; };
+  img.src = gdrive(url);
+}
+
+function renderOpsi(soal, no) {
+  let g = document.getElementById('options-grid'); g.innerHTML = '';
+  ['A','B','C','D'].forEach(ltr => {
+    let val = (soal['opsi_' + ltr.toLowerCase()] || '');
+    let dipilih = jawPG[no] === ltr;
+    let btn = document.createElement('button');
+    btn.className = 'btn-opt' + (dipilih ? ' selected' : '');
+    btn.onclick = () => pilihPG(ltr);
+    let lDiv = document.createElement('div'); lDiv.className = 'opt-ltr'; lDiv.textContent = ltr;
+    let cDiv = document.createElement('div'); cDiv.className = 'opt-content';
+    if (isUrl(val)) { let img = document.createElement('img'); img.className='opt-img'; img.src=gdrive(val); img.alt='Opsi '+ltr; img.loading='lazy'; cDiv.appendChild(img); }
+    else { cDiv.textContent = val || '(opsi kosong)'; }
+    btn.appendChild(lDiv); btn.appendChild(cDiv); g.appendChild(btn);
+  });
+}
+
+function renderOpsiRow(soal, no) {
+  let g = document.getElementById('options-row'); g.innerHTML = '';
+  ['A','B','C','D'].forEach(ltr => {
+    let dipilih = jawPG[no] === ltr;
+    let btn = document.createElement('button');
+    btn.className = 'btn-opt-row' + (dipilih ? ' selected' : '');
+    btn.onclick = () => pilihPG(ltr);
+    let lDiv = document.createElement('div'); lDiv.className = 'opt-ltr'; lDiv.textContent = ltr;
+    btn.appendChild(lDiv);
+    g.appendChild(btn);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  JAWABAN — SIMPAN DRAFT KE LOCALSTORAGE
+//  (dikirim sekaligus ke Sheet saat selesai)
+// ═══════════════════════════════════════════════
+async function kirimKeSheet(payload) {
+  try {
+    await fetch(_urlGasAktif, {
+      method: 'POST', mode: 'no-cors', redirect: 'follow',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {
+    console.warn('kirimKeSheet error:', e);
+  }
+}
+
+async function kirimBatch(payloads) {
+  try {
+    await fetch(_urlGasAktif, {
+      method: 'POST', mode: 'no-cors', redirect: 'follow',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({ action:'simpanJawabanBatch', items: payloads })
+    });
+  } catch(e) {
+    console.warn('kirimBatch error:', e);
+  }
+}
+
+function simpanDraft() {
+  try {
+    localStorage.setItem(LS_DRAFT, JSON.stringify({
+      nama: namaSiswa, sekolah: namaSekolah,
+      jawPG: jawPG, jawEsai: jawEsai, raguMap: raguMap,
+      tMulai: tMulai?.toISOString(), detikSisa: detik
+    }));
+  } catch(e) {}
+}
+
+function muatDraft() {
+  try {
+    let raw = localStorage.getItem(LS_DRAFT);
+    if (!raw) return false;
+    let d = JSON.parse(raw);
+    if (d.nama !== namaSiswa || d.sekolah !== namaSekolah) return false;
+    jawPG    = d.jawPG    || {};
+    jawEsai  = d.jawEsai  || {};
+    raguMap  = d.raguMap  || {};
+    if (d.tMulai) tMulai = new Date(d.tMulai);
+    if (d.detikSisa && d.detikSisa > 0) detik = d.detikSisa;
+    return true;
+  } catch(e) { return false; }
+}
+
+function hapusDraft() {
+  try { localStorage.removeItem(LS_DRAFT); } catch(e) {}
+}
+
+function pilihPG(ltr) {
+  let s = getSoal(), no = s.no;
+  jawPG[no] = ltr;
+  tampil();
+  simpanDraft();
+}
+
+function simpanEsai(ta) {
+  let s = getSoal(), no = s.no, txt = ta.value;
+  jawEsai[no] = txt;
+  ta.className = 'esai-textarea' + (txt.trim() ? ' terisi' : '');
+  document.getElementById('esai-char').textContent = txt.length + ' karakter';
+  document.getElementById('nn' + idx).classList.toggle('dijawab', txt.trim().length > 0);
+  clearTimeout(dbEsai);
+  dbEsai = setTimeout(() => { simpanDraft(); }, 800);
+}
+
+function setKirimInd(cls, txt) {
+  let el = document.getElementById('kirim-ind');
+  if (el) { el.className = 'kirim-ind ' + cls; el.textContent = txt; }
+}
+
+function toggleRagu() {
+  let no = getSoal().no; if (isEsai(no)) return;
+  raguMap[no] = !raguMap[no];
+  document.getElementById('btn-ragu').classList.toggle('aktif', raguMap[no]);
+  updateGrid();
+}
+function nextSoal() { if (idx < soalData.length - 1) { idx++; tampil(); } }
+function prevSoal() { if (idx > 0) { idx--; tampil(); } }
+
+function updateGrid() {
+  soalData.forEach((s, i) => {
+    let b = document.getElementById('nn' + i); if (!b) return;
+    b.className = 'btn-no' + (s.tipe === 'esai' ? ' esai-m' : '');
+    if (i === idx) b.classList.add('aktif');
+    let dij = s.tipe === 'esai' ? (jawEsai[s.no]||'').trim().length > 0 : !!jawPG[s.no];
+    if (dij) b.classList.add('dijawab');
+    if (s.tipe !== 'esai' && raguMap[s.no]) b.classList.add('ragu');
+  });
+}
+function updateLive() {
+  let poin = 0;
+  soalData.forEach(s => { if (s.tipe!=='esai' && jawPG[s.no] && jawPG[s.no]===s.kunci) poin += s.poin; });
+  let pm = soalData.filter(s=>s.tipe!=='esai').reduce((a,s)=>a+s.poin,0);
+  document.getElementById('skor-live').innerHTML = 'Poin PG: <strong>' + poin + '</strong> / <span id="poin-max-live">' + pm + '</span>';
+}
+
+// ═══════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════
+function mulaiTimer() {
+  ujianAktif = true;
+  aktifkanWakeLock();
+  timerID = setInterval(() => {
+    if (detik <= 0) { clearInterval(timerID); alert('Waktu habis! Jawaban dikunci.'); selesaiFinal(); return; }
+    detik--;
+    let j=Math.floor(detik/3600), m=Math.floor((detik%3600)/60), d=detik%60;
+    document.getElementById('timer-txt').textContent = `${String(j).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(d).padStart(2,'0')}`;
+    document.getElementById('timer').classList.toggle('warn', detik <= 300);
+  }, 1000);
+}
+
+// ═══════════════════════════════════════════════
+//  KONFIRMASI
+// ═══════════════════════════════════════════════
+function bukaKonfirmasi() {
+  let pg = soalData.filter(s => s.tipe !== 'esai'), esaiL = soalData.filter(s => s.tipe === 'esai');
+  let dijPG = pg.filter(s => jawPG[s.no]).length, dijE = esaiL.filter(s => (jawEsai[s.no]||'').trim()).length;
+  document.getElementById('sum-grid').innerHTML = `
+    <div class="sum-c t"><div class="sum-num">${soalData.length}</div><div class="sum-lbl">Total Soal</div></div>
+    <div class="sum-c d"><div class="sum-num">${dijPG+dijE}</div><div class="sum-lbl">Dijawab</div></div>
+    <div class="sum-c b"><div class="sum-num">${pg.filter(s=>!jawPG[s.no]).length}</div><div class="sum-lbl">PG Belum</div></div>
+  `;
+  let eK = esaiL.filter(s => !(jawEsai[s.no]||'').trim()).map(s => s.no);
+  document.getElementById('w-esai').style.display = eK.length ? 'block' : 'none';
+  document.getElementById('w-esai-list').innerHTML = eK.map(n => `<span class="pill e">No.${n}</span>`).join('');
+  let nR = pg.filter(s => raguMap[s.no]).map(s => s.no);
+  document.getElementById('w-ragu').style.display = nR.length ? 'block' : 'none';
+  document.getElementById('w-ragu-list').innerHTML = nR.map(n => `<span class="pill r">${n}</span>`).join('');
+  let nB = pg.filter(s => !jawPG[s.no]).map(s => s.no);
+  document.getElementById('w-belum').style.display = nB.length ? 'block' : 'none';
+  document.getElementById('w-belum-list').innerHTML = nB.map(n => `<span class="pill b">${n}</span>`).join('');
+  document.getElementById('chk-setuju').checked = false;
+  document.getElementById('btn-yakin').disabled = true;
+  document.getElementById('modal-konfirmasi').classList.add('aktif');
+}
+function tutupKonfirmasi() { document.getElementById('modal-konfirmasi').classList.remove('aktif'); }
+function toggleYakin() { document.getElementById('btn-yakin').disabled = !document.getElementById('chk-setuju').checked; }
+
+// ═══════════════════════════════════════════════
+//  SELESAI
+// ═══════════════════════════════════════════════
+function selesaiFinal() {
+  clearInterval(timerID); tSelesai = new Date();
+  ujianSelesai = true;
+  ujianAktif   = false;
+  matikanWakeLock();
+  _hentikanAntiCheat(); // hentikan polling fokus & split screen
+  hapusDraft();         // hapus draft localStorage
+
+  document.getElementById('modal-konfirmasi').classList.remove('aktif');
+  document.getElementById('exam-screen').style.display = 'none';
+
+  // Simpan ke localStorage agar device tidak bisa mengerjakan ulang
+  simpanStatusSelesai({
+    nama: namaSiswa, sekolah: namaSekolah,
+    jawPG: jawPG, jawEsai: jawEsai, raguMap: raguMap,
+    tMulai: tMulai?.toISOString(), tSelesai: tSelesai?.toISOString(),
+    paksa_selesai: (pelanggar >= MAKS_P)
+  });
+
+  portalSimpanRiwayat(); // ← hook Portal: simpan snapshot riwayat
+
+  tampilHasilAkhir();
+
+  // Kumpulkan semua jawaban lalu kirim dalam 1 batch request ke GAS
+  (async () => {
+    let items = [];
+    soalData.forEach(s => {
+      let no = s.no, tipe = s.tipe;
+      if (tipe === 'esai') {
+        items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
+          no_soal:no, tipe:'esai', jawaban:jawEsai[no]||'', kunci:s.kunci, poin_soal:s.poin, benar:false });
+      } else {
+        let jwb = jawPG[no]||'';
+        items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
+          no_soal:no, tipe:tipe, jawaban:jwb||'', kunci:s.kunci, poin_soal:s.poin, benar:jwb===s.kunci });
+      }
+    });
+
+    // Kirim semua jawaban dalam 1 request batch
+    await kirimBatch(items);
+
+    // Rekap dikirim setelah batch selesai
+    let hitung = hitungNilai();
+    await kirimKeSheet({
+      action:'rekapAkhir', sekolah:namaSekolah, siswa:namaSiswa,
+      nilai: hitung.poinM > 0 ? Math.round(hitung.poinD / hitung.poinM * 1000) / 10 : 0,
+      poin_dapat: hitung.poinD, poin_max: hitung.poinM,
+      benar: hitung.benar, salah: hitung.salah, esai: hitung.esaiC,
+      pelanggaran: pelanggar,
+      paksa_selesai: (pelanggar >= MAKS_P),
+      waktu_mulai:(tMulai||new Date()).toISOString(), waktu_selesai:(tSelesai||new Date()).toISOString()
+    });
+    console.log('Batch jawaban dan rekap berhasil dikirim.');
+  })();
+}
+
+function hitungNilai() {
+  let benar=0, salah=0, raguC=0, esaiC=0, poinD=0, poinM=0, poinMEsai=0;
+  soalData.forEach(s => {
+    if (s.tipe === 'esai') { esaiC++; poinMEsai += s.poin; return; }
+    poinM += s.poin;
+    if (raguMap[s.no]) raguC++;
+    let jwb = jawPG[s.no];
+    if (!jwb) {}
+    else if (s.kunci && jwb === s.kunci) { benar++; poinD += s.poin; }
+    else if (s.kunci) salah++;
+  });
+  // Model A: nilai_akhir = (nilai_PG% × bobot_pg) + (nilai_esai% × bobot_esai)
+  let nilaiPGpct  = poinM     > 0 ? (poinD            / poinM     * 100) : 0;
+  let nilaiEspct  = poinMEsai > 0 ? (poinEsaiKoreksi  / poinMEsai * 100) : 0;
+  let nilai;
+  if (poinMEsai === 0 || BOBOT_ESAI === 0) {
+    nilai = Math.round(nilaiPGpct * 10) / 10;
+  } else {
+    nilai = Math.round(((nilaiPGpct * BOBOT_PG) + (nilaiEspct * BOBOT_ESAI)) / 100 * 10) / 10;
+  }
+  let poinDTotal = poinD + poinEsaiKoreksi;
+  let poinMTotal = poinM + poinMEsai;
+  return { benar, salah, raguC, esaiC, poinD, poinM, poinMEsai, poinDTotal, poinMTotal, nilai };
+}
+
+function tampilHasilAkhir() {
+  let { benar, salah, raguC, esaiC, poinD, poinM, poinMEsai, poinDTotal, poinMTotal, nilai } = hitungNilai();
+  let pred = nilai>=90?"Sangat Baik":nilai>=75?"Baik":nilai>=60?"Cukup":"Terus Semangat";
+
+  document.getElementById('h-nama').textContent    = namaSiswa;
+  document.getElementById('h-sekolah').textContent = namaSekolah;
+  document.getElementById('h-nilai').textContent   = '...';
+  document.getElementById('h-pred').textContent    = '';
+  // Label esai stat
+  let esaiLblEl = document.getElementById('h-esai-lbl');
+  if (esaiLblEl) esaiLblEl.textContent = esaiC > 0 ? 'Esai (menunggu koreksi)' : 'Esai';
+  document.getElementById('h-benar').textContent   = benar;
+  document.getElementById('h-salah').textContent   = salah;
+  document.getElementById('h-ragu').textContent    = raguC;
+  document.getElementById('h-esai').textContent    = esaiC;
+  document.getElementById('h-poin-dapat').textContent = poinD;
+  document.getElementById('h-poin-max').textContent   = poinM + poinMEsai;
+  // Isi nomor soal esai
+  let esaiNomor = soalData.filter(s => s.tipe === 'esai').map(s => s.no);
+  let esaiListEl = document.getElementById('h-esai-list');
+  if (esaiListEl) esaiListEl.textContent = esaiNomor.length > 0 ? esaiNomor.join(', ') : '--';
+
+  // Fetch nilai dari GAS: nilai_pg (kolom D) atau nilai_akhir (kolom O) sesuai kondisi
+  if (_urlGasAktif) {
+    let url = _urlGasAktif + '?action=getHasilSiswa'
+      + '&nama='    + encodeURIComponent(namaSiswa)
+      + '&sekolah=' + encodeURIComponent(namaSekolah);
+    fetch(url).then(r=>r.json()).then(function(d) {
+      if (d.status === 'ok') {
+        poinEsaiKoreksi = d.poin_esai || 0;
+        let esaiSudahDikoreksi = esaiC > 0 && d.poin_esai > 0 && d.nilai_akhir > 0;
+        let nilaiTampil, predTampil, subLabel;
+        if (esaiSudahDikoreksi) {
+          // Kolom O: nilai akhir Model A sudah termasuk esai
+          nilaiTampil = d.nilai_akhir;
+          predTampil  = d.predikat || (nilaiTampil>=90?"Sangat Baik":nilaiTampil>=75?"Baik":nilaiTampil>=60?"Cukup":"Terus Semangat");
+          subLabel    = 'Nilai Akhir';
+          let esaiLbl2 = document.getElementById('h-esai-lbl');
+          if (esaiLbl2) esaiLbl2.textContent = 'Esai (sudah dikoreksi)';
+          let infoEl = document.getElementById('h-esai-poin-info');
+          if (infoEl) infoEl.textContent = '✅ Poin esai: +' + d.poin_esai + ' poin sudah dihitung';
+          // Update poin diperoleh setelah esai dikoreksi
+          document.getElementById('h-poin-dapat').textContent = poinD + (d.poin_esai||0);
+        } else if (d.nilai_pg > 0) {
+          // Kolom D: Nilai_PG% dari GAS
+          nilaiTampil = d.nilai_pg;
+          predTampil  = nilaiTampil>=90?"Sangat Baik":nilaiTampil>=75?"Baik":nilaiTampil>=60?"Cukup":"Terus Semangat";
+          subLabel    = esaiC > 0 ? 'Nilai Sementara (belum termasuk esai)' : 'Nilai Akhir';
+        } else {
+          // Fallback: hitung lokal (rekap belum masuk ke sheet)
+          let hL = hitungNilai();
+          nilaiTampil = hL.poinM > 0 ? Math.round(hL.poinD / hL.poinM * 1000) / 10 : 0;
+          predTampil  = nilaiTampil>=90?"Sangat Baik":nilaiTampil>=75?"Baik":nilaiTampil>=60?"Cukup":"Terus Semangat";
+          subLabel    = esaiC > 0 ? 'Nilai Sementara (belum termasuk esai)' : 'Nilai Akhir';
+        }
+        document.getElementById('h-nilai').textContent = nilaiTampil;
+        document.getElementById('h-pred').textContent  = predTampil;
+        let subEl = document.getElementById('h-nilai-sub');
+        if (subEl) subEl.textContent = subLabel;
+      }
+    }).catch(function() {
+      // Gagal fetch: hitung lokal
+      let hL = hitungNilai();
+      let nL = hL.poinM > 0 ? Math.round(hL.poinD / hL.poinM * 1000) / 10 : 0;
+      document.getElementById('h-nilai').textContent = nL;
+      document.getElementById('h-pred').textContent  = nL>=90?"Sangat Baik":nL>=75?"Baik":nL>=60?"Cukup":"Terus Semangat";
+      let subEl = document.getElementById('h-nilai-sub');
+      if (subEl) subEl.textContent = esaiC > 0 ? 'Nilai Sementara (belum termasuk esai)' : 'Nilai Akhir';
+    });
+  }
+
+  if (esaiC === 0) document.getElementById('esai-note-blok').style.display = 'none';
+
+  // Tombol analisis: aktif hanya kalau buka_pembahasan = true
+  let btnAna = document.getElementById('btn-analisis');
+  if (btnAna) {
+    if (BUKA_PEMB) {
+      btnAna.classList.add('buka');
+      btnAna.title = '';
+    } else {
+      btnAna.classList.remove('buka');
+      btnAna.title = 'Pembahasan belum dibuka oleh guru';
+    }
+  }
+
+  // Pesan jujur / pelanggaran
+  let _dataLS = cekSudahMengerjakan();
+  let _paksa  = _dataLS && _dataLS.paksa_selesai;
+  let _pel    = _dataLS ? (parseInt(_dataLS.pelanggaran)||0) : pelanggar;
+  let pesanEl = document.getElementById('h-pesan-jujur');
+  let ikonEl  = document.getElementById('h-ikon');
+  let judulEl = document.getElementById('h-judul');
+  if (_paksa || _pel >= MAKS_P) {
+    // Dihentikan karena pelanggaran
+    if (ikonEl) ikonEl.textContent = '⚠️';
+    if (judulEl) judulEl.textContent = 'Ujian Dihentikan';
+    if (pesanEl) {
+      pesanEl.style.display = 'block';
+      pesanEl.innerHTML = '🚫 Ujian kamu dihentikan karena batas pelanggaran tercapai.'
+        + '<br>Menjaga kejujuran adalah bagian dari akhlak yang mulia.'
+        + '<br><em style="opacity:.8">“Sesungguhnya kejujuran membawa kepada kebaikan, dan kebaikan membawa ke surga.” (HR. Bukhari)</em>';
+    }
+  } else if (_pel === 0) {
+    // Tidak ada pelanggaran sama sekali
+    if (pesanEl) {
+      pesanEl.style.display = 'block';
+      pesanEl.innerHTML = '🏆 Selamat! Kamu menyelesaikan ujian dengan <strong>jujur dan disiplin</strong>.'
+        + '<br><em style="opacity:.8">“Orang yang jujur akan mendapat kepercayaan dan keberkahan.”</em>';
+    }
+  } else {
+    // Ada sedikit pelanggaran tapi tidak dihentikan
+    if (pesanEl) {
+      pesanEl.style.display = 'block';
+      pesanEl.innerHTML = '⚠️ Terdeteksi ' + _pel + ' kali keluar halaman selama ujian.'
+        + '<br>Semoga ke depan bisa lebih fokus dan menjaga kejujuran.';
+    }
+  }
+
+  // Sembunyikan semua layar lain sebelum tampil hasil
+  P_SCREENS.forEach(s => {
+    let el = document.getElementById(s);
+    if (el) el.style.display = 'none';
+  });
+  let examEl = document.getElementById('exam-screen');
+  if (examEl) examEl.style.display = 'none';
+
+  document.getElementById('hasil-screen').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+// ═══════════════════════════════════════════════
+//  ANALISIS
+// ═══════════════════════════════════════════════
+function cobaAnalisis() {
+  if (!BUKA_PEMB) {
+    alert('🔒 Pembahasan belum dibuka oleh guru. Hubungi guru jika sudah waktunya.');
+    return;
+  }
+  bukaAnalisis();
+}
+function bukaAnalisis() {
+  let html = buatHtmlAnalisis();
+  document.getElementById('ana-list').innerHTML = html;
+  document.getElementById('modal-analisis').classList.add('aktif');
+}
+
+function buatHtmlAnalisis() {
+  let html = '';
+  soalData.forEach(s => {
+    let no=s.no, tipe=s.tipe;
+    let pemb = (s.pembahasan||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    let poinBar = `<div class="poin-bar">Poin soal ini: ${s.poin}</div>`;
+    if (tipe === 'esai') {
+      let teks=jawEsai[no]||'', diisi=teks.trim().length>0;
+      let rubrik=(s.kunci||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      html+=`<div class="ana-item">
+  <div class="ana-head esai-p"><span class="ana-no">No.${no} <span style="font-size:10px;background:var(--orange-light);color:var(--orange);padding:1px 7px;border-radius:8px;border:1px solid #F5C6A0;margin-left:6px;">ESAI</span></span><span class="ana-badge esai-p">${diisi?'Diisi':'Kosong'}</span></div>
+  ${s.pertanyaan?`<div class="ana-teks">${s.pertanyaan.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
+  ${s.url_gambar?`<div class="ana-img"><img src="${gdrive(s.url_gambar)}" loading="lazy"></div>`:''}
+  <div class="esai-ans"><strong>Jawaban Anda:</strong><div class="teks">${diisi?teks.replace(/</g,'&lt;').replace(/>/g,'&gt;'):'<span style="color:var(--gray-soft);font-style:italic;">Tidak diisi</span>'}</div></div>
+  ${rubrik?`<div class="rubrik-bar"><strong>Rubrik/Kunci:</strong> ${rubrik}</div>`:''}
+  ${pemb?`<div class="pemb-bar"><strong>Pembahasan</strong>${pemb}</div>`:''}
+  ${s.url_pemb_gambar?`<div class="ana-img"><img src="${gdrive(s.url_pemb_gambar)}" loading="lazy"></div>`:''}
+  ${poinBar}</div>`;
+    } else {
+      let jwb=jawPG[no]||null, kunci=s.kunci;
+      let status=!jwb?'kosong':(kunci&&jwb===kunci)?'benar':'salah';
+      let label=status==='benar'?'Benar':status==='salah'?'Salah':'Tidak Dijawab';
+      let opsiH;
+      if (tipe === 'pg_gambar') {
+        // PATCH 3: Horizontal A B C D dengan icon centang/silang besar (konsisten dengan pg_teks)
+        opsiH = '<div class="ana-opsi"><div class="ana-opsi-ttl">Pilihan Jawaban</div><div style="display:flex;gap:8px;flex-wrap:nowrap;">';
+        ['A','B','C','D'].forEach(ltr => {
+          let isK=ltr===kunci, isJ=ltr===jwb&&jwb!==kunci;
+          let bg=isK?'var(--green)':(isJ?'var(--red)':'var(--gray-bg)');
+          let col=isK||isJ?'white':'var(--gray-mid)';
+          let bdr=isK?'var(--green)':(isJ?'var(--red)':'var(--gray-line)');
+          // Icon centang/silang besar (17px) konsisten dengan pg_teks
+          let iconPG=isK?'<span style="font-size:17px;font-weight:900;line-height:1;color:var(--green);">&#10003;</span>':(isJ?'<span style="font-size:17px;font-weight:900;line-height:1;color:var(--red);">&#10007;</span>':'');
+          opsiH+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid ${bdr};border-radius:8px;background:${bg==='var(--gray-bg)'?'var(--white)':bg};"><span style="width:26px;height:26px;border-radius:50%;background:${bg};color:${col};border:1.5px solid ${bdr};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">${ltr}</span>${iconPG}</div>`;
+        });
+        opsiH += '</div></div>';
+      } else {
+        // PATCH 2: pg_teks opsi 2-kolom grid hemat tempat
+        opsiH='<div class="ana-opsi"><div class="ana-opsi-ttl">Pilihan Jawaban</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;">';
+        ['A','B','C','D'].forEach(ltr => {
+          let val=(s['opsi_'+ltr.toLowerCase()]||'');
+          let isK=ltr===kunci, isJ=ltr===jwb;
+          let cls=isK?'kunci':(isJ&&!isK?'salah-mark':'');
+          let icon=isK?'<span style="font-size:17px;font-weight:900;line-height:1;">&#10003;</span> ':(isJ&&!isK?'<span style="font-size:17px;font-weight:900;line-height:1;">&#10007;</span> ':'');
+          let isi=isUrl(val)?`<img class="opsi-img-sm" src="${gdrive(val)}" loading="lazy">`:(val||'(kosong)').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          opsiH+=`<div class="opsi-row ${cls}" style="padding:3px 0;"><span class="opsi-ltr">${ltr}</span><span style="flex:1;min-width:0;word-break:break-word;">${icon}${isi}</span></div>`;
+        });
+        opsiH += '</div></div>';
+      }
+      html+=`<div class="ana-item">
+  <div class="ana-head ${status}"><span class="ana-no">No.${no} <span style="font-size:10px;background:var(--blue-light);color:var(--blue-main);padding:1px 7px;border-radius:8px;border:1px solid #BDD4F5;margin-left:6px;">${tipe==='pg_teks'?'PG TEKS':'PG GAMBAR'}</span></span>
+    <div style="display:flex;gap:6px;align-items:center;">${jwb?`<span style="font-size:12px;color:var(--gray-mid);">Jawaban: <b>${jwb}</b></span>`:''}
+    <span class="ana-badge ${status}">${label}</span></div></div>
+  ${s.pertanyaan?`<div class="ana-teks">${s.pertanyaan.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
+  ${s.url_gambar?`<div class="ana-img"><img src="${gdrive(s.url_gambar)}" loading="lazy"></div>`:''}
+  ${opsiH}
+  <div class="kunci-bar">Kunci: ${kunci||'Belum tersedia'}</div>
+  ${pemb?`<div class="pemb-bar"><strong>Pembahasan</strong>${pemb}</div>`:''}
+  ${s.url_pemb_gambar?`<div class="ana-img"><img src="${gdrive(s.url_pemb_gambar)}" loading="lazy"></div>`:''}
+  ${poinBar}</div>`;
+    }
+  });
+  return html;
+}
+
+// ═══════════════════════════════════════════════
+//  PRINT ANALISIS KE PDF
+// ═══════════════════════════════════════════════
+function printAnalisis() {
+  let { nilai, poinD, poinM, benar, salah } = hitungNilai();
+  let tgl = tSelesai
+    ? tSelesai.toLocaleDateString('id-ID', {weekday:'long',year:'numeric',month:'long',day:'numeric'})
+    : new Date().toLocaleDateString('id-ID', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  let kontenSoal = buatHtmlAnalisis();
+
+  // Buka window baru khusus print
+  let pw = window.open('', '_blank', 'width=900,height=700');
+  if (!pw) {
+    alert('Pop-up diblokir browser. Izinkan pop-up untuk halaman ini lalu coba lagi.');
+    return;
+  }
+
+  pw.document.write(`<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Pembahasan CBT - ${namaSiswa}</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Plus Jakarta Sans',Arial,sans-serif;background:white;color:#1E2B3A;padding:20px;}
+  .hdr{background:#064E3B;color:white;padding:18px 22px;border-radius:8px;margin-bottom:20px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .hdr h1{font-size:17px;margin:0 0 5px;}
+  .hdr p{font-size:13px;margin:3px 0 0;opacity:.9;}
+  .ana-item{border:1.5px solid #DDE3EC;border-radius:10px;overflow:hidden;margin-bottom:16px;break-inside:avoid;page-break-inside:avoid;}
+  .ana-head{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ana-head.benar{background:#E6F7EE;} .ana-head.salah{background:#FDECEA;} .ana-head.kosong{background:#F3F6FA;} .ana-head.esai-p{background:#FFF3E8;}
+  .ana-no{font-size:14px;font-weight:800;}
+  .ana-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ana-badge.benar{background:#1B8A4C;} .ana-badge.salah{background:#C0392B;} .ana-badge.kosong{background:#8896A5;} .ana-badge.esai-p{background:#D4550A;}
+  .ana-teks{padding:11px 13px;background:#F0F6FF;font-size:13px;line-height:1.65;border-top:1px solid #E8F1FD;white-space:pre-wrap;word-break:break-word;}
+  .ana-img{padding:8px 13px;background:#F3F6FA;border-top:1px solid #DDE3EC;}
+  .ana-img img{max-width:100%;border-radius:6px;}
+  .ana-opsi{padding:9px 13px;border-top:1px solid #DDE3EC;background:white;}
+  .ana-opsi-ttl{font-size:10px;font-weight:700;color:#8896A5;margin-bottom:5px;text-transform:uppercase;}
+  .opsi-row{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:13px;}
+  .opsi-row.kunci{font-weight:700;color:#1B8A4C;}
+  .opsi-row.salah-mark{color:#C0392B;text-decoration:line-through;opacity:.7;}
+  .opsi-ltr{width:21px;height:21px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:#F3F6FA;color:#8896A5;border:1px solid #DDE3EC;}
+  .opsi-row.kunci .opsi-ltr{background:#1B8A4C;color:white;border-color:#1B8A4C;}
+  .opsi-row.salah-mark .opsi-ltr{background:#FDECEA;color:#C0392B;border-color:#C0392B;}
+  .opsi-img-sm{max-height:60px;border-radius:4px;border:1px solid #DDE3EC;}
+  .kunci-bar{padding:9px 13px;background:#ECFDF5;border-top:1px solid #D1FAE5;font-size:13px;font-weight:700;color:#059669;}
+  .pemb-bar{padding:11px 13px;background:#E6F7EE;border-top:1px solid #A8D5BB;font-size:13px;color:#1E2B3A;line-height:1.6;}
+  .pemb-bar strong{font-size:10px;font-weight:700;color:#1B8A4C;text-transform:uppercase;display:block;margin-bottom:3px;}
+  .rubrik-bar{padding:9px 13px;background:#F0FDF4;border-top:1px solid #BBF7D0;font-size:12px;color:#059669;}
+  .esai-ans{padding:11px 13px;background:#FFFDF5;border-top:1px solid #FFE082;font-size:13px;}
+  .esai-ans strong{color:#D4550A;display:block;margin-bottom:4px;}
+  .esai-ans .teks{padding:9px;background:white;border:1px solid #FFE082;border-radius:6px;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+  .poin-bar{padding:5px 13px;background:#FFFBEA;border-top:1px solid #E8D48A;font-size:11px;font-weight:700;color:#B8860B;}
+  .btn-print-now{display:block;width:100%;padding:13px;margin-bottom:18px;background:#1B8A4C;color:white;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+  .btn-print-now:hover{opacity:.88;}
+  @media print{
+    body{padding:10px;}
+    .btn-print-now{display:none;}
+    .ana-item{break-inside:avoid;page-break-inside:avoid;}
+    .hdr,.ana-head,.ana-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<button class="btn-print-now" id="btnCetak" onclick="window.print()" disabled>Memuat gambar...</button>
+<div class="hdr">
+  <h1>${JUDUL} &#8212; Analisis &amp; Pembahasan</h1>
+  <p>Nama: <strong>${namaSiswa}</strong> &nbsp;|&nbsp; Sekolah: <strong>${namaSekolah}</strong></p>
+  <p>Nilai: <strong>${nilai}</strong> &nbsp;|&nbsp; Benar: ${benar} &nbsp;|&nbsp; Salah: ${salah} &nbsp;|&nbsp; Poin: ${poinD}/${poinM} &nbsp;|&nbsp; ${tgl}</p>
+</div>
+${kontenSoal}
+<script>
+  (function() {
+    var imgs = Array.from(document.images);
+    var total = imgs.length;
+    var btn = document.getElementById('btnCetak');
+    if (total === 0) {
+      btn.textContent = '🖨 Cetak / Simpan sebagai PDF';
+      btn.disabled = false; btn.style.background = '#1B8A4C';
+      return;
+    }
+    var loaded = 0;
+    btn.textContent = 'Memuat gambar... (0/' + total + ')';
+    btn.style.background = '#8896A5';
+    function onLoad() {
+      loaded++;
+      btn.textContent = loaded >= total
+        ? '🖨 Cetak / Simpan sebagai PDF'
+        : 'Memuat gambar... (' + loaded + '/' + total + ')';
+      if (loaded >= total) {
+        btn.disabled = false; btn.style.background = '#1B8A4C';
+      }
+    }
+    imgs.forEach(function(img) {
+      if (img.complete && img.naturalWidth > 0) { onLoad(); }
+      else {
+        img.addEventListener('load', onLoad);
+        img.addEventListener('error', onLoad);
+      }
+    });
+    // Fallback: aktifkan tombol setelah 10 detik walaupun gambar belum selesai
+    setTimeout(function() {
+      if (btn.disabled) {
+        btn.textContent = '🖨 Cetak / Simpan sebagai PDF';
+        btn.disabled = false;
+        btn.style.background = '#1B8A4C';
+      }
+    }, 10000);
+  })();
+<\/script>
+</body>
+</html>`);
+  pw.document.close();
+}
+
+// ═══════════════════════════════════════════════
+//  SERTIFIKAT PDF (diperbaiki — tanpa emoji mentah)
+
+
+
+// ═══════════════════════════════════════════════
+//  PROTEKSI
+// ═══════════════════════════════════════════════
+// E — Input kode CBT dikecualikan dari blokir context menu
+// agar siswa/guru bisa paste URL dengan klik kanan
+document.addEventListener('contextmenu', e => {
+  if (e.target && e.target.id === 'p-inp-kode') return; // izinkan
+  e.preventDefault();
+});
+document.addEventListener('keydown', e => {
+  if (e.key==='F12') { e.preventDefault(); alert('Dilarang!'); }
+  if (e.ctrlKey && e.key==='u') { e.preventDefault(); alert('Dilarang!'); }
+  if (e.ctrlKey && e.key==='s') e.preventDefault();
+  if (e.key==='PrintScreen'||e.key==='Print') { e.preventDefault(); if(!ujianSelesai){ _kaburkanLayar(1500); alert('Screenshot dilarang!'); } }
+  if (e.ctrlKey&&e.shiftKey&&(e.key==='s'||e.key==='S')) { e.preventDefault(); if(!ujianSelesai){ _kaburkanLayar(1500); alert('Screenshot dilarang!'); } }
+});
+function _kaburkanLayar(ms){ document.body.style.filter='blur(20px) brightness(0.3)'; setTimeout(()=>{document.body.style.filter='';},ms||1000); }
+(function(){ var s=document.createElement('style'); s.textContent='*{-webkit-user-select:none!important;user-select:none!important;}input,textarea,select{-webkit-user-select:text!important;user-select:text!important;}img{pointer-events:none;}@media print{body{display:none!important;}}'; document.head.appendChild(s); })();
+function fullscreen() { let el=document.documentElement; if(el.requestFullscreen) el.requestFullscreen(); else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen(); }
+function _pesanWarning(n,sisa) {
+  const D1 = PESAN_1 || `⚠️ Peringatan ${n}/${MAKS_P}: Jangan keluar halaman! Sisa: ${sisa} kali.`;
+  const D2 = PESAN_2 || `🚨 Peringatan keras ${n}/${MAKS_P}! Sisa: ${sisa} kali. Tetap di halaman ujian!`;
+  const D3 = PESAN_3 || `🛑 Batas pelanggaran tercapai. Ujian Anda dihentikan.`;
+  if(n===1)return D1; if(n===2)return D2; return D3;
+}
+// ═══════════════════════════════════════════════
+//  ANTI-CHEAT v2 — Focus-based + Split Screen Lock
+//  Aturan 1: document.hasFocus() polling 400ms
+//    - satu kehilangan fokus = satu pelanggaran
+//    - state _fokusHilang mencegah penghitungan ganda
+//    - saat fokus kembali, state di-reset
+//  Aturan 2: split screen → kunci sesi (overlay),
+//    bukan tambah pelanggaran — sesi bisa dilanjutkan
+//    setelah layar kembali penuh & fokus kembali
+// ═══════════════════════════════════════════════
+
+let _fokusHilang    = false;   // state: apakah saat ini fokus sedang hilang
+let _splitLocked    = false;   // state: apakah sesi sedang dikunci karena split screen
+let _acIntervalId   = null;    // ID interval polling fokus
+let _lastInnerW     = window.innerWidth;
+let _lastInnerH     = window.innerHeight;
+let _splitCheckId   = null;    // ID interval polling split screen
+
+// ── Overlay split screen ─────────────────────────────────────
+function _tampilSplitLock() {
+  if (_splitLocked) return;
+  _splitLocked = true;
+  document.getElementById('split-lock-overlay').classList.add('aktif');
+  // Nonaktifkan semua interaksi pada area soal
+  let examEl = document.getElementById('exam-screen');
+  if (examEl) examEl.style.pointerEvents = 'none';
+}
+
+function _sembunyikanSplitLock() {
+  if (!_splitLocked) return;
+  _splitLocked = false;
+  document.getElementById('split-lock-overlay').classList.remove('aktif');
+  let examEl = document.getElementById('exam-screen');
+  if (examEl) examEl.style.pointerEvents = '';
+}
+
+// ── Deteksi split screen via perubahan dimensi window ────────
+// Split screen menyebabkan innerWidth atau innerHeight berkurang
+// signifikan (> 30% dari ukuran awal layar).
+// Rotasi & keyboard virtual menyebabkan perubahan < threshold.
+function _cekSplitScreen() {
+  if (ujianSelesai) return;
+  let w = window.innerWidth, h = window.innerHeight;
+  // Ukuran layar fisik (orientasi-agnostik): max dari kombinasi
+  let screenW = Math.max(screen.width, screen.height);
+  let screenH = Math.min(screen.width, screen.height);
+  // Threshold: kurang dari 55% lebar atau tinggi layar = split screen
+  let THRESH_W = screenW * 0.55;
+  let THRESH_H = screenH * 0.55;
+  let isSplit  = (w < THRESH_W) || (h < THRESH_H);
+  if (isSplit && !_splitLocked) {
+    _tampilSplitLock();
+  } else if (!isSplit && _splitLocked) {
+    // Ukuran kembali normal — tunggu fokus dulu sebelum buka kunci
+    if (document.hasFocus()) {
+      _sembunyikanSplitLock();
+      _fokusHilang = false; // reset agar kehilangan fokus berikutnya dihitung
+    }
+  }
+}
+
+// ── Polling fokus halaman (Aturan 1) ─────────────────────────
+function _pollingFokus() {
+  if (ujianSelesai) {
+    clearInterval(_acIntervalId);
+    return;
+  }
+  // Jangan proses pelanggaran saat sesi dikunci karena split screen
+  if (_splitLocked) return;
+
+  let punya = document.hasFocus();
+  if (!punya && !_fokusHilang) {
+    // Kehilangan fokus yang baru → catat sebagai pelanggaran
+    _fokusHilang = true;
+    pelanggar++;
+    _kaburkanLayar(800);
+    if (pelanggar >= MAKS_P) {
+      alert(_pesanWarning(pelanggar, 0));
+      selesaiFinal();
+    } else {
+      alert(_pesanWarning(pelanggar, MAKS_P - pelanggar));
+      fullscreen();
+    }
+  } else if (punya && _fokusHilang) {
+    // Fokus kembali → reset state agar kehilangan berikutnya dihitung
+    _fokusHilang = false;
+  }
+}
+
+function antiCheat() {
+  // Simpan dimensi awal window sebagai acuan split screen
+  _lastInnerW = window.innerWidth;
+  _lastInnerH = window.innerHeight;
+
+  // ── Aturan 1: polling fokus setiap 400ms ──
+  _acIntervalId = setInterval(_pollingFokus, 400);
+
+  // ── Aturan 2: polling split screen setiap 500ms ──
+  _splitCheckId = setInterval(_cekSplitScreen, 500);
+
+  // blur: kaburkan saja (UX feedback), BUKAN pelanggaran
+  // Pelanggaran ditangani oleh polling hasFocus()
+  window.addEventListener('blur', () => {
+    if (!ujianSelesai && !_splitLocked) _kaburkanLayar(600);
+  });
+
+  // Saat fokus kembali dari tab switch → update state split screen juga
+  window.addEventListener('focus', () => {
+    if (_splitLocked && !(_cekSplitInline())) {
+      _sembunyikanSplitLock();
+      _fokusHilang = false;
+    }
+  });
+}
+
+// Helper inline cek split (dipanggil dari event focus)
+function _cekSplitInline() {
+  let w = window.innerWidth, h = window.innerHeight;
+  let screenW = Math.max(screen.width, screen.height);
+  let screenH = Math.min(screen.width, screen.height);
+  return (w < screenW * 0.55) || (h < screenH * 0.55);
+}
+
+// Hentikan semua interval anti-cheat saat ujian selesai
+function _hentikanAntiCheat() {
+  clearInterval(_acIntervalId);
+  clearInterval(_splitCheckId);
+  _sembunyikanSplitLock();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PORTAL SISWA — JavaScript (Refined Architecture)
+//
+//  Perubahan dari versi sebelumnya:
+//  [1] UUID permanen per profil (pUUID)
+//  [2] Riwayat diindeks per profilId — filter otomatis
+//  [3] Hook Premium dengan resolver chain yang bisa diextend
+//  [4] Backup dengan metadata versi + fungsi migrasi skema
+//  [5] Ad system provider-agnostic, slot dikonfigurasi via objek
+// ═══════════════════════════════════════════════════════════════
+
+// ── LocalStorage keys (terpisah dari CBT) ─────────────────────
+const LS_PROFIL   = 'portal_profil_list';   // array profil
+const LS_RIWAYAT  = 'portal_riwayat';       // array riwayat (per profilId)
+
+// ── Versi skema backup — naikkan saat struktur berubah ────────
+const BACKUP_SCHEMA_VERSION = 2;
+
+// ── [1] UUID generator permanen ───────────────────────────────
+// Dipakai saat membuat profil baru. Menggunakan crypto.randomUUID
+// jika tersedia (Chrome ≥ 92, Android ≥ 92), fallback ke random hex.
+function pUUID() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback: 8-4-4-4-12 hex
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    let r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+// ── [3] Registry kode CBT Free tier ───────────────────────────
+// Tambah mapping kode pendek di sini. Format: 'KODE': { url, label }
+const P_KODE_MAP = {
+  // Contoh:
+  // 'IPA-2026': { url: 'https://script.google.com/...', label: 'IPA 2026' },
+};
+
+// ── [3] Premium resolver chain ─────────────────────────────────
+// Setiap resolver adalah { id, label, resolve(kode) → Promise<{url,meta}|null> }
+// Tambah resolver baru tanpa mengubah pValidasiKode().
+const P_PREMIUM_RESOLVERS = [
+  // Contoh resolver masa depan:
+  // {
+  //   id: 'kabupaten-server',
+  //   label: 'Server Kabupaten KSM23',
+  //   resolve: async (kode) => {
+  //     let res = await fetch('https://api.ksm23.id/resolve?kode=' + kode);
+  //     let d = await res.json();
+  //     return d.url ? { url: d.url, meta: d } : null;
+  //   }
+  // },
+];
+
+// ── [5] Konfigurasi slot iklan (provider-agnostic) ─────────────
+// enabled    : false  → semua slot nonaktif (default keamanan)
+// slots      : map slotId → { provider, adUnitId, format, zones }
+// zones      : layar mana slot ini boleh tampil
+// inject(el) : fungsi yang memasang iklan ke elemen DOM
+//              kosongkan jika belum ada provider nyata
+const P_AD_CONFIG = {
+  enabled : false,  // ← set true untuk aktifkan
+  provider: null,   // 'google-adsense' | 'custom' | null
+  slots   : {
+    'ad-slot-home'   : { zones: ['portal-screen'],          format: 'banner', adUnitId: '' },
+    'ad-slot-riwayat': { zones: ['portal-riwayat-screen'],  format: 'banner', adUnitId: '' },
+    'ad-slot-detail' : { zones: ['portal-detail-screen'],   format: 'banner', adUnitId: '' },
+  },
+  // Inject dipanggil 1x per slot saat pertama kali zona aktif ditampilkan.
+  // Override fungsi ini untuk integrasi provider nyata.
+  inject(slotId, el, cfg) {
+    // Placeholder — konten dummy sampai provider diset
+    el.innerHTML = '<span style="font-size:11px;color:var(--gray-soft);">📢 Slot: ' + slotId + '</span>';
+  }
+};
+// Set zona aktif yang sudah diinisialisasi (hindari inject ganda)
+const _adInjected = new Set();
+
+// ── State runtime portal ───────────────────────────────────────
+let _pImporData  = null;   // data backup saat modal impor aktif
+let _pDetailAktif = null;  // riwayat yang sedang dibuka
+let _pKodeResolvedUrl = null;  // URL hasil resolusi kode CBT
+
+// ═══════════════════════════════════════════════
+//  NAVIGASI LAYAR
+// ═══════════════════════════════════════════════
+const P_SCREENS = [
+  'portal-screen','portal-cbt-screen','portal-riwayat-screen',
+  'portal-detail-screen','portal-profil-screen','portal-backup-screen',
+  'login-screen'
+];
+
+function pTampil(id) {
+  // Sembunyikan semua layar dengan eksplisit display:none
+  P_SCREENS.forEach(s => {
+    let el = document.getElementById(s);
+    if (el) el.style.display = 'none';
+  });
+  // Sembunyikan juga exam dan hasil (dikelola terpisah tapi perlu ikut)
+  let examEl  = document.getElementById('exam-screen');
+  let hasilEl = document.getElementById('hasil-screen');
+  if (examEl)  examEl.style.display  = 'none';
+  if (hasilEl) hasilEl.style.display = 'none';
+
+  // Tampilkan target — exam pakai flex, sisanya block
+  let target = document.getElementById(id);
+  if (target) {
+    target.style.display = (id === 'exam-screen') ? 'flex' : 'block';
+  }
+  window.scrollTo(0, 0);
+
+  // Callback per layar
+  if (id === 'portal-screen')         pRenderBeranda();
+  if (id === 'portal-profil-screen')  pRenderProfilList();
+  if (id === 'portal-backup-screen')  pRenderBackupInfo();
+  if (id === 'portal-riwayat-screen') pMuatRiwayat();
+
+  // [5] Iklan: aktifkan slot yang relevan untuk layar ini
+  _adAktifkanZona(id);
+}
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+function portalInit() {
+  // Jalankan migrasi skema data jika perlu
+  _pMigrasi();
+
+  let exam  = document.getElementById('exam-screen');
+  let hasil = document.getElementById('hasil-screen');
+  if (exam)  exam.style.display  = 'none';
+  if (hasil) hasil.style.display = 'none';
+
+  pTampil('portal-screen');
+}
+
+// ═══════════════════════════════════════════════
+//  BERANDA
+// ═══════════════════════════════════════════════
+function pRenderBeranda() {
+  let profil = pProfilAktif();
+  let av = document.getElementById('p-header-av');
+  let nm = document.getElementById('p-header-nama');
+  let sb = document.getElementById('p-header-sub');
+  if (profil) {
+    av.textContent = profil.nama.charAt(0).toUpperCase();
+    nm.textContent = profil.nama;
+    // [1] Tampilkan UUID pendek sebagai identitas permanen
+    sb.textContent = 'ID: ' + profil.uuid.slice(0, 8).toUpperCase();
+  } else {
+    av.textContent = '?';
+    nm.textContent = 'Belum ada profil';
+    sb.textContent = 'Tap "Ganti" untuk membuat profil';
+  }
+  // [2] Badge riwayat hanya hitung milik profil aktif
+  let count = pRiwayatProfil().length;
+  let badge = document.getElementById('p-riwayat-badge');
+  if (badge) badge.textContent = count + ' ujian tersimpan';
+}
+
+// ═══════════════════════════════════════════════
+//  [1] KELOLA PROFIL — dengan UUID permanen
+// ═══════════════════════════════════════════════
+function pProfilSemua() {
+  try {
+    let list = JSON.parse(localStorage.getItem(LS_PROFIL)) || [];
+    // [A.1] Urutkan: aktif pertama, lalu terbaru digunakan
+    list.sort((a, b) => {
+      if (a.aktif && !b.aktif) return -1;
+      if (!a.aktif && b.aktif) return 1;
+      return (b.lastUsed || 0) - (a.lastUsed || 0);
+    });
+    return list;
+  } catch(e) { return []; }
+}
+function pProfilSimpan(list) {
+  try { localStorage.setItem(LS_PROFIL, JSON.stringify(list)); } catch(e) {}
+}
+function pProfilAktif() {
+  return pProfilSemua().find(p => p.aktif) || null;
+}
+function pProfilSetAktif(id) {
+  let list = pProfilSemua().map(p => ({
+    ...p,
+    aktif    : p.uuid === id,
+    lastUsed : p.uuid === id ? Date.now() : (p.lastUsed || 0)
+  }));
+  pProfilSimpan(list);
+}
+
+function pSimpanProfil() {
+  let inp  = document.getElementById('p-inp-profil');
+  let nama = inp.value.trim();
+  if (!nama) { alert('Nama tidak boleh kosong.'); return; }
+
+  let list = pProfilSemua();
+  let editId = inp.dataset.editId || '';
+
+  // Mode edit: ubah nama profil yang sudah ada
+  if (editId) {
+    let target = list.find(p => p.uuid === editId);
+    if (target && target.nama !== nama) {
+      // [1] UUID tidak berubah — hanya nama yang diperbarui
+      pModalTampil(
+        '✏️ Ubah Identitas',
+        'Nama lama: ' + target.nama + '\nNama baru: ' + nama + '\n\nLanjutkan perubahan?',
+        '', 'ya', function() {
+          list = list.map(p => p.uuid === editId ? { ...p, nama, diubah: new Date().toISOString() } : p);
+          pProfilSimpan(list);
+          inp.value = ''; inp.dataset.editId = '';
+          pRenderProfilList();
+          pModalTutup();
+        }
+      );
+      return;
+    }
+    inp.value = ''; inp.dataset.editId = '';
+    pRenderProfilList();
+    return;
+  }
+
+  // Cek nama duplikat
+  let existing = list.find(p => p.nama.toLowerCase() === nama.toLowerCase());
+  if (existing) {
+    pModalTampil(
+      'Profil Ditemukan',
+      '"' + existing.nama + '" sudah tersimpan. Jadikan profil aktif?',
+      '', 'ya', function() {
+        pProfilSetAktif(existing.uuid);
+        inp.value = '';
+        pRenderProfilList();
+        pModalTutup();
+      }
+    );
+    return;
+  }
+
+  // [A.1] Profil baru → UUID permanen + lastUsed
+  let jadikanAktif = list.length === 0;
+  list.push({
+    uuid     : pUUID(),
+    nama,
+    aktif    : jadikanAktif,
+    lastUsed : jadikanAktif ? Date.now() : 0,
+    dibuat   : new Date().toISOString(),
+    diubah   : null,
+    meta     : {}
+  });
+  pProfilSimpan(list);
+  inp.value = '';
+  pRenderProfilList();
+}
+
+function pProfilUbah(uuid) {
+  let profil = pProfilSemua().find(p => p.uuid === uuid);
+  if (!profil) return;
+  let inp = document.getElementById('p-inp-profil');
+  inp.value = profil.nama;
+  inp.dataset.editId = uuid;
+  inp.focus();
+  inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function pProfilHapus(uuid) {
+  let profil = pProfilSemua().find(p => p.uuid === uuid);
+  if (!profil) return;
+  // [2] Hitung riwayat milik profil ini
+  let jmlRiwayat = pRiwayatSemua().filter(r => r.profilId === uuid).length;
+  let warningRiwayat = jmlRiwayat > 0
+    ? '\n\n⚠️ ' + jmlRiwayat + ' riwayat ujian milik profil ini TIDAK ikut dihapus dan masih bisa diakses via Backup.'
+    : '';
+  pModalTampil(
+    '🗑 Hapus Profil',
+    'Hapus profil "' + profil.nama + '"?' + warningRiwayat,
+    '', 'ya merah', function() {
+      let list = pProfilSemua().filter(p => p.uuid !== uuid);
+      if (profil.aktif && list.length > 0) list[0].aktif = true;
+      pProfilSimpan(list);
+      pRenderProfilList();
+      pModalTutup();
+    }
+  );
+}
+
+function pRenderProfilList() {
+  let list = pProfilSemua();
+  let el   = document.getElementById('p-profil-list');
+  if (!el) return;
+  if (list.length === 0) {
+    el.innerHTML = '<div class="p-riwayat-kosong"><span class="ico">👤</span>Belum ada profil. Tambahkan di atas.</div>';
+    return;
+  }
+  el.innerHTML = list.map(p => {
+    // [2] Jumlah riwayat per profil
+    let jml = pRiwayatSemua().filter(r => r.profilId === p.uuid).length;
+    return `
+    <div class="p-profil-item ${p.aktif ? 'aktif-profil' : ''}">
+      <div class="p-av">${p.nama.charAt(0).toUpperCase()}</div>
+      <div class="p-info">
+        <div class="p-pnama">${_esc(p.nama)}</div>
+        <div style="font-size:10px;color:var(--gray-soft);margin-top:1px;">
+          ${jml} ujian · ID: ${p.uuid.slice(0,8).toUpperCase()}
+        </div>
+        ${p.aktif ? '<div class="p-pbadge">✓ Aktif</div>' : ''}
+      </div>
+      <div class="p-profil-aksi">
+        ${!p.aktif ? `<button class="pilih" onclick="pProfilSetAktif('${p.uuid}');pRenderProfilList();pRenderBeranda()">Pilih</button>` : ''}
+        <button onclick="pProfilUbah('${p.uuid}')">Ubah</button>
+        <button class="hapus" onclick="pProfilHapus('${p.uuid}')">Hapus</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Autocomplete ───────────────────────────────────────────────
+function pAcInput(val) {
+  let listEl = document.getElementById('p-ac-list');
+  if (!val.trim()) { listEl.style.display = 'none'; return; }
+  let cocok = pProfilSemua().filter(p => p.nama.toLowerCase().includes(val.toLowerCase()));
+  if (cocok.length === 0) { listEl.style.display = 'none'; return; }
+  listEl.innerHTML = cocok.map(p =>
+    `<div class="p-ac-item" onclick="pAcPilih('${_esc(p.nama)}','${p.uuid}')">${_esc(p.nama)}</div>`
+  ).join('');
+  listEl.style.display = 'block';
+}
+function pAcPilih(nama, uuid) {
+  let inp = document.getElementById('p-inp-profil');
+  inp.value = nama;
+  inp.dataset.editId = uuid;
+  document.getElementById('p-ac-list').style.display = 'none';
+}
+document.addEventListener('click', function(e) {
+  let listEl = document.getElementById('p-ac-list');
+  if (listEl && !listEl.contains(e.target) && e.target.id !== 'p-inp-profil')
+    listEl.style.display = 'none';
+});
+
+// ═══════════════════════════════════════════════
+//  MASUK UJIAN
+// ═══════════════════════════════════════════════
+function pTampilMasukUjian() {
+  let profil = pProfilAktif();
+  document.getElementById('p-cbt-av').textContent  = profil ? profil.nama.charAt(0).toUpperCase() : '?';
+  document.getElementById('p-cbt-nama').textContent = profil ? profil.nama : 'Belum ada profil — buat dulu di Kelola Profil';
+  document.getElementById('p-inp-kode').value       = '';
+  document.getElementById('p-kode-hint').textContent = '';
+  document.getElementById('p-btn-lanjut').disabled  = true;
+  document.getElementById('p-premium-pilihan').style.display = 'none';
+  _pKodeResolvedUrl = null;
+  pTampil('portal-cbt-screen');
+}
+
+function pKodeInput(val) {
+  let v    = val.trim();
+  let btn  = document.getElementById('p-btn-lanjut');
+  let hint = document.getElementById('p-kode-hint');
+  _pKodeResolvedUrl = null;
+  document.getElementById('p-premium-pilihan').style.display = 'none';
+
+  if (!v) { btn.disabled = true; hint.textContent = ''; return; }
+
+  if (v.startsWith('https://script.google.com/')) {
+    _pKodeResolvedUrl = v;
+    hint.textContent = '✅ URL Google Apps Script (Free)';
+    hint.style.color = 'var(--green)';
+    btn.disabled = false;
+  } else if (P_KODE_MAP[v.toUpperCase()]) {
+    _pKodeResolvedUrl = P_KODE_MAP[v.toUpperCase()].url;
+    hint.textContent  = '✅ ' + (P_KODE_MAP[v.toUpperCase()].label || v.toUpperCase()) + ' (Free)';
+    hint.style.color  = 'var(--green)';
+    btn.disabled = false;
+  } else if (v.length >= 4) {
+    hint.textContent = '🔑 Kode akan diverifikasi...';
+    hint.style.color = 'var(--gray-soft)';
+    btn.disabled = false;
+  } else {
+    btn.disabled = true;
+    hint.textContent = '';
+  }
+}
+
+// [3] Validasi kode — resolver chain
+async function pValidasiKode() {
+  let profil = pProfilAktif();
+  if (!profil) { alert('Buat profil terlebih dahulu di menu Kelola Profil.'); return; }
+
+  let kode  = document.getElementById('p-inp-kode').value.trim();
+  let hint  = document.getElementById('p-kode-hint');
+  let btn   = document.getElementById('p-btn-lanjut');
+  if (!kode) return;
+
+  // Free tier 1: URL langsung atau kode terdaftar
+  if (_pKodeResolvedUrl) {
+    pMasukCBT(_pKodeResolvedUrl);
+    return;
+  }
+
+  // [3] Premium resolver chain — coba satu per satu
+  if (P_PREMIUM_RESOLVERS.length > 0) {
+    btn.disabled = true;
+    hint.textContent = '🔄 Memverifikasi kode...';
+    hint.style.color = 'var(--gray-soft)';
+    for (let resolver of P_PREMIUM_RESOLVERS) {
+      try {
+        let result = await resolver.resolve(kode);
+        if (result && result.url) {
+          // [3] Premium resolved: tampilkan pilihan kelas jika ada
+          _pKodeResolvedUrl = result.url;
+          if (result.meta && result.meta.kelas_tersedia) {
+            _pTampilPilihanKelas(result.meta.kelas_tersedia);
+          } else {
+            pMasukCBT(result.url);
+          }
+          btn.disabled = false;
+          return;
+        }
+      } catch(e) { console.warn('[Premium resolver ' + resolver.id + ']', e); }
+    }
+    // Semua resolver gagal
+    hint.textContent = '❌ Kode tidak dikenali oleh server manapun.';
+    hint.style.color = 'var(--red)';
+    btn.disabled = false;
+    return;
+  }
+
+  // [3] Tidak ada resolver aktif: tampilkan pilihan kelas sebagai stub Premium
+  hint.textContent = '⚡ Kode Premium — pilih kelas untuk lanjut.';
+  hint.style.color = 'var(--orange)';
+  _pTampilPilihanKelas(['VII', 'VIII', 'IX']);
+}
+
+// [3] Tampilkan opsi kelas (bisa dari resolver meta atau default)
+function _pTampilPilihanKelas(kelasArr) {
+  let sel  = document.getElementById('p-sel-kelas');
+  let wrap = document.getElementById('p-premium-pilihan');
+  sel.innerHTML = '<option value="">-- Pilih Kelas --</option>' +
+    kelasArr.map(k => `<option value="${k}">Kelas ${k}</option>`).join('');
+  wrap.style.display = 'block';
+}
+
+function pMasukCBT(urlGAS) {
+  let profil = pProfilAktif();
+  if (!profil) { alert('Profil tidak ditemukan.'); return; }
+
+  if (!urlGAS) {
+    // Dari pilihan kelas Premium
+    let kelas = document.getElementById('p-sel-kelas').value;
+    if (!kelas) { alert('Pilih kelas terlebih dahulu.'); return; }
+    // [3] Gabungkan URL resolver + parameter kelas
+    urlGAS = (_pKodeResolvedUrl || URL_SCRIPT) + '&kelas=' + encodeURIComponent(kelas);
+  }
+
+  // Set URL aktif — semua fetch CBT pakai ini
+  _urlGasAktif = urlGAS;
+
+  // [A.1] Update lastUsed profil aktif saat masuk ujian
+  let listP = pProfilSemua();
+  listP = listP.map(p => p.aktif ? { ...p, lastUsed: Date.now() } : p);
+  pProfilSimpan(listP);
+
+  // Pre-isi nama dari profil aktif
+  let inpNama = document.getElementById('inp-nama');
+  if (inpNama) inpNama.value = profil.nama;
+
+  pTampil('login-screen');
+  muatSoal();
+}
+
+// ═══════════════════════════════════════════════
+//  [2] RIWAYAT — dipisah per profilId
+// ═══════════════════════════════════════════════
+function pRiwayatSemua() {
+  try { return JSON.parse(localStorage.getItem(LS_RIWAYAT)) || []; }
+  catch(e) { return []; }
+}
+function pRiwayatSimpanList(list) {
+  try { localStorage.setItem(LS_RIWAYAT, JSON.stringify(list)); } catch(e) {}
+}
+
+// [2] Hanya riwayat profil aktif
+function pRiwayatProfil(uuid) {
+  let id = uuid || (pProfilAktif() || {}).uuid || null;
+  if (!id) return [];
+  return pRiwayatSemua().filter(r => r.profilId === id);
+}
+
+// Hook dipanggil dari selesaiFinal()
+function portalSimpanRiwayat() {
+  try {
+    let hitung = hitungNilai();
+    let profil = pProfilAktif();
+    let list   = pRiwayatSemua();
+    let entry  = {
+      id          : 'rw_' + pUUID(),          // UUID permanen untuk riwayat
+      profilId    : profil ? profil.uuid : null, // [2] ikat ke profil
+      judul       : JUDUL,
+      siswa       : namaSiswa,
+      sekolah     : namaSekolah,
+      tanggal     : (tSelesai || new Date()).toISOString(),
+      nilai       : hitung.nilai,
+      predikat    : hitung.predikat,
+      benar       : hitung.benar,
+      salah       : hitung.salah,
+      esai        : hitung.esaiC,
+      poinD       : hitung.poinD,
+      poinM       : hitung.poinM,
+      pelanggaran : pelanggar,
+      soalSnapshot: soalData.map(s => ({...s})),
+      jawPG       : {...jawPG},
+      jawEsai     : {...jawEsai},
+      raguMap     : {...raguMap},
+      buka_pemb   : BUKA_PEMB,
+      gas_url     : _urlGasAktif,          // simpan URL sumber soal
+      snapshotVersion: 1                   // [A.2] pondasi versioning snapshot
+    };
+    // Dedup: judul + profilId + hari yang sama → timpa
+    let tgl = entry.tanggal.slice(0, 10);
+    list = list.filter(r => !(r.judul === entry.judul
+                             && r.profilId === entry.profilId
+                             && r.tanggal.slice(0, 10) === tgl));
+    list.unshift(entry);
+    if (list.length > 100) list = list.slice(0, 100); // naikkan limit dari 50
+    pRiwayatSimpanList(list);
+  } catch(e) { console.warn('portalSimpanRiwayat error:', e); }
+}
+
+function pMuatRiwayat() {
+  // [2] Hanya tampilkan riwayat profil aktif
+  let list = pRiwayatProfil();
+  let el   = document.getElementById('p-riwayat-list');
+  if (!el) return;
+
+  let profil = pProfilAktif();
+  let namaP  = profil ? profil.nama : '—';
+
+  // Header profil di atas daftar
+  let headerHtml = `
+    <div style="font-size:11px;font-weight:700;color:var(--gray-soft);
+      text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding:0 2px;">
+      Riwayat: ${_esc(namaP)}
+    </div>`;
+
+  if (list.length === 0) {
+    el.innerHTML = headerHtml + '<div class="p-riwayat-kosong"><span class="ico">📭</span>Belum ada riwayat untuk profil ini.</div>';
+    return;
+  }
+  el.innerHTML = headerHtml + list.map(r => {
+    let kls = _predikatKls(r.predikat);
+    let tgl = new Date(r.tanggal).toLocaleDateString('id-ID',
+      { day: 'numeric', month: 'short', year: 'numeric' });
+    return `<div class="p-riwayat-item" onclick="pBukaDetail('${r.id}')">
+      <div class="r-nilai ${kls}">${Math.round(r.nilai || 0)}</div>
+      <div class="r-info">
+        <div class="r-judul">${_esc(r.judul)}</div>
+        <div class="r-meta">${_esc(r.siswa)} · ${tgl}</div>
+      </div>
+      <div class="r-arrow">›</div>
+    </div>`;
+  }).join('');
+}
+
+function pBukaDetail(id) {
+  // [2] Cari di semua riwayat (bukan hanya profil aktif) agar link UUID tetap valid
+  let r = pRiwayatSemua().find(x => x.id === id);
+  if (!r) return;
+  _pDetailAktif = r;
+  _pRenderDetail(r);
+  pTampil('portal-detail-screen');
+
+  // [C] Server sync — jika ada gas_url di riwayat, cek nilai terbaru di background
+  if (r.gas_url && r.siswa && r.sekolah) {
+    _pSyncNilaiDariServer(r);
+  }
+}
+
+// [C] Ambil nilai terbaru dari GAS dan perbarui cache lokal jika ada perubahan
+function _pSyncNilaiDariServer(r) {
+  if (!r.gas_url) return;
+  let url = r.gas_url + '?action=getHasilSiswa'
+    + '&nama='    + encodeURIComponent(r.siswa)
+    + '&sekolah=' + encodeURIComponent(r.sekolah);
+
+  // Gunakan AbortSignal.timeout jika tersedia (Chrome ≥ 111), fallback manual
+  let fetchOpts = {};
+  try {
+    if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+      fetchOpts.signal = AbortSignal.timeout(10000);
+    }
+  } catch(e) {}
+
+  fetch(url, fetchOpts)
+    .then(res => res.json())
+    .then(function(d) {
+      if (d.status !== 'ok') return;
+      let berubah = false;
+
+      // [C] Perbarui nilai akhir jika guru sudah koreksi esai
+      if (d.nilai_akhir && d.poin_esai > 0) {
+        // Esai sudah dikoreksi — nilai akhir resmi
+        if (d.nilai_akhir !== r.nilai) {
+          r.nilai    = d.nilai_akhir;
+          r.predikat = d.predikat ||
+            (r.nilai>=90?'Sangat Baik':r.nilai>=75?'Baik':r.nilai>=60?'Cukup':'Terus Semangat');
+          berubah    = true;
+        }
+        // Update info esai di cache
+        if (!r.esaiSudahDikoreksi) {
+          r.esaiSudahDikoreksi = true;
+          r.poinEsai = d.poin_esai;
+          berubah = true;
+        }
+      } else if (d.nilai_pg > 0 && !r.esaiSudahDikoreksi) {
+        // Esai belum dikoreksi — pakai nilai PG sementara
+        if (d.nilai_pg !== r.nilai) {
+          r.nilai  = d.nilai_pg;
+          r.predikat = r.nilai>=90?'Sangat Baik':r.nilai>=75?'Baik':r.nilai>=60?'Cukup':'Terus Semangat';
+          berubah  = true;
+        }
+      }
+
+      // [D] Sinkronisasi status pembahasan dari server
+      // GAS mengirim: buka_pembahasan (boolean) atau review_locked (boolean)
+      let bukaServer = null;
+      if (typeof d.buka_pembahasan !== 'undefined') {
+        bukaServer = !!d.buka_pembahasan;
+      } else if (typeof d.review_locked !== 'undefined') {
+        bukaServer = !d.review_locked;
+      }
+      if (bukaServer !== null && bukaServer !== r.buka_pemb) {
+        r.buka_pemb = bukaServer;
+        berubah     = true;
+      }
+
+      if (berubah) {
+        // Simpan cache lokal yang sudah diperbarui
+        let semua = pRiwayatSemua().map(x => x.id === r.id ? r : x);
+        pRiwayatSimpanList(semua);
+        _pDetailAktif = r;
+        // Re-render detail secara non-disruptive (siswa tidak merasakan ada fetch)
+        _pRenderDetail(r);
+      }
+    })
+    .catch(function() {
+      // Gagal sync — tampilkan data cache, tidak ada pesan error ke user
+    });
+}
+
+// Render konten layar detail (dipisah dari navigasi agar bisa dipanggil ulang setelah sync)
+function _pRenderDetail(r) {
+  document.getElementById('p-det-judul').textContent = r.judul;
+  let tgl = new Date(r.tanggal).toLocaleDateString('id-ID',
+    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  document.getElementById('p-det-tgl').textContent  = tgl;
+  document.getElementById('p-det-nilai').textContent = Math.round(r.nilai || 0);
+  document.getElementById('p-det-pred').textContent  = r.predikat || '--';
+  document.getElementById('p-det-pred').className    = 'skor-pred';
+
+  document.getElementById('p-det-stat').innerHTML = `
+    <div class="stat-c benar"><div class="stat-num">${r.benar||0}</div><div class="stat-lbl">Benar (PG)</div></div>
+    <div class="stat-c salah"><div class="stat-num">${r.salah||0}</div><div class="stat-lbl">Salah</div></div>
+    <div class="stat-c ragu"><div class="stat-num">${Object.keys(r.raguMap||{}).length}</div><div class="stat-lbl">Ragu-ragu</div></div>
+    <div class="stat-c esai"><div class="stat-num">${r.esai||0}</div><div class="stat-lbl">Esai</div></div>`;
+
+  document.getElementById('p-det-info').innerHTML =
+    'Poin: <strong>' + (r.poinD||0) + ' / ' + (r.poinM||0) + '</strong>' +
+    (r.esaiSudahDikoreksi
+      ? ' · Esai: <strong style="color:var(--green)">✅ +' + (r.poinEsai||0) + ' poin (sudah dikoreksi)</strong>'
+      : (r.esai > 0 ? ' · Esai: <strong style="color:var(--orange)">⏳ Menunggu koreksi</strong>' : '')) +
+    ' · Pelanggaran: <strong>' + (r.pelanggaran||0) + '</strong>' +
+    ' · Sekolah: <strong>' + _esc(r.sekolah||'—') + '</strong>';
+
+  // [D] Tombol pembahasan — status ikuti server (via cache yang sudah diperbarui)
+  let btnPemb = document.getElementById('p-btn-buka-pemb');
+  if (!btnPemb) return;
+  if (r.buka_pemb && r.soalSnapshot && r.soalSnapshot.length > 0) {
+    btnPemb.disabled = false;
+    btnPemb.textContent = '📖 Lihat Pembahasan';
+  } else if (!r.buka_pemb) {
+    btnPemb.disabled = true;
+    btnPemb.textContent = '🔒 Pembahasan belum dibuka guru';
+  } else {
+    btnPemb.disabled = true;
+    btnPemb.textContent = '⚠️ Data pembahasan tidak tersedia';
+  }
+}
+
+function pBukaAnalisisRiwayat() {
+  if (!_pDetailAktif) return;
+  let r = _pDetailAktif;
+  if (!r.soalSnapshot || r.soalSnapshot.length === 0) {
+    alert('Data soal tidak tersedia di riwayat ini.'); return;
+  }
+  soalData  = r.soalSnapshot;
+  jawPG     = r.jawPG   || {};
+  jawEsai   = r.jawEsai || {};
+  raguMap   = r.raguMap || {};
+  BUKA_PEMB = true;
+  bukaAnalisis();
+}
+
+// ═══════════════════════════════════════════════
+//  [4] BACKUP — metadata versi + migrasi skema
+// ═══════════════════════════════════════════════
+
+// Tabel migrasi: skema lama → baru
+// Tambah fungsi di sini saat BACKUP_SCHEMA_VERSION naik.
+const _pMigrators = {
+  // v1 → v2: tambah uuid ke profil + profilId ke riwayat + lastUsed + snapshotVersion
+  1: function(data) {
+    (data.profil || []).forEach(p => {
+      if (!p.uuid)     p.uuid     = p.id || pUUID();
+      if (!p.meta)     p.meta     = {};
+      if (!p.lastUsed) p.lastUsed = 0;   // [A.1] seed lastUsed
+    });
+    let profil = data.profil || [];
+    (data.riwayat || []).forEach(r => {
+      if (!r.profilId) {
+        let match = profil.find(p => p.nama && r.siswa &&
+          p.nama.toLowerCase() === r.siswa.toLowerCase());
+        r.profilId = match ? match.uuid : null;
+      }
+      if (!r.id || !r.id.startsWith('rw_')) r.id = 'rw_' + pUUID();
+      if (!r.snapshotVersion) r.snapshotVersion = 1; // [A.2] seed snapshotVersion
+    });
+    data._schema = 2;
+    return data;
+  },
+  // v2 → v3 (placeholder): tambah migrator di sini saat butuh
+};
+
+// Jalankan migrasi data di localStorage jika skema lama
+function _pMigrasi() {
+  try {
+    let profilRaw   = localStorage.getItem(LS_PROFIL);
+    let riwayatRaw  = localStorage.getItem(LS_RIWAYAT);
+    if (!profilRaw && !riwayatRaw) return; // data kosong, tidak perlu migrasi
+
+    let profil   = JSON.parse(profilRaw  || '[]');
+    let riwayat  = JSON.parse(riwayatRaw || '[]');
+
+    // Deteksi versi skema saat ini (cek field uuid di profil pertama)
+    let currentSchema = 1;
+    if (profil.length > 0 && profil[0].uuid) currentSchema = 2;
+
+    if (currentSchema >= BACKUP_SCHEMA_VERSION) return; // sudah up-to-date
+
+    console.log('[Portal] Migrasi skema v' + currentSchema + ' → v' + BACKUP_SCHEMA_VERSION);
+    let data = { profil, riwayat, _schema: currentSchema };
+    for (let v = currentSchema; v < BACKUP_SCHEMA_VERSION; v++) {
+      if (_pMigrators[v]) data = _pMigrators[v](data);
+    }
+    pProfilSimpan(data.profil);
+    pRiwayatSimpanList(data.riwayat);
+    console.log('[Portal] Migrasi selesai.');
+  } catch(e) { console.warn('[Portal] Migrasi error:', e); }
+}
+
+function pRenderBackupInfo() {
+  let profil  = pProfilSemua();
+  let riwayat = pRiwayatSemua();
+  let rProfil = pRiwayatProfil().length;
+  let el = document.getElementById('p-backup-info');
+  if (el) el.innerHTML =
+    '📋 <strong>' + profil.length + '</strong> profil · ' +
+    '<strong>' + riwayat.length + '</strong> total riwayat ' +
+    '(<strong>' + rProfil + '</strong> milik profil aktif) · ' +
+    'Skema v' + BACKUP_SCHEMA_VERSION + '<br>' +
+    '<small style="color:var(--gray-soft)">Semua data tersimpan lokal di perangkat ini.</small>';
+}
+
+function pEkspor() {
+  let profil  = pProfilSemua();
+  let riwayat = pRiwayatSemua();
+  // [4] Metadata versi & skema
+  let payload = {
+    _app          : 'CBT Kabut Digital Portal',
+    _schema       : BACKUP_SCHEMA_VERSION,
+    _versi_app    : 'v7.1.0',
+    _tanggal      : new Date().toISOString(),
+    _device       : typeof navigator !== 'undefined' ? navigator.userAgent.slice(0, 80) : '',
+    _profil_count : profil.length,
+    _riwayat_count: riwayat.length,
+    profil,
+    riwayat
+  };
+  let blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  let url  = URL.createObjectURL(blob);
+  let a    = document.createElement('a');
+  a.href   = url;
+  let tgl  = new Date().toISOString().slice(0, 10);
+  a.download = 'backup_portal_cbt_' + tgl + '_v' + BACKUP_SCHEMA_VERSION + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function pImpor() {
+  document.getElementById('p-file-impor').value = '';
+  document.getElementById('p-file-impor').click();
+}
+
+function pFileImpor(input) {
+  let file = input.files[0];
+  if (!file) return;
+  let reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      let data = JSON.parse(e.target.result);
+      if (!data.profil && !data.riwayat)
+        throw new Error('Format backup tidak valid.');
+
+      // [4] Jalankan migrasi skema jika backup berasal dari versi lama
+      let backupSchema = data._schema || 1;
+      if (backupSchema < BACKUP_SCHEMA_VERSION) {
+        console.log('[Portal] Migrasi backup v' + backupSchema + ' → v' + BACKUP_SCHEMA_VERSION);
+        for (let v = backupSchema; v < BACKUP_SCHEMA_VERSION; v++) {
+          if (_pMigrators[v]) data = _pMigrators[v](data);
+        }
+      }
+      _pImporData = data;
+
+      let jumlahP = (data.profil  || []).length;
+      let jumlahR = (data.riwayat || []).length;
+      document.getElementById('p-impor-info').innerHTML =
+        '<strong>Skema backup:</strong> v' + backupSchema +
+        (backupSchema < BACKUP_SCHEMA_VERSION ? ' (akan dimigrasi ke v' + BACKUP_SCHEMA_VERSION + ')' : '') +
+        '<br><strong>Profil:</strong> ' + jumlahP + ' profil' +
+        '<br><strong>Riwayat:</strong> ' + jumlahR + ' ujian' +
+        '<br><br><em>Pilih cara impor:</em>';
+      document.getElementById('p-modal-impor').classList.add('aktif');
+    } catch(err) {
+      alert('File tidak valid: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function pImpor_Gabung() {
+  if (!_pImporData) return;
+  // [1] Gabung profil berdasarkan UUID (bukan nama)
+  let profil   = pProfilSemua();
+  let uuidAda  = new Set(profil.map(p => p.uuid));
+  (_pImporData.profil || []).forEach(p => {
+    if (!uuidAda.has(p.uuid)) profil.push(p);
+  });
+  pProfilSimpan(profil);
+  // [2] Gabung riwayat berdasarkan id UUID
+  let riwayat = pRiwayatSemua();
+  let idAda   = new Set(riwayat.map(r => r.id));
+  (_pImporData.riwayat || []).forEach(r => {
+    if (!idAda.has(r.id)) riwayat.push(r);
+  });
+  riwayat.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+  pRiwayatSimpanList(riwayat);
+  pModalImpTutup();
+  alert('✅ Data berhasil digabungkan.');
+  pRenderBackupInfo();
+}
+
+function pImpor_Ganti() {
+  if (!_pImporData) return;
+  pModalTampil(
+    '⚠️ Ganti Semua Data',
+    'Semua profil dan riwayat saat ini akan ditimpa. Lanjutkan?',
+    '', 'ya merah', function() {
+      pProfilSimpan(_pImporData.profil || []);
+      pRiwayatSimpanList(_pImporData.riwayat || []);
+      pModalImpTutup();
+      pModalTutup();
+      alert('✅ Data berhasil diganti.');
+      pRenderBackupInfo();
+    }
+  );
+}
+
+function pHapusSemua() {
+  pModalTampil(
+    '🗑 Hapus Semua Data Portal',
+    'Profil dan riwayat ujian akan dihapus permanen.\nData CBT (token, draft) tidak terpengaruh.',
+    '', 'ya merah', function() {
+      try {
+        localStorage.removeItem(LS_PROFIL);
+        localStorage.removeItem(LS_RIWAYAT);
+      } catch(e) {}
+      pModalTutup();
+      pRenderBackupInfo();
+      pRenderProfilList();
+      alert('✅ Data portal telah dihapus.');
+    }
+  );
+}
+
+// ═══════════════════════════════════════════════
+//  [5] IKLAN / PROMOSI — provider-agnostic
+// ═══════════════════════════════════════════════
+
+// Aktifkan slot yang relevan untuk zona (layar) yang sedang ditampilkan.
+// Inject hanya dijalankan sekali per slot (via _adInjected set).
+function _adAktifkanZona(zonaId) {
+  if (!P_AD_CONFIG.enabled) return;
+  // Zona ujian: TIDAK PERNAH tampil iklan
+  if (['exam-screen', 'login-screen'].includes(zonaId)) return;
+
+  Object.entries(P_AD_CONFIG.slots).forEach(([slotId, cfg]) => {
+    if (!cfg.zones.includes(zonaId)) return;
+    let el = document.getElementById(slotId);
+    if (!el) return;
+    el.classList.add('aktif');
+    // Inject konten iklan hanya sekali
+    if (!_adInjected.has(slotId)) {
+      _adInjected.add(slotId);
+      try { P_AD_CONFIG.inject(slotId, el, cfg); } catch(e) { console.warn('[Ad inject]', e); }
+    }
+  });
+}
+
+// API publik: toggle semua slot — tidak berlaku saat ujian aktif
+function portalAdToggle(aktif) {
+  P_AD_CONFIG.enabled = aktif;
+  if (!aktif) {
+    // Nonaktifkan semua slot
+    document.querySelectorAll('.p-ad-slot').forEach(el => el.classList.remove('aktif'));
+  }
+}
+
+// API publik: daftarkan provider iklan dari luar
+// Contoh: portalAdSetProvider('google-adsense', (slotId, el, cfg) => { ... })
+function portalAdSetProvider(providerId, injectFn) {
+  P_AD_CONFIG.provider = providerId;
+  P_AD_CONFIG.inject   = injectFn;
+  _adInjected.clear();  // reset agar provider baru bisa inject ulang
+}
+
+// ═══════════════════════════════════════════════
+//  MODAL PORTAL (generic)
+// ═══════════════════════════════════════════════
+function pModalTampil(judul, pesan, extra, yaKls, onYa) {
+  document.getElementById('p-modal-judul').textContent = judul;
+  document.getElementById('p-modal-pesan').textContent = pesan;
+  document.getElementById('p-modal-extra').innerHTML   = extra || '';
+  let ya = document.getElementById('p-modal-ya');
+  ya.className = yaKls || 'ya';
+  ya.onclick   = onYa || pModalTutup;
+  document.getElementById('p-modal').classList.add('aktif');
+}
+function pModalTutup() {
+  document.getElementById('p-modal').classList.remove('aktif');
+}
+function pModalImpTutup() {
+  document.getElementById('p-modal-impor').classList.remove('aktif');
+  _pImporData = null;
+}
+
+// ═══════════════════════════════════════════════
+//  HELPER
+// ═══════════════════════════════════════════════
+function _esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function _predikatKls(p) {
+  if (!p) return 'D';
+  let c = p.charAt(0).toUpperCase();
+  return ['A','B','C','D','E'].includes(c) ? c : 'D';
+}
+</script>
+
+
+<script data-pwa-converter="v2">
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[PWA] SW registered:', reg.scope))
+      .catch(err => console.error('[PWA] SW failed:', err));
+  });
+}
+let _pwaPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _pwaPrompt = e;
+  const b = document.getElementById('_pwa_banner');
+  if (b) b.style.display = 'flex';
+});
+function _pwaInstall() {
+  if (!_pwaPrompt) return;
+  _pwaPrompt.prompt();
+  _pwaPrompt.userChoice.then(r => {
+    console.log('[PWA] Install:', r.outcome);
+    _pwaPrompt = null;
+    const b = document.getElementById('_pwa_banner');
+    if (b) b.style.display = 'none';
+  });
+}
+window.addEventListener('appinstalled', () => {
+  const b = document.getElementById('_pwa_banner');
+  if (b) b.style.display = 'none';
+});</script></body></html>
