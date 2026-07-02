@@ -1,12 +1,12 @@
 {
   "name": "CBT Kabut Digital",
-  "short_name": "CBT-KD",
-  "description": "CBT-KD (Computer Based Test – Kabut Digital) adalah platform ujian berbasis web dan PWA yang dirancang untuk sekolah, madrasah, pelatihan, komunitas, dan berbagai lembaga pendidikan. Sistem ini mendukung pelaksanaan ujian secara mudah, cepat, dan aman dengan fitur penilaian otomatis, analisis hasil, riwayat ujian, pembahasan, serta integrasi dengan Google Spreadsheet dan Google Apps Script. CBT-KD dapat diakses melalui browser maupun dipasang sebagai aplikasi di perangkat tanpa perlu instalasi dari toko aplikasi.",
+  "short_name": "CBT KD",
+  "description": "CBT Kabut Digital (CBT-KD) adalah platform ujian berbasis komputer (Computer Based Test) yang dirancang untuk digunakan oleh berbagai jenis lembaga — sekolah, madrasah, perguruan tinggi, bimbingan belajar, lembaga pelatihan, perusahaan, hingga instansi pemerintah — menggunakan satu codebase yang sama.  Ujian dikelola sepenuhnya melalui Google Spreadsheet sebagai backend. Tidak perlu server khusus, tidak perlu biaya hosting. Cukup salin template, isi soal, bagikan tautan — ujian siap dijalankan.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#f58700",
+  "theme_color": "#d4af37",
   "orientation": "any",
   "lang": "id",
   "categories": [
