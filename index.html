@@ -1,8 +1,23 @@
+
+<!-- ================================================
+  WATERMARK DIGITAL
+  Pemilik  : Rapian Hasanuddin
+  Kontak   : rapian0279@gmail.com
+  ID Unik  : WM-MRQ5FS3BDQLRC
+  Tanggal  : 2026-07-18
+  Hak Cipta: © 2026 Rapian Hasanuddin
+================================================ -->
 <!DOCTYPE html>
 <html lang="id"><head>
+<meta name="author" content="Rapian Hasanuddin">
+<meta name="copyright" content="© 2026 Rapian Hasanuddin">
+<meta name="protection-id" content="WM-MRQ5FS3BDQLRC">
+<meta name="_wm" content="WM-MRQ5FS3BDQLRC"><meta name="_bh" content="64b625f0">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<title>CBT Kabut Digital</title>
+<title>C​‌​BT Kabut Digital</title>
+<script>eval(decodeURIComponent(escape(atob("Ci8vIFRlcmFwa2FuIHByZWZlcmVuc2kgdGVtYSBzZWNlcGF0IG11bmdraW4gKHNlYmVsdW0gQ1NTIGRpLXBhaW50KSBzdXBheWEKLy8gdGlkYWsgc2VtcGF0ICJrZWRpcCIgbW9kZSB0ZXJhbmcgZHVsdSBiYXJ1IHBpbmRhaCBrZSBtb2RlIG1hbGFtLgooZnVuY3Rpb24oKXsKICB0cnkgewogICAgdmFyIHQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnY2J0X3RlbWEnKTsKICAgIGlmICh0ID09PSAnZGFyaycpIGRvY3VtZW50LmRvY3VtZW50RWxlbWVudC5zZXRBdHRyaWJ1dGUoJ2RhdGEtdGhlbWUnLCAnZGFyaycpOwogIH0gY2F0Y2goZSkge30KfSkoKTsK"))))</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
 <style>
@@ -10,12 +25,27 @@
   --font-arab:20px;
   --blue-deep:#064E3B; --blue-main:#059669; --blue-mid:#10B981;
   --blue-light:#D1FAE5; --blue-pale:#ECFDF5;
+  /* BUG-FIX (2026-07, ronde 4): --blue-deep dipakai untuk 2 tujuan --
+     sebagai warna TEKS judul/label (butuh terang di mode malam) DAN sebagai
+     warna LATAR hover tombol zoom gambar (harus tetap gelap di kedua tema).
+     Dipisah: --title-accent khusus untuk teks judul, --blue-deep tetap apa
+     adanya untuk keperluan latar. */
+  --title-accent:#064E3B;
   --green:#1B8A4C; --green-light:#E6F7EE;
   --red:#C0392B; --red-light:#FDECEA;
   --orange:#D4550A; --orange-light:#FFF3E8;
   --yellow:#B8860B; --yellow-light:#FFFBEA;
   --gray-dark:#1E2B3A; --gray-mid:#4A5568; --gray-soft:#8896A5;
   --gray-line:#DDE3EC; --gray-bg:#F3F6FA; --white:#FFFFFF;
+  /* BUG-FIX (2026-07, mode malam): --gray-dark/--gray-soft dipakai untuk DUA
+     tujuan berbeda di file ini -- sebagai warna TEKS di kebanyakan tempat,
+     tapi juga sebagai warna LATAR tombol solid berteks putih (Kembali/Lanjut,
+     badge kosong, dst) di beberapa tempat. Saat mode malam meng-override
+     --gray-dark jadi warna terang (supaya teks body kebaca di latar gelap),
+     tombol solid itu ikut kebawa terang juga -- padahal dia butuh tetap gelap
+     karena teksnya putih. Makanya dipisah jadi variable sendiri yang SENGAJA
+     tidak ikut berubah di kedua tema. */
+  --chip-dark:#1E2B3A; --chip-muted:#55606E;
   --r-sm:6px; --r-md:10px; --r-lg:16px;
   --sh-sm:0 1px 4px rgba(10,53,102,.08);
   --sh-md:0 4px 16px rgba(10,53,102,.10);
@@ -88,13 +118,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 /* ── EXAM ────────────────────────────────────*/
 .left-panel{flex:1;min-width:0;background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-md);padding:24px;}
 .exam-hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:2px solid var(--blue-light);margin-bottom:20px;}
-.exam-ttl{font-size:16px;font-weight:800;color:var(--blue-deep);}
+.exam-ttl{font-size:16px;font-weight:800;color:var(--title-accent);}
 .timer{display:flex;align-items:center;gap:6px;background:var(--red);color:white;padding:6px 14px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;transition:background .3s;}
 .timer.warn{background:var(--orange);animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
 
 .soal-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
-.no-lbl{font-size:18px;font-weight:800;color:var(--blue-deep);}
+.no-lbl{font-size:18px;font-weight:800;color:var(--title-accent);}
 .badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
 .badge.pg_teks{background:var(--blue-light);color:var(--blue-main);border:1px solid #BDD4F5;}
 .badge.pg_gambar{background:#EEF0FF;color:#3730A3;border:1px solid #C7CAF7;}
@@ -119,7 +149,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .options-grid{display:grid;gap:10px;margin-bottom:24px;}
 .btn-opt{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--gray-line);background:var(--white);border-radius:var(--r-md);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:500;color:var(--gray-dark);transition:all .18s;line-height:1.5;text-align:left;}
 .btn-opt:hover{border-color:var(--blue-mid);background:var(--blue-pale);}
-.btn-opt.selected{border-color:var(--blue-main);background:var(--blue-light);color:var(--blue-deep);font-weight:700;box-shadow:0 0 0 3px rgba(26,115,232,.15);}
+.btn-opt.selected{border-color:var(--blue-main);background:var(--blue-light);color:var(--title-accent);font-weight:700;box-shadow:0 0 0 3px rgba(26,115,232,.15);}
 .opt-ltr{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--gray-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gray-mid);transition:all .18s;}
 .btn-opt.selected .opt-ltr{background:var(--blue-main);border-color:var(--blue-main);color:white;}
 .opt-img{max-width:100%;max-height:120px;border-radius:var(--r-sm);border:1px solid var(--gray-line);display:block;}
@@ -129,7 +159,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .options-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:nowrap;}
 .btn-opt-row{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 8px;border:1.5px solid var(--gray-line);background:var(--white);border-radius:var(--r-md);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--gray-dark);transition:all .18s;min-width:0;}
 .btn-opt-row:hover{border-color:var(--blue-mid);background:var(--blue-pale);}
-.btn-opt-row.selected{border-color:var(--blue-main);background:var(--blue-light);color:var(--blue-deep);box-shadow:0 0 0 3px rgba(26,115,232,.15);}
+.btn-opt-row.selected{border-color:var(--blue-main);background:var(--blue-light);color:var(--title-accent);box-shadow:0 0 0 3px rgba(26,115,232,.15);}
 .btn-opt-row .opt-ltr{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--gray-bg);border:1.5px solid var(--gray-line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gray-mid);transition:all .18s;}
 .btn-opt-row.selected .opt-ltr{background:var(--blue-main);border-color:var(--blue-main);color:white;}
 
@@ -142,7 +172,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .kirim-ind.ok{color:var(--green);} .kirim-ind.sending{color:var(--yellow);} .kirim-ind.err{color:var(--red);}
 
 .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
-.btn-nav{padding:10px 22px;background:var(--gray-dark);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.btn-nav{padding:10px 22px;background:var(--chip-dark);color:white;border:none;border-radius:var(--r-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;}
 .btn-nav:hover{opacity:.85;}
 .btn-ragu{background:var(--yellow-light);color:var(--yellow);border:1.5px solid #E8D48A;}
 .btn-ragu.aktif{background:#FFDE8A;border-color:var(--yellow);}
@@ -175,7 +205,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .skor-angka{font-size:68px;font-weight:800;line-height:1;letter-spacing:-2px;}
 .skor-sub{font-size:13px;opacity:.8;margin-top:4px;}
 .skor-pred{margin-top:10px;padding:5px 18px;background:rgba(255,255,255,.2);border-radius:20px;font-size:16px;font-weight:700;display:inline-block;}
-.poin-info{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--blue-deep);}
+.poin-info{background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-size:13px;color:var(--title-accent);}
 .esai-note{background:var(--orange-light);border:1px solid #F5C6A0;border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;}
 .esai-note h4{font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px;}
 .esai-note p{font-size:12px;color:var(--gray-mid);line-height:1.5;}
@@ -190,7 +220,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .aksi-col{display:flex;flex-direction:column;gap:10px;}
 .btn-aksi{width:100%;padding:14px;border:none;border-radius:var(--r-md);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .1s;}
 .btn-aksi:hover{opacity:.9;transform:translateY(-1px);}
-.btn-aksi.analisis{background:var(--gray-soft);color:white;cursor:not-allowed;opacity:.7;}.btn-aksi.analisis.buka{background:var(--blue-main);color:white;cursor:pointer;opacity:1;}
+.btn-aksi.analisis{background:var(--chip-muted);color:white;cursor:not-allowed;opacity:.7;}.btn-aksi.analisis.buka{background:var(--blue-main);color:white;cursor:pointer;opacity:1;}
 
 /* ── SPLIT SCREEN LOCK OVERLAY ── */
 #split-lock-overlay{
@@ -252,7 +282,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .ana-no{font-size:14px;font-weight:800;}
 .ana-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;}
 .ana-badge.benar{background:var(--green);color:white;} .ana-badge.salah{background:var(--red);color:white;}
-.ana-badge.kosong{background:var(--gray-soft);color:white;} .ana-badge.esai-p{background:var(--orange);color:white;}
+.ana-badge.kosong{background:var(--chip-muted);color:white;} .ana-badge.esai-p{background:var(--orange);color:white;}
 .ana-teks{padding:12px 14px;background:var(--blue-pale);font-size:13px;line-height:1.6;border-top:1px solid var(--blue-light);white-space:pre-wrap;word-break:break-word;}
 .ana-img{padding:10px 14px;background:var(--gray-bg);border-top:1px solid var(--gray-line);}
 .ana-img img{max-width:100%;border-radius:var(--r-sm);}
@@ -287,7 +317,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .reset-guru a:hover{color:var(--blue-mid);}
 
 @media(max-width:768px){
-  .exam-wrap{flex-direction:column;}
+  /* BUG-FIX (2026-07): .exam-wrap punya align-items:flex-start (sengaja,
+     supaya di layout desktop/landscape -- flex-direction:row -- right-panel
+     yang sticky tidak dipaksa setinggi left-panel). Tapi begitu di mode HP
+     potret exam-wrap berpindah ke flex-direction:column, align-items yang
+     SAMA itu jadi berlaku ke sumbu HORIZONTAL, bukan vertikal lagi -- akibatnya
+     kartu soal (.left-panel) dan panel navigasi (.right-panel) menyusut
+     mengikuti lebar teks/konten alih-alih melebar penuh, sehingga latar abu-abu
+     kelihatan di sisi kanan. Ditambal dengan menegaskan stretch penuh khusus
+     saat mode kolom (potret). */
+  .exam-wrap{flex-direction:column;align-items:stretch;}
+  .left-panel{width:100%;}
   .right-panel{width:100%;position:static;max-height:none;}
   .grid-nomor{grid-template-columns:repeat(6,1fr);}
 }
@@ -386,7 +426,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
   text-transform:uppercase;letter-spacing:.4px;}
 .p-fg input,.p-fg select{width:100%;padding:11px 14px;border:1.5px solid var(--gray-line);
   border-radius:var(--r-sm);font-size:14px;font-family:inherit;outline:none;
-  background:var(--white);transition:border-color .2s;}
+  color:var(--gray-dark);background:var(--white);transition:border-color .2s;}
 .p-fg input:focus,.p-fg select:focus{border-color:var(--blue-main);}
 
 /* ── Autocomplete dropdown ── */
@@ -439,7 +479,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
   background:var(--blue-pale);padding:1px 7px;border-radius:8px;margin-top:2px;display:inline-block;}
 .p-profil-aksi{display:flex;gap:6px;}
 .p-profil-aksi button{padding:5px 10px;font-size:11px;font-weight:700;border-radius:6px;
-  border:1px solid var(--gray-line);background:var(--gray-bg);cursor:pointer;font-family:inherit;}
+  border:1px solid var(--gray-line);background:var(--gray-bg);color:var(--gray-dark);cursor:pointer;font-family:inherit;}
 .p-profil-aksi .pilih{background:var(--blue-main);color:white;border-color:var(--blue-main);}
 .p-profil-aksi .hapus{background:var(--red-light);color:var(--red);border-color:#F5B7B1;}
 
@@ -483,9 +523,130 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 
 /* ── Version badge ── */
 .p-version{text-align:center;font-size:10px;color:var(--gray-soft);margin-top:8px;letter-spacing:.5px;}
-</style>
-<meta name="description" content="Engine ujian CBT online — soal dari Google Sheet, hasil otomatis, anti-kecurangan."><meta name="theme-color" content="#0c7ff2"><link rel="manifest" href="./manifest.json"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="CBT Kabut Digital"><link rel="apple-touch-icon" href="./icons/icon-192.png"></head>
-<body><div id="_pwa_banner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0c7ff2;color:#fff;padding:14px 20px;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.25);z-index:99999;font-family:system-ui,sans-serif;font-size:14px;align-items:center;gap:12px;max-width:calc(100vw - 32px)"><span>📲 Instal CBT Kabut Digital</span><button onclick="_pwaInstall()" style="background:#fff;color:#0c7ff2;border:none;padding:7px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px">Instal</button><button onclick="this.parentElement.style.display='none'" style="background:rgba(255,255,255,.25);color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer">✕</button></div>
+
+/* ═══════════════════════════════════════════════════════════
+   MODE MALAM (DARK MODE)
+   Ditambahkan 2026-07. Strategi: hampir semua elemen di file ini
+   sudah memakai CSS variable (--white, --gray-bg, --gray-dark,
+   --gray-mid, --gray-soft, --gray-line, --blue-pale, --blue-light,
+   --green-light, --red-light, --orange-light, --yellow-light),
+   jadi cukup override variable itu di bawah [data-theme="dark"]
+   supaya menjalar otomatis ke hampir semua kartu/panel/tombol
+   tanpa menyentuh ratusan selector satu-satu. Warna aksen jenuh
+   (--blue-main, --green, --red, --orange, --yellow, dst) SENGAJA
+   tidak diubah karena sudah cukup kontras di atas latar gelap.
+   ═══════════════════════════════════════════════════════════ */
+html[data-theme="dark"]{
+  /* REVISI (ronde 11): ditetapkan eksplisit -- latar halaman (--gray-bg)
+     #2E3338, latar kartu/panel (--white, nama variable historis) #121416. */
+  --white:#121416; --gray-bg:#2E3338; --gray-dark:#EDEDED;
+  --gray-mid:#A2A2A8; --gray-soft:#78787F;
+  --gray-line:#34353B;
+  --title-accent:#5EEAD4; /* REVISI (ronde 4): judul/label supaya jelas tapi tidak neon -- lihat catatan di :root */
+  --blue-light:#0D2620; --blue-pale:#0A1A16;
+  --green-light:#0F2417; --red-light:#2A1512;
+  --orange-light:#2A1D10; --yellow-light:#251F0E;
+  --sh-sm:0 1px 4px rgba(0,0,0,.45);
+  --sh-md:0 4px 16px rgba(0,0,0,.55);
+  --sh-lg:0 8px 32px rgba(0,0,0,.65);
+}
+/* Beberapa surface pakai hex literal (bukan variable) -- ditambal manual di sini */
+html[data-theme="dark"] .esai-textarea{background:#161A18;color:var(--gray-dark);}
+html[data-theme="dark"] .esai-textarea:focus{background:#1B211E;}
+html[data-theme="dark"] .esai-ans{background:#1C1710;}
+html[data-theme="dark"] .esai-ans .teks{background:#161616;border-color:#3A2E10;}
+html[data-theme="dark"] .rubrik-bar{background:#0D1712;}
+html[data-theme="dark"] .p-menu-item.wizard{background:#0B1712;}
+html[data-theme="dark"] .ico-badge{background:#0D2620;color:#34D399;}
+html[data-theme="dark"] .status-bar.loading{background:#211C0A;color:#F0C960;}
+html[data-theme="dark"] .status-bar.ok{background:#0F2417;color:#4ADE80;}
+html[data-theme="dark"] .status-bar.error{background:#2A1512;color:#F87171;}
+/* BUG-FIX (2026-07, ronde 4): ".btn-no.ragu" (kotak nomor navigasi yang
+   ditandai ragu-ragu) dan ".btn-ragu.aktif" (tombol toggle ragu-ragu) pakai
+   latar kuning pucat #FFDE8A yang hardcode (tidak ikut tema) berpasangan
+   dengan teks --gray-dark yang di mode malam jadi putih -- putih di atas
+   kuning pucat nyaris tak terbaca, dan warnanya sendiri jadi terlalu
+   menyilaukan di tengah latar gelap. Diganti jadi ambar gelap + teks putih
+   bersih, senada dengan referensi yang diminta. */
+html[data-theme="dark"] .btn-no.ragu{background:#3A2A06;border-color:#D4A017;color:#FFFFFF;}
+html[data-theme="dark"] .btn-ragu.aktif{background:#3A2A06;border-color:#D4A017;color:#F0C960;}
+/* REVISI (2026-07, ronde 5): di mode terang, kotak pilihan jawaban & kotak
+   nomor navigasi sengaja memakai --white (sedikit beda dari --gray-bg) supaya
+   terlihat seperti "kartu" yang naik dari latar. Tapi di referensi mode malam
+   yang diminta (gaya Mi Browser), kotak-kotak yang BELUM dipilih/dijawab
+   seharusnya menyatu dengan latar -- cuma garis pembatas yang kelihatan,
+   bukan kotak terisi. State yang SUDAH berwarna (terpilih/terjawab/ragu-ragu)
+   tidak disentuh karena punya warna khasnya sendiri. */
+html[data-theme="dark"] .btn-opt:not(.selected){background:var(--white);}
+html[data-theme="dark"] .btn-opt-row:not(.selected){background:var(--white);}
+html[data-theme="dark"] .btn-no:not(.dijawab):not(.ragu){background:var(--white);}
+/* REVISI (2026-07, ronde 6): pola yang sama seperti kotak jawaban ujian --
+   ".p-menu-item" (Riwayat Ujian/Kelola Profil/Backup & Pemulihan di beranda
+   portal) juga pakai var(--white) sebagai isi, jadi lebih terang dari latar
+   di mode malam. Disamakan dengan latar supaya jadi kotak bergaris tepi saja,
+   sesuai referensi -- kecuali varian yang memang sengaja berwarna sendiri
+   (.primary = hijau solid, .wizard = sudah ditambal terpisah di atas). */
+html[data-theme="dark"] .p-menu-item:not(.primary):not(.wizard){background:var(--white);}
+html[data-theme="dark"] .status-bar.retry{background:#2A1D10;color:#FDBA74;}
+html[data-theme="dark"] .load-overlay{background:rgba(28,29,33,.92);}
+html[data-theme="dark"] .p-ad-slot{background:#242529;}
+html[data-theme="dark"] ::-webkit-scrollbar{width:10px;height:10px;}
+html[data-theme="dark"] ::-webkit-scrollbar-track{background:#2E3338;}
+html[data-theme="dark"] ::-webkit-scrollbar-thumb{background:#2A2A2A;border-radius:6px;}
+
+/* ── Tombol toggle mode malam — mengambang, tampil di semua layar ── */
+.theme-toggle-btn{
+  position:fixed;top:14px;right:14px;z-index:10000;
+  width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gray-line);
+  background:var(--white);color:var(--gray-dark);box-shadow:var(--sh-md);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:transform .2s,background .2s;
+}
+.theme-toggle-btn:active{transform:scale(.9);}
+.theme-toggle-btn svg{width:19px;height:19px;}
+.theme-toggle-btn .ico-moon{display:none;}
+html[data-theme="dark"] .theme-toggle-btn .ico-sun{display:none;}
+html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
+@media(max-width:480px){ .theme-toggle-btn{top:10px;right:10px;width:36px;height:36px;} .theme-toggle-btn svg{width:17px;height:17px;} }
+/* _b:494fff */</style>
+<meta name="description" content="&lt;meta name=&quot;description&quot; content=&quot;CBT Kabut Digital: buat ujian online untuk sekolah, kampus, atau perusahaan lewat wizard 5 langkah — tanpa server, pakai Google Sheets sendiri.&quot;&gt;"><meta name="theme-color" content="#a87c2d"><link rel="manifest" href="./manifest.json"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="CBT Kabut Digital"><link rel="apple-touch-icon" href="./icons/icon-192.png"> data-pwa-converter="v2"<script data-pwa-converter="v2">
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[PWA] SW registered:', reg.scope))
+      .catch(err => console.error('[PWA] SW failed:', err));
+  });
+}
+let _pwaPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _pwaPrompt = e;
+  const b = document.getElementById('_pwa_banner');
+  if (b) b.style.display = 'flex';
+});
+function _pwaInstall() {
+  if (!_pwaPrompt) return;
+  _pwaPrompt.prompt();
+  _pwaPrompt.userChoice.then(r => {
+    console.log('[PWA] Install:', r.outcome);
+    _pwaPrompt = null;
+    const b = document.getElementById('_pwa_banner');
+    if (b) b.style.display = 'none';
+  });
+}
+window.addEventListener('appinstalled', () => {
+  const b = document.getElementById('_pwa_banner');
+  if (b) b.style.display = 'none';
+});</script> data-wm-rt="1"<script data-wm-rt="1">(function(){var _id="WM-MRQ5FS3BDQLRC";var _bh="64b625f0";var _on="Rapian Hasanuddin";var _id8="WM-MRQ5F";function _h(s){var h=0;for(var i=0;i<s.length;i++){h=(Math.imul(31,h)+s.charCodeAt(i))|0;}return Math.abs(h).toString(16).padStart(8,"0");}function _warn(r){if(document.getElementById("_wm_warn"))return;var ov=document.createElement("div");ov.id="_wm_warn";ov.style.cssText="position:fixed;top:0;left:0;width:100%;background:rgba(220,38,38,.96);color:#fff;padding:13px 18px;z-index:999999;font-family:sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.3)";ov.textContent="⚠ Aplikasi ini telah dimodifikasi secara tidak sah — Rapian Hasanuddin";if(document.body)document.body.appendChild(ov);}function _chk(){var _m=document.querySelector("meta[name='_wm']");if(!_m||_m.getAttribute("content")!==_id){_warn("meta-wm");return;}var _bwm=document.body&&document.body.getAttribute("data-wm");if(_bwm&&_bwm!==_id){_warn("body-wm");return;}var _cv=getComputedStyle(document.documentElement).getPropertyValue("--_wm-id").trim();if(_cv&&_cv.replace(/["'"]/g,"").indexOf(_id8)===-1){_warn("css-wm");return;}}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){setTimeout(_chk,500);});}else{setTimeout(_chk,500);}setInterval(_chk,5000);})();</script></head>
+<body data-wm="WM-MRQ5FS3BDQLRC" data-owner="UmFwaWFuIEhhc2FudWRkaW4=">
+<!-- OWNER:WM-MRQ5FS3BDQLRC:Rapian%20Hasanuddin:2026-07-18 --><span style="display:none!important;position:absolute;left:-9999px" data-wm="WM-MRQ5FS3BDQLRC">WM-MRQ5FS3BDQLRC</span>
+<div id="_pwa_banner" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#a87c2d;color:#fff;padding:14px 20px;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.25);z-index:99999;font-family:system-ui,sans-serif;font-size:14px;align-items:center;gap:12px;max-width:calc(100vw - 32px)"><span>📲 Instal CBT Kabut Digital</span><button onclick="_pwaInstall()" style="background:#fff;color:#a87c2d;border:none;padding:7px 16px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px">Instal</button><button onclick="this.parentElement.style.display='none'" style="background:rgba(255,255,255,.25);color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer">✕</button></div>
+
+<!-- ── TOGGLE MODE MALAM — mengambang, tampil di semua layar ── -->
+<button class="theme-toggle-btn" id="btn-theme-toggle" onclick="toggleTema()" title="Ganti mode terang/malam" type="button">
+  <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+  <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+</button>
 
 <!-- ═══════════════════════════════════════════════════════════
      PORTAL SISWA — HTML
@@ -539,7 +700,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
         <div class="lbl">Backup &amp; Pemulihan</div>
         <div class="sub">Ekspor &amp; impor data</div>
       </div>
-      <a id="menu-wizard" class="p-menu-item wizard" href="https://istiqamah92170.github.io/cbt-kabut-digital/index.html" target="_blank" rel="noopener">
+      <a id="menu-wizard" class="p-menu-item wizard" href="__CBTKD_WIZARD_URL__" target="_blank" rel="noopener">
         <div class="ico-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9Z"></path></svg></div>
         <div class="txt">
           <div class="lbl">Buat CBT Baru</div>
@@ -897,7 +1058,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
         <button class="btn-aksi analisis" id="btn-analisis" onclick="cobaAnalisis()">📊 Analisis &amp; Pembahasan Soal</button>
         <button class="btn-aksi" style="background:var(--orange);color:white;" onclick="resetDevice()">🔄 Reset Perangkat Ujian</button>
         <!-- B.2 — Kembali ke Portal tanpa refresh -->
-        <button class="btn-aksi" style="background:var(--gray-soft);color:white;margin-top:6px;" onclick="pTampil('portal-screen')">← Kembali ke Portal</button>
+        <button class="btn-aksi" style="background:var(--chip-muted);color:white;margin-top:6px;" onclick="pTampil('portal-screen')">← Kembali ke Portal</button>
       </div>
 
     </div>
@@ -933,2431 +1094,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 
 
 
-<script>
-// ═══════════════════════════════════════════════
-//  KONFIGURASI
-// ═══════════════════════════════════════════════
-// ── Baca URL GAS dari parameter ?gas= jika ada ──────────────────────
-const _gasParam = new URLSearchParams(window.location.search).get('gas');
-const URL_SCRIPT  = _gasParam
-  ? decodeURIComponent(_gasParam)
-  : "https://script.google.com/macros/s/AKfycbwWAOOimIzR-lFcfErtZc3vgzCGxLVTkvp90GckAP2FHaBZlOTtB6QRp4N87drThDOTFg/exec";
-const TIMEOUT_MS  = 15000;
-const MAX_RETRY   = 2;
-const LS_KEY      = "cbt_omi_2026_selesai";  // localStorage key (ujian selesai)
-
-// ═══════════════════════════════════════════════
-//  MASTER_CONFIG — batas kemampuan engine
-//  Jika suatu flag false, server tidak bisa mengaktifkannya
-// ═══════════════════════════════════════════════
-const MASTER_CONFIG = {
-  allowAds             : true,
-  allowRewardUnlock    : true,
-  allowHistory         : true,
-  allowReview          : true,
-  allowBackup          : true,
-  allowMultiProfile    : true,
-  allowPremiumResolver : true,
-  allowServerBranding  : true,
-  allowServerTheme     : true,
-  allowServerLogo      : true,
-  allowWizard          : true
-};
-
-// ── Default branding bawaan engine (dipakai jika server tidak kirim) ──
-const SERVER_BRAND_DEFAULT = {
-  institution_name        : 'CBT Kabut Digital',
-  institution_short_name  : 'CBT',
-  institution_logo        : '',
-  selector_options        : [],          // diisi otomatis dari institution_name + selector_options GAS
-  welcome_message         : 'Selamat Datang',
-  theme_color             : '',
-  institution_field_label : 'Institusi / Lembaga',
-  participant_field_label : 'Nama Lengkap Peserta',
-  participant_reset_msg   : 'Peserta bisa mengerjakan ulang.',
-  premium_selector_label  : 'Pilih Grup'  // khusus untuk Premium kelas selector
-};
-
-// State branding aktif — diisi dari server, fallback ke default
-let SERVER_BRAND = { ...SERVER_BRAND_DEFAULT };
-const LS_DRAFT    = "cbt_omi_2026_draft";     // localStorage key (draft jawaban selama ujian)
-const LS_DEVICE   = "cbt_omi_2026_device";    // localStorage key (device id & login count)
-
-// URL GAS aktif untuk sesi ini — diset portal sebelum muatSoal dipanggil.
-// Semua fetch (soal, kirimBatch, rekapAkhir, getHasilSiswa) WAJIB pakai ini.
-let _urlGasAktif  = URL_SCRIPT;
-
-// ═══════════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════════
-let soalData   = [];
-let tokenSheet = "";
-let poinEsaiKoreksi = 0;   // poin esai yang sudah dikoreksi guru (dari GAS)
-let BOBOT_PG   = 70;       // bobot PG (dari konfigurasi)
-let FONT_ARAB  = 20;       // ukuran font pertanyaan arab (px)
-let _wakeLock  = null;      // Wake Lock agar layar tidak mati
-
-async function aktifkanWakeLock() {
-  if (!('wakeLock' in navigator)) return; // tidak didukung browser
-  try {
-    _wakeLock = await navigator.wakeLock.request('screen');
-    _wakeLock.addEventListener('release', function() { _wakeLock = null; });
-  } catch(e) { /* silent — izin ditolak atau tidak didukung */ }
-}
-
-let _teksImgScale = 1;
-function zoomTeksImg(arah) {
-  let img = document.getElementById('teks-img');
-  if (!img) return;
-  if (arah === 1)       _teksImgScale = Math.min(3, _teksImgScale + 0.2);
-  else if (arah === -1) _teksImgScale = Math.max(0.5, _teksImgScale - 0.2);
-  else                  _teksImgScale = 1;
-  img.style.transform = 'scale(' + _teksImgScale + ')';
-  img.style.transformOrigin = 'top left';
-}
-
-function matikanWakeLock() {
-  if (_wakeLock) { _wakeLock.release(); _wakeLock = null; }
-}
-
-// Re-aktifkan wake lock jika tab kembali aktif
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible' && ujianAktif) aktifkanWakeLock();
-});
-
-// Render teks pertanyaan: teks Arab dibungkus span khusus
-function renderTeksQ(el, teks) {
-  if (!teks) { el.textContent = ''; return; }
-  let arabRe = new RegExp('[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]+', 'g');
-  let safe = teks.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-                 .replace(arabRe, '<span class="arab-txt">$&</span>');
-  el.innerHTML = safe;
-}
-let BOBOT_ESAI = 30;       // bobot Esai (dari konfigurasi)
-let resetToken = "";   // token khusus reset perangkat (dari sheet Konfigurasi: reset_token)
-let DURASI     = 90;
-let JUDUL      = "CBT";
-let soalReady  = false;
-
-// ═══════════════════════════════════════════════
-//  SERVER BRANDING
-//  Dipanggil setelah muatSoal berhasil dapat response GAS.
-//  Hanya berjalan jika MASTER_CONFIG.allowServerBranding = true.
-// ═══════════════════════════════════════════════
-function _applyServerBranding(branding) {
-  if (!MASTER_CONFIG.allowServerBranding || !branding) {
-    // Meski tanpa branding server, tetap terapkan MASTER_CONFIG ke modul
-    _applyMasterConfigToPortal();
-    return;
-  }
-
-  // Merge dengan default — hanya field non-kosong dari server yang ditimpa
-  let merged = {};
-  Object.keys(SERVER_BRAND_DEFAULT).forEach(function(k) {
-    let v = branding[k];
-    merged[k] = (v !== undefined && v !== null && v !== '')
-      ? v : SERVER_BRAND_DEFAULT[k];
-  });
-  SERVER_BRAND = merged;
-
-  // ── Logo ─────────────────────────────────────
-  if (MASTER_CONFIG.allowServerLogo && SERVER_BRAND.institution_logo) {
-    let logoEls = document.querySelectorAll('.p-logo');
-    logoEls.forEach(el => {
-      el.innerHTML = '<img src="' + SERVER_BRAND.institution_logo
-        + '" alt="logo" style="width:40px;height:40px;object-fit:contain;border-radius:8px;">';
-    });
-  }
-
-  // ── Nama institusi di Portal header ──────────
-  let h1El = document.getElementById('p-brand-name');
-  if (h1El && SERVER_BRAND.institution_short_name) {
-    h1El.textContent = SERVER_BRAND.institution_short_name;
-  }
-
-  // ── Warna tema ────────────────────────────────
-  if (MASTER_CONFIG.allowServerTheme && SERVER_BRAND.theme_color) {
-    document.documentElement.style.setProperty('--teal', SERVER_BRAND.theme_color);
-  }
-
-  // ── Label field institusi di login screen ────
-  let selMadrasahLabel = document.getElementById('lbl-institusi');
-  if (selMadrasahLabel) selMadrasahLabel.textContent = SERVER_BRAND.institution_field_label;
-
-  // ── Label field peserta di login screen ──────
-  let pesertaLabel = document.getElementById('lbl-peserta');
-  if (pesertaLabel) pesertaLabel.textContent = SERVER_BRAND.participant_field_label;
-
-  // ── Placeholder input nama ────────────────────
-  let inpNama = document.getElementById('inp-nama');
-  if (inpNama && SERVER_BRAND.welcome_message) {
-    inpNama.placeholder = SERVER_BRAND.welcome_message + ' — ketik nama Anda...';
-  }
-
-  // ── Opsi select institusi ─────────────────────
-  // selector_options dari GAS sudah berisi institution_name sebagai opsi pertama
-  let selMadrasah = document.getElementById('sel-madrasah');
-  if (selMadrasah && Array.isArray(SERVER_BRAND.selector_options)
-      && SERVER_BRAND.selector_options.length > 0) {
-    selMadrasah.innerHTML = '<option value="" disabled>'
-      + '-- ' + SERVER_BRAND.institution_field_label + ' --</option>'
-      + SERVER_BRAND.selector_options.map(opt => {
-          let val = typeof opt === 'object' ? (opt.value || opt) : opt;
-          let lbl = typeof opt === 'object' ? (opt.label || opt.value || opt) : opt;
-          return '<option value="' + val + '">' + lbl + '</option>';
-        }).join('');
-    // Jika hanya satu opsi, pilih otomatis agar tidak perlu diklik
-    if (SERVER_BRAND.selector_options.length === 1) {
-      let singleVal = typeof SERVER_BRAND.selector_options[0] === 'object'
-        ? (SERVER_BRAND.selector_options[0].value || SERVER_BRAND.selector_options[0])
-        : SERVER_BRAND.selector_options[0];
-      selMadrasah.value = singleVal;
-    }
-  }
-
-  // ── Label Premium selector (kelas/grup) — bukan untuk login ──
-  let premLabel = SERVER_BRAND.premium_selector_label || 'Pilih Grup';
-  let lblKelas = document.getElementById('lbl-kelas');
-  if (lblKelas) lblKelas.textContent = premLabel;
-  let selKelas = document.getElementById('p-sel-kelas');
-  if (selKelas && selKelas.options[0]) {
-    selKelas.options[0].textContent = '-- ' + premLabel + ' --';
-  }
-
-  // ── Terapkan MASTER_CONFIG ke modul Portal ───
-  _applyMasterConfigToPortal();
-}
-
-// Terapkan flag MASTER_CONFIG ke elemen Portal (dipanggil selalu, dengan atau tanpa branding)
-function _applyMasterConfigToPortal() {
-  let menuRiwayat = document.getElementById('menu-riwayat');
-  let menuProfil  = document.getElementById('menu-profil');
-  let menuBackup  = document.getElementById('menu-backup');
-  let menuWizard  = document.getElementById('menu-wizard');
-
-  if (menuRiwayat) menuRiwayat.style.display = MASTER_CONFIG.allowHistory  ? '' : 'none';
-  if (menuProfil)  menuProfil.style.display  = MASTER_CONFIG.allowMultiProfile ? '' : 'none';
-  if (menuBackup)  menuBackup.style.display  = MASTER_CONFIG.allowBackup   ? '' : 'none';
-  if (menuWizard)  menuWizard.style.display  = MASTER_CONFIG.allowWizard   ? '' : 'none';
-}
-
-let idx        = 0;
-let jawPG      = {};
-let jawEsai    = {};
-let raguMap    = {};
-let namaSiswa  = "";
-let namaSekolah= "";
-let detik      = 0;
-let timerID    = null;
-let pelanggar  = 0;
-let MAKS_P     = 3;
-let PESAN_1    = "";
-let PESAN_2    = "";
-let PESAN_3    = "";
-let ACAK_SOAL  = false;
-let BUKA_PEMB  = false;   // true = tampil pembahasan
-let TOKEN_PEL  = "";      // reset token khusus pelanggaran
-let ujianSelesai = false;  // flag: anti-curang nonaktif setelah selesai
-let ujianAktif   = false;  // flag: ujian sedang berjalan (untuk wake lock)
-let tMulai=null, tSelesai=null;
-let dbEsai=null;
-let zoom=1;
-let hasilSimpan = null;
-let deviceId    = "";    // ID unik perangkat (disimpan di localStorage)
-let loginCount  = 0;     // berapa kali device ini login
-
-// ═══════════════════════════════════════════════
-//  CEK SUDAH MENGERJAKAN (1 DEVICE = 1 KALI)
-// ═══════════════════════════════════════════════
-function cekSudahMengerjakan() {
-  try {
-    let data = localStorage.getItem(LS_KEY);
-    return data ? JSON.parse(data) : null;
-  } catch(e) { return null; }
-}
-
-function simpanStatusSelesai(data) {
-  try {
-    localStorage.setItem(LS_KEY, JSON.stringify(data));
-  } catch(e) {}
-}
-
-// A-3: guru bisa hapus cache GAS via HTML agar perubahan konfigurasi (termasuk
-// buka_pembahasan) langsung efektif tanpa menunggu 5 menit TTL cache GAS
-function hapusCacheGAS() {
-  if (!_urlGasAktif) { alert('Belum terhubung ke GAS.'); return; }
-  fetch(_urlGasAktif, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify({ action: 'hapusCache' })
-  }).then(function() {
-    alert('✅ Cache GAS berhasil dihapus. Perubahan konfigurasi aktif pada login berikutnya.');
-  }).catch(function() {
-    alert('⚠️ Permintaan terkirim (tidak bisa dikonfirmasi karena mode no-cors).');
-  });
-}
-
-function resetDevice() {
-  let token = prompt("Masukkan token reset dari guru:");
-  if (!token) return;
-  let tok = token.trim();
-  if (tok === tokenSheet) {
-    alert("Token reset tidak valid. Hubungi guru.");
-    return;
-  }
-  // Cek apakah siswa ini punya catatan pelanggaran
-  let _dsLS  = cekSudahMengerjakan();
-  let _paksa = _dsLS && _dsLS.paksa_selesai;
-  if (_paksa) {
-    // Dihentikan paksa: wajib pakai TOKEN_PEL
-    if (!TOKEN_PEL || tok !== TOKEN_PEL) {
-      alert("🚫 Ujian ini dihentikan karena pelanggaran. Gunakan token reset khusus pelanggaran dari guru.");
-      return;
-    }
-    try { localStorage.removeItem(LS_KEY); localStorage.removeItem(LS_DRAFT); } catch(e) {}
-    alert("✅ Reset berhasil. " + SERVER_BRAND.participant_reset_msg + " ⚠️ Harap ingatkan untuk tetap jujur.");
-  } else {
-    // Reset biasa: pakai resetToken
-    if (tok !== resetToken) {
-      alert("Token reset salah! Reset tidak berhasil.");
-      return;
-    }
-    try { localStorage.removeItem(LS_KEY); localStorage.removeItem(LS_DRAFT); } catch(e) {}
-    alert("✅ Perangkat berhasil di-reset. " + SERVER_BRAND.participant_reset_msg);
-  }
-  document.getElementById('modal-analisis').classList.remove('aktif');
-  document.getElementById('hasil-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'block';
-  document.getElementById('form-login-area').style.display = 'block';
-  location.reload();
-}
-
-
-// ═══════════════════════════════════════════════
-//  FETCH DENGAN TIMEOUT + RETRY
-// ═══════════════════════════════════════════════
-function fetchDenganTimeout(url, opsi, timeoutMs) {
-  return new Promise((resolve, reject) => {
-    const ctrl = new AbortController();
-    const tid  = setTimeout(() => ctrl.abort(), timeoutMs);
-    fetch(url, { ...opsi, signal: ctrl.signal, redirect: 'follow' })
-      .then(r => { clearTimeout(tid); resolve(r); })
-      .catch(e => { clearTimeout(tid); reject(e); });
-  });
-}
-
-async function fetchDenganRetry(url, opsi, timeoutMs, maxRetry) {
-  let percobaan = 0;
-  while (percobaan <= maxRetry) {
-    try {
-      if (percobaan > 0) {
-        setOverlay(`Percobaan ke-${percobaan + 1} dari ${maxRetry + 1}...<br><small style="font-weight:400;color:var(--gray-soft);">Server sedang booting, harap sabar</small>`);
-        await new Promise(r => setTimeout(r, 2000));
-      }
-      const resp = await fetchDenganTimeout(url, opsi, timeoutMs);
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      return resp;
-    } catch (e) {
-      percobaan++;
-      if (percobaan > maxRetry) throw e;
-    }
-  }
-}
-
-// ═══════════════════════════════════════════════
-//  LOAD SOAL
-// ═══════════════════════════════════════════════
-window.onload = function() {
-  portalInit(); // ← Portal yang mengendalikan kapan muatSoal dipanggil
-};
-
-function getOrInitDevice() {
-  try {
-    let raw = localStorage.getItem(LS_DEVICE);
-    let d = raw ? JSON.parse(raw) : null;
-    if (!d || !d.id) {
-      d = { id: "dev_" + Math.random().toString(36).slice(2,10) + Date.now(), count: 0 };
-    }
-    return d;
-  } catch(e) { return { id: "dev_unknown", count: 0 }; }
-}
-
-function muatSoal() {
-  soalReady = false;
-  document.getElementById('btn-login').disabled = true;
-  setBar('loading', 'Menghubungi server soal...');
-  setOverlay('Memuat soal dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Harap tunggu, ini mungkin memakan waktu 5&#8211;15 detik</small>');
-  document.getElementById('load-overlay').classList.remove('hide');
-
-  fetchDenganRetry(_urlGasAktif + "?action=getDataSoal", {}, TIMEOUT_MS, MAX_RETRY)
-    .then(r => r.json())
-    .then(data => {
-      tokenSheet = (data.token||"CBT-TOKEN").trim();
-      resetToken = (data.reset_token||data.token||"CBT-TOKEN").trim();
-      DURASI     = parseInt(data.durasi_menit||90);
-      JUDUL      = data.judul||"CBT";
-      MAKS_P     = parseInt(data.maks_pelanggaran||3);
-      PESAN_1    = (data.pesan_1||'').trim();
-      PESAN_2    = (data.pesan_2||'').trim();
-      PESAN_3    = (data.pesan_3||'').trim();
-      ACAK_SOAL  = data.acak_soal === true;
-      BUKA_PEMB  = data.buka_pembahasan === true;
-      TOKEN_PEL  = (data.reset_token_pel||'').trim();
-      BOBOT_PG   = parseFloat(data.bobot_pg   || 70);
-      BOBOT_ESAI = parseFloat(data.bobot_esai || 30);
-      FONT_ARAB  = parseInt(data.font_arab || 20);
-      document.documentElement.style.setProperty('--font-arab', FONT_ARAB + 'px');
-      // Terapkan branding dari server (jika ada)
-      _applyServerBranding(data.branding || null);
-      if (Array.isArray(data.soal) && data.soal.length > 0) {
-        let _rawSoal = data.soal.map(s => ({
-          no              : parseInt(s.no),
-          tipe            : (s.tipe||"pg_gambar").toLowerCase().trim(),
-          poin            : parseFloat(s.poin)||1,
-          pertanyaan      : (s.pertanyaan||"").trim(),
-          url_gambar      : (s.url_gambar||"").trim(),
-          opsi_a          : (s.opsi_a||"").trim(),
-          opsi_b          : (s.opsi_b||"").trim(),
-          opsi_c          : (s.opsi_c||"").trim(),
-          opsi_d          : (s.opsi_d||"").trim(),
-          kunci           : (s.kunci||"").trim().toUpperCase(),
-          pembahasan      : (s.pembahasan||"").trim(),
-          url_pemb_gambar : (s.url_pemb_gambar||"").trim()
-        }));
-        if(ACAK_SOAL){
-          let _pg=_rawSoal.filter(s=>s.tipe!=='esai');
-          let _es=_rawSoal.filter(s=>s.tipe==='esai');
-          for(let _i=_pg.length-1;_i>0;_i--){let _j=Math.floor(Math.random()*(_i+1));[_pg[_i],_pg[_j]]=[_pg[_j],_pg[_i]];}
-          soalData=[..._pg,..._es];
-          // no_tampil: nomor urut 1..N SETELAH diacak, khusus untuk ditampilkan ke peserta.
-          // s.no (asli dari sheet) TETAP dipakai untuk simpan jawaban & analisis butir soal,
-          // supaya laporan guru tidak rusak walau tampilan tiap peserta beda urutan soalnya.
-          soalData.forEach((s,_k)=>{ s.no_tampil = _k+1; });
-        }else{
-          soalData=_rawSoal;
-          soalData.forEach(s=>{ s.no_tampil = s.no; });
-        }
-        soalReady = true;
-        let pm = soalData.filter(s => s.tipe !== 'esai').reduce((a,s) => a + s.poin, 0);
-        document.getElementById('poin-max-live').textContent = pm;
-
-        // Cek apakah device ini sudah pernah mengerjakan
-        let sudah = cekSudahMengerjakan();
-        if (sudah) {
-          setBar('ok', 'Soal berhasil dimuat. Kamu sudah pernah mengerjakan ujian ini.');
-          document.getElementById('load-overlay').classList.add('hide');
-          // Isi state dari localStorage lalu langsung tampil hasil
-          namaSiswa   = sudah.nama    || '';
-          namaSekolah = sudah.sekolah || '';
-          jawPG       = sudah.jawPG   || {};
-          jawEsai     = sudah.jawEsai || {};
-          raguMap     = sudah.raguMap || {};
-          tMulai      = sudah.tMulai   ? new Date(sudah.tMulai)   : null;
-          tSelesai    = sudah.tSelesai ? new Date(sudah.tSelesai) : null;
-          document.getElementById('login-screen').style.display = 'none';
-          tampilHasilAkhir();
-        } else {
-          setBar('ok', '✅ ' + soalData.length + ' soal berhasil dimuat. Silakan login.');
-          document.getElementById('btn-login').disabled = false;
-          document.getElementById('load-overlay').classList.add('hide');
-          // Pre-isi nama dari profil aktif portal
-          let _pAktif = pProfilAktif();
-          if (_pAktif) {
-            let _inpN = document.getElementById('inp-nama');
-            if (_inpN && !_inpN.value) _inpN.value = _pAktif.nama;
-          }
-        }
-      } else {
-        setBar('error', '⚠ Soal belum tersedia di Sheet. Hubungi guru.');
-        tampilTombolRefresh('Data soal kosong. Hubungi guru atau coba refresh.');
-      }
-    })
-    .catch(e => {
-      console.error(e);
-      let pesan = e.name === 'AbortError'
-        ? '⏱ Timeout setelah ' + MAX_RETRY + ' percobaan. Server tidak merespons.'
-        : '❌ Gagal memuat soal: ' + (e.message||'periksa koneksi internet.');
-      setBar('error', pesan);
-      tampilTombolRefresh(pesan);
-    });
-}
-
-function setOverlay(html) {
-  document.getElementById('overlay-txt').innerHTML = html;
-}
-
-function tampilTombolRefresh(pesan) {
-  setOverlay(pesan + '<br><br>');
-  const ov = document.getElementById('load-overlay');
-  const spin = ov.querySelector('.spin');
-  if (spin) spin.remove();
-  if (!ov.querySelector('.btn-refresh')) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-refresh';
-    btn.textContent = 'Coba Lagi';
-    btn.onclick = function() {
-      const old = ov.querySelector('.spin');
-      if (!old) {
-        const s = document.createElement('div');
-        s.className = 'spin';
-        ov.insertBefore(s, ov.firstChild);
-      }
-      btn.remove();
-      let bkPortal = ov.querySelector('.btn-back-portal');
-      if (bkPortal) bkPortal.remove();
-      muatSoal();
-    };
-    ov.appendChild(btn);
-  }
-  // B.1 — Tombol kembali ke Portal agar siswa tidak terjebak
-  if (!ov.querySelector('.btn-back-portal')) {
-    const bk = document.createElement('button');
-    bk.className = 'btn-back-portal';
-    bk.textContent = '← Kembali ke Portal';
-    bk.style.cssText = 'margin-top:10px;background:none;border:1.5px solid rgba(255,255,255,.4);' +
-      'color:rgba(255,255,255,.85);border-radius:8px;padding:10px 20px;font-size:13px;' +
-      'font-weight:700;cursor:pointer;font-family:inherit;display:block;width:100%;';
-    bk.onclick = function() {
-      ov.classList.add('hide');
-      pTampil('portal-screen');
-    };
-    ov.appendChild(bk);
-  }
-}
-
-function setBar(t, m) {
-  let b = document.getElementById('load-bar'), tx = document.getElementById('load-txt');
-  b.className = 'status-bar ' + t; tx.textContent = m;
-}
-function isEsai(no)  { return soalData.find(s => s.no === no)?.tipe === 'esai'; }
-function getSoal()   { return soalData[idx]; }
-function isUrl(s)    { return s && (s.startsWith('http://') || s.startsWith('https://')); }
-function gdrive(u)   {
-  if (!u) return u;
-  let id = u.match(/[?&]id=([a-zA-Z0-9_-]+)/)?.[1]
-           || u.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/)?.[1]
-           || u.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-  return id ? 'https://drive.google.com/thumbnail?id=' + id + '&sz=s4000' : u;
-}
-
-// ═══════════════════════════════════════════════
-//  ZOOM
-// ═══════════════════════════════════════════════
-function applyZoom() { document.getElementById('img-soal').style.width = (zoom * 100) + '%'; }
-function zoomIn()    { zoom = Math.min(zoom + .25, 4); applyZoom(); }
-function zoomOut()   { zoom = Math.max(zoom - .25, 1); applyZoom(); }
-function resetZoom() { zoom = 1; applyZoom(); let w = document.querySelector('.img-scroll'); if(w) { w.scrollTop=0; w.scrollLeft=0; } }
-document.addEventListener('gesturestart', e => e.preventDefault());
-document.addEventListener('wheel', e => { if(e.ctrlKey) e.preventDefault(); }, { passive:false });
-
-// ═══════════════════════════════════════════════
-//  MULAI UJIAN
-// ═══════════════════════════════════════════════
-function mulaiUjian() {
-  namaSekolah = document.getElementById('sel-madrasah').value;
-  namaSiswa   = document.getElementById('inp-nama').value.trim();
-  let tok     = document.getElementById('inp-token').value.trim();
-  if (!namaSekolah)  { alert('Pilih ' + SERVER_BRAND.institution_field_label + '!'); return; }
-  if (!namaSiswa)    { alert('Isi ' + SERVER_BRAND.participant_field_label + '!'); return; }
-  if (!soalReady || soalData.length === 0) { alert('Soal belum siap. Tunggu atau klik Coba Lagi.'); return; }
-  // Cek apakah siswa ini dihentikan karena pelanggaran
-  let _lsKey   = 'cbt_' + namaSiswa.replace(/\s+/g,'_');
-  let _draftRaw = localStorage.getItem(_lsKey + '_rekap');
-  let _draftRekap = null;
-  try { _draftRekap = _draftRaw ? JSON.parse(_draftRaw) : null; } catch(e){}
-  let _isPel = _draftRekap && _draftRekap.paksa_selesai === true;
-  if (_isPel) {
-    if (!TOKEN_PEL || tok !== TOKEN_PEL) {
-      alert('Ujian Anda sebelumnya dihentikan karena pelanggaran.\n'          + 'Gunakan token khusus dari guru untuk melanjutkan.');
-      return;
-    }
-  } else {
-    if (tok !== tokenSheet) { alert('Token salah!'); return; }
-  }
-  // Cek sekali lagi apakah device sudah mengerjakan
-  if (cekSudahMengerjakan()) {
-    alert('Perangkat ini sudah pernah mengerjakan ujian. Hubungi guru untuk reset.');
-    return;
-  }
-  // Inisialisasi/update device ID dan login count
-  let devData = getOrInitDevice();
-  deviceId   = devData.id;
-  loginCount = devData.count + 1;
-  devData.count = loginCount;
-  try { localStorage.setItem(LS_DEVICE, JSON.stringify(devData)); } catch(e) {}
-  // Jika login ke-2 atau lebih, reset hitungan pelanggaran ke nol
-  if (loginCount >= 2) { pelanggar = 0; }
-  poinEsaiKoreksi = 0; // A-5: reset agar tidak bocor dari sesi browser sebelumnya
-  tMulai = new Date(); detik = DURASI * 60;
-  // Muat draft jika ada (siswa yang tiba-tiba keluar bisa lanjut)
-  let adaDraft = muatDraft();
-  if (adaDraft) {
-    console.log('Draft jawaban ditemukan, melanjutkan sesi sebelumnya.');
-  }
-  document.getElementById('exam-ttl').textContent = JUDUL;
-  // Sembunyikan semua layar portal dan login
-  P_SCREENS.forEach(s => { let el=document.getElementById(s); if(el) el.style.display='none'; });
-  document.getElementById('hasil-screen').style.display = 'none';
-  document.getElementById('exam-screen').style.display  = 'flex';
-  buatGrid();
-  tampil();
-  mulaiTimer();
-  fullscreen();
-  antiCheat();
-}
-
-// ═══════════════════════════════════════════════
-//  TAMPIL SOAL
-// ═══════════════════════════════════════════════
-function buatGrid() {
-  let g = document.getElementById('grid-nomor'); g.innerHTML = '';
-  soalData.forEach((s,i) => {
-    let b = document.createElement('button');
-    b.className = 'btn-no' + (s.tipe === 'esai' ? ' esai-m' : '');
-    b.textContent = s.no_tampil; b.id = 'nn' + i;
-    b.onclick = () => { idx = i; tampil(); };
-    g.appendChild(b);
-  });
-}
-
-function tampil() {
-  let s = getSoal(), no = s.no, tipe = s.tipe;
-  document.getElementById('no-lbl').textContent = 'SOAL ' + s.no_tampil;
-  let bd = document.getElementById('badge-tipe');
-  if (tipe==='pg_teks')        { bd.className='badge pg_teks';   bd.textContent='PG Teks'; }
-  else if (tipe==='pg_gambar') { bd.className='badge pg_gambar'; bd.textContent='PG Gambar'; }
-  else                          { bd.className='badge esai';      bd.textContent='Esai'; }
-  document.getElementById('badge-poin').textContent = s.poin + ' poin';
-  ['box-gambar','box-teks','area-pg','area-esai'].forEach(id => document.getElementById(id).style.display='none');
-  document.getElementById('teks-img-wrap').style.display = 'none';
-  document.getElementById('teks-img').src = '';
-  document.getElementById('teks-img').style.transform = '';
-  _teksImgScale = 1;
-  document.getElementById('btn-ragu').classList.remove('btn-ragu-hidden');
-
-  if (tipe === 'pg_gambar') {
-    document.getElementById('box-gambar').style.display = 'block';
-    document.getElementById('area-pg').style.display = 'block';
-    document.getElementById('options-grid').style.display = 'none';
-    document.getElementById('options-row').style.display = 'flex';
-    muatGambar(s.url_gambar);
-    renderOpsiRow(s, no);
-  } else if (tipe === 'pg_teks') {
-    document.getElementById('box-teks').style.display = 'block';
-    document.getElementById('area-pg').style.display = 'block';
-    document.getElementById('options-grid').style.display = 'grid';
-    document.getElementById('options-row').style.display = 'none';
-    renderTeksQ(document.getElementById('teks-q'), s.pertanyaan);
-    if (s.url_gambar) { document.getElementById('teks-img-wrap').style.display='block'; document.getElementById('teks-img').src=gdrive(s.url_gambar); }
-    else              { document.getElementById('teks-img-wrap').style.display='none'; }
-    renderOpsi(s, no);
-  } else {
-    if (s.pertanyaan) { document.getElementById('box-teks').style.display='block'; renderTeksQ(document.getElementById('teks-q'),s.pertanyaan); }
-    if (s.url_gambar) { document.getElementById('box-gambar').style.display='block'; muatGambar(s.url_gambar); }
-    document.getElementById('area-esai').style.display = 'block';
-    let ta = document.getElementById('esai-ta');
-    ta.value = jawEsai[no] || '';
-    ta.className = 'esai-textarea' + (ta.value.trim() ? ' terisi' : '');
-    document.getElementById('esai-char').textContent = ta.value.length + ' karakter';
-    document.getElementById('kirim-ind').textContent = '';
-    document.getElementById('btn-ragu').classList.add('btn-ragu-hidden');
-  }
-  if (tipe !== 'esai') document.getElementById('btn-ragu').classList.toggle('aktif', !!raguMap[no]);
-  updateGrid();
-  updateLive();
-}
-
-function muatGambar(url) {
-  resetZoom();
-  let img = document.getElementById('img-soal'), ld = document.getElementById('img-load');
-  img.style.display = 'none'; ld.style.display = 'block';
-  ld.className = 'img-load'; ld.textContent = 'Memuat gambar soal...';
-  img.onload  = () => { ld.style.display='none'; img.style.display='block'; };
-  img.onerror = () => { ld.textContent = 'Gagal memuat gambar soal'; };
-  img.src = gdrive(url);
-}
-
-function renderOpsi(soal, no) {
-  let g = document.getElementById('options-grid'); g.innerHTML = '';
-  ['A','B','C','D'].forEach(ltr => {
-    let val = (soal['opsi_' + ltr.toLowerCase()] || '');
-    let dipilih = jawPG[no] === ltr;
-    let btn = document.createElement('button');
-    btn.className = 'btn-opt' + (dipilih ? ' selected' : '');
-    btn.onclick = () => pilihPG(ltr);
-    let lDiv = document.createElement('div'); lDiv.className = 'opt-ltr'; lDiv.textContent = ltr;
-    let cDiv = document.createElement('div'); cDiv.className = 'opt-content';
-    if (isUrl(val)) { let img = document.createElement('img'); img.className='opt-img'; img.src=gdrive(val); img.alt='Opsi '+ltr; img.loading='lazy'; cDiv.appendChild(img); }
-    else { cDiv.textContent = val || '(opsi kosong)'; }
-    btn.appendChild(lDiv); btn.appendChild(cDiv); g.appendChild(btn);
-  });
-}
-
-function renderOpsiRow(soal, no) {
-  let g = document.getElementById('options-row'); g.innerHTML = '';
-  ['A','B','C','D'].forEach(ltr => {
-    let dipilih = jawPG[no] === ltr;
-    let btn = document.createElement('button');
-    btn.className = 'btn-opt-row' + (dipilih ? ' selected' : '');
-    btn.onclick = () => pilihPG(ltr);
-    let lDiv = document.createElement('div'); lDiv.className = 'opt-ltr'; lDiv.textContent = ltr;
-    btn.appendChild(lDiv);
-    g.appendChild(btn);
-  });
-}
-
-// ═══════════════════════════════════════════════
-//  JAWABAN — SIMPAN DRAFT KE LOCALSTORAGE
-//  (dikirim sekaligus ke Sheet saat selesai)
-// ═══════════════════════════════════════════════
-async function kirimKeSheet(payload) {
-  try {
-    await fetch(_urlGasAktif, {
-      method: 'POST', mode: 'no-cors', redirect: 'follow',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {
-    console.warn('kirimKeSheet error:', e);
-  }
-}
-
-async function kirimBatch(payloads) {
-  try {
-    await fetch(_urlGasAktif, {
-      method: 'POST', mode: 'no-cors', redirect: 'follow',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify({ action:'simpanJawabanBatch', items: payloads })
-    });
-  } catch(e) {
-    console.warn('kirimBatch error:', e);
-  }
-}
-
-function simpanDraft() {
-  try {
-    localStorage.setItem(LS_DRAFT, JSON.stringify({
-      nama: namaSiswa, sekolah: namaSekolah,
-      jawPG: jawPG, jawEsai: jawEsai, raguMap: raguMap,
-      tMulai: tMulai?.toISOString(), detikSisa: detik
-    }));
-  } catch(e) {}
-}
-
-function muatDraft() {
-  try {
-    let raw = localStorage.getItem(LS_DRAFT);
-    if (!raw) return false;
-    let d = JSON.parse(raw);
-    if (d.nama !== namaSiswa || d.sekolah !== namaSekolah) return false;
-    jawPG    = d.jawPG    || {};
-    jawEsai  = d.jawEsai  || {};
-    raguMap  = d.raguMap  || {};
-    if (d.tMulai) tMulai = new Date(d.tMulai);
-    if (d.detikSisa && d.detikSisa > 0) detik = d.detikSisa;
-    return true;
-  } catch(e) { return false; }
-}
-
-function hapusDraft() {
-  try { localStorage.removeItem(LS_DRAFT); } catch(e) {}
-}
-
-function pilihPG(ltr) {
-  let s = getSoal(), no = s.no;
-  jawPG[no] = ltr;
-  tampil();
-  simpanDraft();
-}
-
-function simpanEsai(ta) {
-  let s = getSoal(), no = s.no, txt = ta.value;
-  jawEsai[no] = txt;
-  ta.className = 'esai-textarea' + (txt.trim() ? ' terisi' : '');
-  document.getElementById('esai-char').textContent = txt.length + ' karakter';
-  document.getElementById('nn' + idx).classList.toggle('dijawab', txt.trim().length > 0);
-  clearTimeout(dbEsai);
-  dbEsai = setTimeout(() => { simpanDraft(); }, 800);
-}
-
-function setKirimInd(cls, txt) {
-  let el = document.getElementById('kirim-ind');
-  if (el) { el.className = 'kirim-ind ' + cls; el.textContent = txt; }
-}
-
-function toggleRagu() {
-  let no = getSoal().no; if (isEsai(no)) return;
-  raguMap[no] = !raguMap[no];
-  document.getElementById('btn-ragu').classList.toggle('aktif', raguMap[no]);
-  updateGrid();
-}
-function nextSoal() { if (idx < soalData.length - 1) { idx++; tampil(); } }
-function prevSoal() { if (idx > 0) { idx--; tampil(); } }
-
-function updateGrid() {
-  soalData.forEach((s, i) => {
-    let b = document.getElementById('nn' + i); if (!b) return;
-    b.className = 'btn-no' + (s.tipe === 'esai' ? ' esai-m' : '');
-    if (i === idx) b.classList.add('aktif');
-    let dij = s.tipe === 'esai' ? (jawEsai[s.no]||'').trim().length > 0 : !!jawPG[s.no];
-    if (dij) b.classList.add('dijawab');
-    if (s.tipe !== 'esai' && raguMap[s.no]) b.classList.add('ragu');
-  });
-}
-function updateLive() {
-  let poin = 0;
-  soalData.forEach(s => { if (s.tipe!=='esai' && jawPG[s.no] && jawPG[s.no]===s.kunci) poin += s.poin; });
-  let pm = soalData.filter(s=>s.tipe!=='esai').reduce((a,s)=>a+s.poin,0);
-  document.getElementById('skor-live').innerHTML = 'Poin PG: <strong>' + poin + '</strong> / <span id="poin-max-live">' + pm + '</span>';
-}
-
-// ═══════════════════════════════════════════════
-//  TIMER
-// ═══════════════════════════════════════════════
-function mulaiTimer() {
-  ujianAktif = true;
-  aktifkanWakeLock();
-  timerID = setInterval(() => {
-    if (detik <= 0) { clearInterval(timerID); alert('Waktu habis! Jawaban dikunci.'); selesaiFinal(); return; }
-    detik--;
-    let j=Math.floor(detik/3600), m=Math.floor((detik%3600)/60), d=detik%60;
-    document.getElementById('timer-txt').textContent = `${String(j).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(d).padStart(2,'0')}`;
-    document.getElementById('timer').classList.toggle('warn', detik <= 300);
-  }, 1000);
-}
-
-// ═══════════════════════════════════════════════
-//  KONFIRMASI
-// ═══════════════════════════════════════════════
-function bukaKonfirmasi() {
-  let pg = soalData.filter(s => s.tipe !== 'esai'), esaiL = soalData.filter(s => s.tipe === 'esai');
-  let dijPG = pg.filter(s => jawPG[s.no]).length, dijE = esaiL.filter(s => (jawEsai[s.no]||'').trim()).length;
-  document.getElementById('sum-grid').innerHTML = `
-    <div class="sum-c t"><div class="sum-num">${soalData.length}</div><div class="sum-lbl">Total Soal</div></div>
-    <div class="sum-c d"><div class="sum-num">${dijPG+dijE}</div><div class="sum-lbl">Dijawab</div></div>
-    <div class="sum-c b"><div class="sum-num">${pg.filter(s=>!jawPG[s.no]).length}</div><div class="sum-lbl">PG Belum</div></div>
-  `;
-  let eK = esaiL.filter(s => !(jawEsai[s.no]||'').trim()).map(s => s.no_tampil);
-  document.getElementById('w-esai').style.display = eK.length ? 'block' : 'none';
-  document.getElementById('w-esai-list').innerHTML = eK.map(n => `<span class="pill e">No.${n}</span>`).join('');
-  let nR = pg.filter(s => raguMap[s.no]).map(s => s.no_tampil);
-  document.getElementById('w-ragu').style.display = nR.length ? 'block' : 'none';
-  document.getElementById('w-ragu-list').innerHTML = nR.map(n => `<span class="pill r">${n}</span>`).join('');
-  let nB = pg.filter(s => !jawPG[s.no]).map(s => s.no_tampil);
-  document.getElementById('w-belum').style.display = nB.length ? 'block' : 'none';
-  document.getElementById('w-belum-list').innerHTML = nB.map(n => `<span class="pill b">${n}</span>`).join('');
-  document.getElementById('chk-setuju').checked = false;
-  document.getElementById('btn-yakin').disabled = true;
-  document.getElementById('modal-konfirmasi').classList.add('aktif');
-}
-function tutupKonfirmasi() { document.getElementById('modal-konfirmasi').classList.remove('aktif'); }
-function toggleYakin() { document.getElementById('btn-yakin').disabled = !document.getElementById('chk-setuju').checked; }
-
-// ═══════════════════════════════════════════════
-//  SELESAI
-// ═══════════════════════════════════════════════
-function selesaiFinal() {
-  clearInterval(timerID); tSelesai = new Date();
-  ujianSelesai = true;
-  ujianAktif   = false;
-  matikanWakeLock();
-  _hentikanAntiCheat(); // hentikan polling fokus & split screen
-  hapusDraft();         // hapus draft localStorage
-
-  document.getElementById('modal-konfirmasi').classList.remove('aktif');
-  document.getElementById('exam-screen').style.display = 'none';
-
-  // Simpan ke localStorage agar device tidak bisa mengerjakan ulang
-  simpanStatusSelesai({
-    nama: namaSiswa, sekolah: namaSekolah,
-    jawPG: jawPG, jawEsai: jawEsai, raguMap: raguMap,
-    tMulai: tMulai?.toISOString(), tSelesai: tSelesai?.toISOString(),
-    paksa_selesai: (pelanggar >= MAKS_P)
-  });
-
-  portalSimpanRiwayat(); // ← hook Portal: simpan snapshot riwayat
-
-  tampilHasilAkhir();
-
-  // Kumpulkan semua jawaban lalu kirim dalam 1 batch request ke GAS
-  (async () => {
-    let items = [];
-    soalData.forEach(s => {
-      let no = s.no, tipe = s.tipe;
-      if (tipe === 'esai') {
-        items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
-          no_soal:no, tipe:'esai', jawaban:jawEsai[no]||'', kunci:s.kunci, poin_soal:s.poin, benar:false });
-      } else {
-        let jwb = jawPG[no]||'';
-        items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
-          no_soal:no, tipe:tipe, jawaban:jwb||'', kunci:s.kunci, poin_soal:s.poin, benar:jwb===s.kunci });
-      }
-    });
-
-    // Kirim semua jawaban dalam 1 request batch
-    await kirimBatch(items);
-
-    // Rekap dikirim setelah batch selesai
-    let hitung = hitungNilai();
-    await kirimKeSheet({
-      action:'rekapAkhir', sekolah:namaSekolah, siswa:namaSiswa,
-      nilai: hitung.poinM > 0 ? Math.round(hitung.poinD / hitung.poinM * 1000) / 10 : 0,
-      poin_dapat: hitung.poinD, poin_max: hitung.poinM,
-      benar: hitung.benar, salah: hitung.salah, esai: hitung.esaiC,
-      pelanggaran: pelanggar,
-      paksa_selesai: (pelanggar >= MAKS_P),
-      waktu_mulai:(tMulai||new Date()).toISOString(), waktu_selesai:(tSelesai||new Date()).toISOString()
-    });
-    console.log('Batch jawaban dan rekap berhasil dikirim.');
-  })();
-}
-
-function hitungNilai() {
-  let benar=0, salah=0, raguC=0, esaiC=0, poinD=0, poinM=0, poinMEsai=0;
-  soalData.forEach(s => {
-    if (s.tipe === 'esai') { esaiC++; poinMEsai += s.poin; return; }
-    poinM += s.poin;
-    if (raguMap[s.no]) raguC++;
-    let jwb = jawPG[s.no];
-    if (!jwb) {}
-    else if (s.kunci && jwb === s.kunci) { benar++; poinD += s.poin; }
-    else if (s.kunci) salah++;
-  });
-  // Model A: nilai_akhir = (nilai_PG% × bobot_pg) + (nilai_esai% × bobot_esai)
-  let nilaiPGpct  = poinM     > 0 ? (poinD            / poinM     * 100) : 0;
-  let nilaiEspct  = poinMEsai > 0 ? (poinEsaiKoreksi  / poinMEsai * 100) : 0;
-  let nilai;
-  if (poinMEsai === 0 || BOBOT_ESAI === 0) {
-    nilai = Math.round(nilaiPGpct * 10) / 10;
-  } else {
-    nilai = Math.round(((nilaiPGpct * BOBOT_PG) + (nilaiEspct * BOBOT_ESAI)) / 100 * 10) / 10;
-  }
-  let poinDTotal = poinD + poinEsaiKoreksi;
-  let poinMTotal = poinM + poinMEsai;
-  return { benar, salah, raguC, esaiC, poinD, poinM, poinMEsai, poinDTotal, poinMTotal, nilai };
-}
-
-function tampilHasilAkhir() {
-  let { benar, salah, raguC, esaiC, poinD, poinM, poinMEsai, poinDTotal, poinMTotal, nilai } = hitungNilai();
-  let pred = nilai>=90?"Sangat Baik":nilai>=75?"Baik":nilai>=60?"Cukup":"Terus Semangat";
-
-  document.getElementById('h-nama').textContent    = namaSiswa;
-  document.getElementById('h-sekolah').textContent = SERVER_BRAND.institution_field_label + ': ' + namaSekolah;
-  document.getElementById('h-nilai').textContent   = '...';
-  document.getElementById('h-pred').textContent    = '';
-  // Label esai stat
-  let esaiLblEl = document.getElementById('h-esai-lbl');
-  if (esaiLblEl) esaiLblEl.textContent = esaiC > 0 ? 'Esai (menunggu koreksi)' : 'Esai';
-  document.getElementById('h-benar').textContent   = benar;
-  document.getElementById('h-salah').textContent   = salah;
-  document.getElementById('h-ragu').textContent    = raguC;
-  document.getElementById('h-esai').textContent    = esaiC;
-  document.getElementById('h-poin-dapat').textContent = poinD;
-  document.getElementById('h-poin-max').textContent   = poinM + poinMEsai;
-  // Isi nomor soal esai
-  let esaiNomor = soalData.filter(s => s.tipe === 'esai').map(s => s.no_tampil);
-  let esaiListEl = document.getElementById('h-esai-list');
-  if (esaiListEl) esaiListEl.textContent = esaiNomor.length > 0 ? esaiNomor.join(', ') : '--';
-
-  // Fetch nilai dari GAS: nilai_pg (kolom D) atau nilai_akhir (kolom O) sesuai kondisi
-  if (_urlGasAktif) {
-    let url = _urlGasAktif + '?action=getHasilSiswa'
-      + '&nama='    + encodeURIComponent(namaSiswa)
-      + '&sekolah=' + encodeURIComponent(namaSekolah);
-    fetch(url).then(r=>r.json()).then(function(d) {
-      if (d.status === 'ok') {
-        poinEsaiKoreksi = d.poin_esai || 0;
-        let esaiSudahDikoreksi = esaiC > 0 && d.poin_esai > 0 && d.nilai_akhir > 0;
-        let nilaiTampil, predTampil, subLabel;
-        if (esaiSudahDikoreksi) {
-          // Kolom O: nilai akhir Model A sudah termasuk esai
-          nilaiTampil = d.nilai_akhir;
-          predTampil  = d.predikat || (nilaiTampil>=90?"Sangat Baik":nilaiTampil>=75?"Baik":nilaiTampil>=60?"Cukup":"Terus Semangat");
-          subLabel    = 'Nilai Akhir';
-          let esaiLbl2 = document.getElementById('h-esai-lbl');
-          if (esaiLbl2) esaiLbl2.textContent = 'Esai (sudah dikoreksi)';
-          let infoEl = document.getElementById('h-esai-poin-info');
-          if (infoEl) infoEl.textContent = '✅ Poin esai: +' + d.poin_esai + ' poin sudah dihitung';
-          // Update poin diperoleh setelah esai dikoreksi
-          document.getElementById('h-poin-dapat').textContent = poinD + (d.poin_esai||0);
-        } else if (d.nilai_pg > 0) {
-          // Kolom D: Nilai_PG% dari GAS
-          nilaiTampil = d.nilai_pg;
-          predTampil  = nilaiTampil>=90?"Sangat Baik":nilaiTampil>=75?"Baik":nilaiTampil>=60?"Cukup":"Terus Semangat";
-          subLabel    = esaiC > 0 ? 'Nilai Sementara (belum termasuk esai)' : 'Nilai Akhir';
-        } else {
-          // Fallback: hitung lokal (rekap belum masuk ke sheet)
-          let hL = hitungNilai();
-          nilaiTampil = hL.poinM > 0 ? Math.round(hL.poinD / hL.poinM * 1000) / 10 : 0;
-          predTampil  = nilaiTampil>=90?"Sangat Baik":nilaiTampil>=75?"Baik":nilaiTampil>=60?"Cukup":"Terus Semangat";
-          subLabel    = esaiC > 0 ? 'Nilai Sementara (belum termasuk esai)' : 'Nilai Akhir';
-        }
-        document.getElementById('h-nilai').textContent = nilaiTampil;
-        document.getElementById('h-pred').textContent  = predTampil;
-        let subEl = document.getElementById('h-nilai-sub');
-        if (subEl) subEl.textContent = subLabel;
-      }
-    }).catch(function() {
-      // Gagal fetch: hitung lokal
-      let hL = hitungNilai();
-      let nL = hL.poinM > 0 ? Math.round(hL.poinD / hL.poinM * 1000) / 10 : 0;
-      document.getElementById('h-nilai').textContent = nL;
-      document.getElementById('h-pred').textContent  = nL>=90?"Sangat Baik":nL>=75?"Baik":nL>=60?"Cukup":"Terus Semangat";
-      let subEl = document.getElementById('h-nilai-sub');
-      if (subEl) subEl.textContent = esaiC > 0 ? 'Nilai Sementara (belum termasuk esai)' : 'Nilai Akhir';
-    });
-  }
-
-  if (esaiC === 0) document.getElementById('esai-note-blok').style.display = 'none';
-
-  // Tombol analisis: aktif hanya kalau buka_pembahasan = true
-  let btnAna = document.getElementById('btn-analisis');
-  if (btnAna) {
-    if (BUKA_PEMB) {
-      btnAna.classList.add('buka');
-      btnAna.title = '';
-    } else {
-      btnAna.classList.remove('buka');
-      btnAna.title = 'Pembahasan belum dibuka oleh guru';
-    }
-  }
-
-  // Pesan jujur / pelanggaran
-  let _dataLS = cekSudahMengerjakan();
-  let _paksa  = _dataLS && _dataLS.paksa_selesai;
-  let _pel    = _dataLS ? (parseInt(_dataLS.pelanggaran)||0) : pelanggar;
-  let pesanEl = document.getElementById('h-pesan-jujur');
-  let ikonEl  = document.getElementById('h-ikon');
-  let judulEl = document.getElementById('h-judul');
-  if (_paksa || _pel >= MAKS_P) {
-    // Dihentikan karena pelanggaran
-    if (ikonEl) ikonEl.textContent = '⚠️';
-    if (judulEl) judulEl.textContent = 'Ujian Dihentikan';
-    if (pesanEl) {
-      pesanEl.style.display = 'block';
-      pesanEl.innerHTML = '🚫 Ujian kamu dihentikan karena batas pelanggaran tercapai.'
-        + '<br>Menjaga kejujuran adalah bagian dari akhlak yang mulia.'
-        + '<br><em style="opacity:.8">“Sesungguhnya kejujuran membawa kepada kebaikan, dan kebaikan membawa ke surga.” (HR. Bukhari)</em>';
-    }
-  } else if (_pel === 0) {
-    // Tidak ada pelanggaran sama sekali
-    if (pesanEl) {
-      pesanEl.style.display = 'block';
-      pesanEl.innerHTML = '🏆 Selamat! Kamu menyelesaikan ujian dengan <strong>jujur dan disiplin</strong>.'
-        + '<br><em style="opacity:.8">“Orang yang jujur akan mendapat kepercayaan dan keberkahan.”</em>';
-    }
-  } else {
-    // Ada sedikit pelanggaran tapi tidak dihentikan
-    if (pesanEl) {
-      pesanEl.style.display = 'block';
-      pesanEl.innerHTML = '⚠️ Terdeteksi ' + _pel + ' kali keluar halaman selama ujian.'
-        + '<br>Semoga ke depan bisa lebih fokus dan menjaga kejujuran.';
-    }
-  }
-
-  // Sembunyikan semua layar lain sebelum tampil hasil
-  P_SCREENS.forEach(s => {
-    let el = document.getElementById(s);
-    if (el) el.style.display = 'none';
-  });
-  let examEl = document.getElementById('exam-screen');
-  if (examEl) examEl.style.display = 'none';
-
-  document.getElementById('hasil-screen').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-
-// ═══════════════════════════════════════════════
-//  ANALISIS
-// ═══════════════════════════════════════════════
-function cobaAnalisis() {
-  if (!MASTER_CONFIG.allowReview) {
-    alert('Fitur pembahasan tidak tersedia pada versi ini.');
-    return;
-  }
-  if (!BUKA_PEMB) {
-    alert('🔒 Pembahasan belum dibuka oleh guru. Hubungi guru jika sudah waktunya.');
-    return;
-  }
-  bukaAnalisis();
-}
-function bukaAnalisis() {
-  let html = buatHtmlAnalisis();
-  document.getElementById('ana-list').innerHTML = html;
-  document.getElementById('modal-analisis').classList.add('aktif');
-}
-
-function buatHtmlAnalisis() {
-  let html = '';
-  // Pembahasan SENGAJA tidak ikut urutan acak ujian -- selalu tampil urut No asli,
-  // supaya kalau dibahas bersama-sama di kelas, semua orang lihat urutan yang sama.
-  let soalUrutAsli = soalData.slice().sort((a, b) => a.no - b.no);
-  soalUrutAsli.forEach(s => {
-    let no=s.no, tipe=s.tipe;
-    let pemb = (s.pembahasan||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    let poinBar = `<div class="poin-bar">Poin soal ini: ${s.poin}</div>`;
-    if (tipe === 'esai') {
-      let teks=jawEsai[no]||'', diisi=teks.trim().length>0;
-      let rubrik=(s.kunci||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      html+=`<div class="ana-item">
-  <div class="ana-head esai-p"><span class="ana-no">No.${no} <span style="font-size:10px;background:var(--orange-light);color:var(--orange);padding:1px 7px;border-radius:8px;border:1px solid #F5C6A0;margin-left:6px;">ESAI</span></span><span class="ana-badge esai-p">${diisi?'Diisi':'Kosong'}</span></div>
-  ${s.pertanyaan?`<div class="ana-teks">${s.pertanyaan.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
-  ${s.url_gambar?`<div class="ana-img"><img src="${gdrive(s.url_gambar)}" loading="lazy"></div>`:''}
-  <div class="esai-ans"><strong>Jawaban Anda:</strong><div class="teks">${diisi?teks.replace(/</g,'&lt;').replace(/>/g,'&gt;'):'<span style="color:var(--gray-soft);font-style:italic;">Tidak diisi</span>'}</div></div>
-  ${rubrik?`<div class="rubrik-bar"><strong>Rubrik/Kunci:</strong> ${rubrik}</div>`:''}
-  ${pemb?`<div class="pemb-bar"><strong>Pembahasan</strong>${pemb}</div>`:''}
-  ${s.url_pemb_gambar?`<div class="ana-img"><img src="${gdrive(s.url_pemb_gambar)}" loading="lazy"></div>`:''}
-  ${poinBar}</div>`;
-    } else {
-      let jwb=jawPG[no]||null, kunci=s.kunci;
-      let status=!jwb?'kosong':(kunci&&jwb===kunci)?'benar':'salah';
-      let label=status==='benar'?'Benar':status==='salah'?'Salah':'Tidak Dijawab';
-      let opsiH;
-      if (tipe === 'pg_gambar') {
-        // PATCH 3: Horizontal A B C D dengan icon centang/silang besar (konsisten dengan pg_teks)
-        opsiH = '<div class="ana-opsi"><div class="ana-opsi-ttl">Pilihan Jawaban</div><div style="display:flex;gap:8px;flex-wrap:nowrap;">';
-        ['A','B','C','D'].forEach(ltr => {
-          let isK=ltr===kunci, isJ=ltr===jwb&&jwb!==kunci;
-          let bg=isK?'var(--green)':(isJ?'var(--red)':'var(--gray-bg)');
-          let col=isK||isJ?'white':'var(--gray-mid)';
-          let bdr=isK?'var(--green)':(isJ?'var(--red)':'var(--gray-line)');
-          // Icon centang/silang besar (17px) konsisten dengan pg_teks
-          let iconPG=isK?'<span style="font-size:17px;font-weight:900;line-height:1;color:var(--green);">&#10003;</span>':(isJ?'<span style="font-size:17px;font-weight:900;line-height:1;color:var(--red);">&#10007;</span>':'');
-          opsiH+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid ${bdr};border-radius:8px;background:${bg==='var(--gray-bg)'?'var(--white)':bg};"><span style="width:26px;height:26px;border-radius:50%;background:${bg};color:${col};border:1.5px solid ${bdr};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">${ltr}</span>${iconPG}</div>`;
-        });
-        opsiH += '</div></div>';
-      } else {
-        // PATCH 2: pg_teks opsi 2-kolom grid hemat tempat
-        opsiH='<div class="ana-opsi"><div class="ana-opsi-ttl">Pilihan Jawaban</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;">';
-        ['A','B','C','D'].forEach(ltr => {
-          let val=(s['opsi_'+ltr.toLowerCase()]||'');
-          let isK=ltr===kunci, isJ=ltr===jwb;
-          let cls=isK?'kunci':(isJ&&!isK?'salah-mark':'');
-          let icon=isK?'<span style="font-size:17px;font-weight:900;line-height:1;">&#10003;</span> ':(isJ&&!isK?'<span style="font-size:17px;font-weight:900;line-height:1;">&#10007;</span> ':'');
-          let isi=isUrl(val)?`<img class="opsi-img-sm" src="${gdrive(val)}" loading="lazy">`:(val||'(kosong)').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-          opsiH+=`<div class="opsi-row ${cls}" style="padding:3px 0;"><span class="opsi-ltr">${ltr}</span><span style="flex:1;min-width:0;word-break:break-word;">${icon}${isi}</span></div>`;
-        });
-        opsiH += '</div></div>';
-      }
-      html+=`<div class="ana-item">
-  <div class="ana-head ${status}"><span class="ana-no">No.${no} <span style="font-size:10px;background:var(--blue-light);color:var(--blue-main);padding:1px 7px;border-radius:8px;border:1px solid #BDD4F5;margin-left:6px;">${tipe==='pg_teks'?'PG TEKS':'PG GAMBAR'}</span></span>
-    <div style="display:flex;gap:6px;align-items:center;">${jwb?`<span style="font-size:12px;color:var(--gray-mid);">Jawaban: <b>${jwb}</b></span>`:''}
-    <span class="ana-badge ${status}">${label}</span></div></div>
-  ${s.pertanyaan?`<div class="ana-teks">${s.pertanyaan.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
-  ${s.url_gambar?`<div class="ana-img"><img src="${gdrive(s.url_gambar)}" loading="lazy"></div>`:''}
-  ${opsiH}
-  <div class="kunci-bar">Kunci: ${kunci||'Belum tersedia'}</div>
-  ${pemb?`<div class="pemb-bar"><strong>Pembahasan</strong>${pemb}</div>`:''}
-  ${s.url_pemb_gambar?`<div class="ana-img"><img src="${gdrive(s.url_pemb_gambar)}" loading="lazy"></div>`:''}
-  ${poinBar}</div>`;
-    }
-  });
-  return html;
-}
-
-// ═══════════════════════════════════════════════
-//  PRINT ANALISIS KE PDF
-// ═══════════════════════════════════════════════
-function printAnalisis() {
-  let { nilai, poinD, poinM, benar, salah } = hitungNilai();
-  let tgl = tSelesai
-    ? tSelesai.toLocaleDateString('id-ID', {weekday:'long',year:'numeric',month:'long',day:'numeric'})
-    : new Date().toLocaleDateString('id-ID', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
-  let kontenSoal = buatHtmlAnalisis();
-
-  // Buka window baru khusus print
-  let pw = window.open('', '_blank', 'width=900,height=700');
-  if (!pw) {
-    alert('Pop-up diblokir browser. Izinkan pop-up untuk halaman ini lalu coba lagi.');
-    return;
-  }
-
-  pw.document.write(`<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Pembahasan CBT - ${namaSiswa}</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Plus Jakarta Sans',Arial,sans-serif;background:white;color:#1E2B3A;padding:20px;}
-  .hdr{background:#064E3B;color:white;padding:18px 22px;border-radius:8px;margin-bottom:20px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .hdr h1{font-size:17px;margin:0 0 5px;}
-  .hdr p{font-size:13px;margin:3px 0 0;opacity:.9;}
-  .ana-item{border:1.5px solid #DDE3EC;border-radius:10px;overflow:hidden;margin-bottom:16px;break-inside:avoid;page-break-inside:avoid;}
-  .ana-head{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .ana-head.benar{background:#E6F7EE;} .ana-head.salah{background:#FDECEA;} .ana-head.kosong{background:#F3F6FA;} .ana-head.esai-p{background:#FFF3E8;}
-  .ana-no{font-size:14px;font-weight:800;}
-  .ana-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .ana-badge.benar{background:#1B8A4C;} .ana-badge.salah{background:#C0392B;} .ana-badge.kosong{background:#8896A5;} .ana-badge.esai-p{background:#D4550A;}
-  .ana-teks{padding:11px 13px;background:#F0F6FF;font-size:13px;line-height:1.65;border-top:1px solid #E8F1FD;white-space:pre-wrap;word-break:break-word;}
-  .ana-img{padding:8px 13px;background:#F3F6FA;border-top:1px solid #DDE3EC;}
-  .ana-img img{max-width:100%;border-radius:6px;}
-  .ana-opsi{padding:9px 13px;border-top:1px solid #DDE3EC;background:white;}
-  .ana-opsi-ttl{font-size:10px;font-weight:700;color:#8896A5;margin-bottom:5px;text-transform:uppercase;}
-  .opsi-row{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:13px;}
-  .opsi-row.kunci{font-weight:700;color:#1B8A4C;}
-  .opsi-row.salah-mark{color:#C0392B;text-decoration:line-through;opacity:.7;}
-  .opsi-ltr{width:21px;height:21px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:#F3F6FA;color:#8896A5;border:1px solid #DDE3EC;}
-  .opsi-row.kunci .opsi-ltr{background:#1B8A4C;color:white;border-color:#1B8A4C;}
-  .opsi-row.salah-mark .opsi-ltr{background:#FDECEA;color:#C0392B;border-color:#C0392B;}
-  .opsi-img-sm{max-height:60px;border-radius:4px;border:1px solid #DDE3EC;}
-  .kunci-bar{padding:9px 13px;background:#ECFDF5;border-top:1px solid #D1FAE5;font-size:13px;font-weight:700;color:#059669;}
-  .pemb-bar{padding:11px 13px;background:#E6F7EE;border-top:1px solid #A8D5BB;font-size:13px;color:#1E2B3A;line-height:1.6;}
-  .pemb-bar strong{font-size:10px;font-weight:700;color:#1B8A4C;text-transform:uppercase;display:block;margin-bottom:3px;}
-  .rubrik-bar{padding:9px 13px;background:#F0FDF4;border-top:1px solid #BBF7D0;font-size:12px;color:#059669;}
-  .esai-ans{padding:11px 13px;background:#FFFDF5;border-top:1px solid #FFE082;font-size:13px;}
-  .esai-ans strong{color:#D4550A;display:block;margin-bottom:4px;}
-  .esai-ans .teks{padding:9px;background:white;border:1px solid #FFE082;border-radius:6px;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
-  .poin-bar{padding:5px 13px;background:#FFFBEA;border-top:1px solid #E8D48A;font-size:11px;font-weight:700;color:#B8860B;}
-  .btn-print-now{display:block;width:100%;padding:13px;margin-bottom:18px;background:#1B8A4C;color:white;border:none;border-radius:8px;font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
-  .btn-print-now:hover{opacity:.88;}
-  @media print{
-    body{padding:10px;}
-    .btn-print-now{display:none;}
-    .ana-item{break-inside:avoid;page-break-inside:avoid;}
-    .hdr,.ana-head,.ana-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  }
-</style>
-</head>
-<body>
-<button class="btn-print-now" id="btnCetak" onclick="window.print()" disabled>Memuat gambar...</button>
-<div class="hdr">
-  <h1>${JUDUL} &#8212; Analisis &amp; Pembahasan</h1>
-  <p>Nama: <strong>${namaSiswa}</strong> &nbsp;|&nbsp; ${SERVER_BRAND.institution_field_label}: <strong>${namaSekolah}</strong></p>
-  <p>Nilai: <strong>${nilai}</strong> &nbsp;|&nbsp; Benar: ${benar} &nbsp;|&nbsp; Salah: ${salah} &nbsp;|&nbsp; Poin: ${poinD}/${poinM} &nbsp;|&nbsp; ${tgl}</p>
-</div>
-${kontenSoal}
-<script>
-  (function() {
-    var imgs = Array.from(document.images);
-    var total = imgs.length;
-    var btn = document.getElementById('btnCetak');
-    if (total === 0) {
-      btn.textContent = '🖨 Cetak / Simpan sebagai PDF';
-      btn.disabled = false; btn.style.background = '#1B8A4C';
-      return;
-    }
-    var loaded = 0;
-    btn.textContent = 'Memuat gambar... (0/' + total + ')';
-    btn.style.background = '#8896A5';
-    function onLoad() {
-      loaded++;
-      btn.textContent = loaded >= total
-        ? '🖨 Cetak / Simpan sebagai PDF'
-        : 'Memuat gambar... (' + loaded + '/' + total + ')';
-      if (loaded >= total) {
-        btn.disabled = false; btn.style.background = '#1B8A4C';
-      }
-    }
-    imgs.forEach(function(img) {
-      if (img.complete && img.naturalWidth > 0) { onLoad(); }
-      else {
-        img.addEventListener('load', onLoad);
-        img.addEventListener('error', onLoad);
-      }
-    });
-    // Fallback: aktifkan tombol setelah 10 detik walaupun gambar belum selesai
-    setTimeout(function() {
-      if (btn.disabled) {
-        btn.textContent = '🖨 Cetak / Simpan sebagai PDF';
-        btn.disabled = false;
-        btn.style.background = '#1B8A4C';
-      }
-    }, 10000);
-  })();
-<\/script>
-</body>
-</html>`);
-  pw.document.close();
-}
-
-// ═══════════════════════════════════════════════
-//  SERTIFIKAT PDF (diperbaiki — tanpa emoji mentah)
-
-
-
-// ═══════════════════════════════════════════════
-//  PROTEKSI
-// ═══════════════════════════════════════════════
-// E — Input kode CBT dikecualikan dari blokir context menu
-// agar siswa/guru bisa paste URL dengan klik kanan
-document.addEventListener('contextmenu', e => {
-  if (e.target && e.target.id === 'p-inp-kode') return; // izinkan
-  e.preventDefault();
-});
-document.addEventListener('keydown', e => {
-  if (e.key==='F12') { e.preventDefault(); alert('Dilarang!'); }
-  if (e.ctrlKey && e.key==='u') { e.preventDefault(); alert('Dilarang!'); }
-  if (e.ctrlKey && e.key==='s') e.preventDefault();
-  if (e.key==='PrintScreen'||e.key==='Print') { e.preventDefault(); if(!ujianSelesai){ _kaburkanLayar(1500); alert('Screenshot dilarang!'); } }
-  if (e.ctrlKey&&e.shiftKey&&(e.key==='s'||e.key==='S')) { e.preventDefault(); if(!ujianSelesai){ _kaburkanLayar(1500); alert('Screenshot dilarang!'); } }
-});
-function _kaburkanLayar(ms){ document.body.style.filter='blur(20px) brightness(0.3)'; setTimeout(()=>{document.body.style.filter='';},ms||1000); }
-(function(){ var s=document.createElement('style'); s.textContent='*{-webkit-user-select:none!important;user-select:none!important;}input,textarea,select{-webkit-user-select:text!important;user-select:text!important;}img{pointer-events:none;}@media print{body{display:none!important;}}'; document.head.appendChild(s); })();
-function fullscreen() { let el=document.documentElement; if(el.requestFullscreen) el.requestFullscreen(); else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen(); }
-function _pesanWarning(n,sisa) {
-  const D1 = PESAN_1 || `⚠️ Peringatan ${n}/${MAKS_P}: Jangan keluar halaman! Sisa: ${sisa} kali.`;
-  const D2 = PESAN_2 || `🚨 Peringatan keras ${n}/${MAKS_P}! Sisa: ${sisa} kali. Tetap di halaman ujian!`;
-  const D3 = PESAN_3 || `🛑 Batas pelanggaran tercapai. Ujian Anda dihentikan.`;
-  if(n===1)return D1; if(n===2)return D2; return D3;
-}
-// ═══════════════════════════════════════════════
-//  ANTI-CHEAT v2 — Focus-based + Split Screen Lock
-//  Aturan 1: document.hasFocus() polling 400ms
-//    - satu kehilangan fokus = satu pelanggaran
-//    - state _fokusHilang mencegah penghitungan ganda
-//    - saat fokus kembali, state di-reset
-//  Aturan 2: split screen → kunci sesi (overlay),
-//    bukan tambah pelanggaran — sesi bisa dilanjutkan
-//    setelah layar kembali penuh & fokus kembali
-// ═══════════════════════════════════════════════
-
-let _fokusHilang    = false;   // state: apakah saat ini fokus sedang hilang
-let _splitLocked    = false;   // state: apakah sesi sedang dikunci karena split screen
-let _acIntervalId   = null;    // ID interval polling fokus
-let _lastInnerW     = window.innerWidth;
-let _lastInnerH     = window.innerHeight;
-let _splitCheckId   = null;    // ID interval polling split screen
-
-// ── Overlay split screen ─────────────────────────────────────
-function _tampilSplitLock() {
-  if (_splitLocked) return;
-  _splitLocked = true;
-  document.getElementById('split-lock-overlay').classList.add('aktif');
-  // Nonaktifkan semua interaksi pada area soal
-  let examEl = document.getElementById('exam-screen');
-  if (examEl) examEl.style.pointerEvents = 'none';
-}
-
-function _sembunyikanSplitLock() {
-  if (!_splitLocked) return;
-  _splitLocked = false;
-  document.getElementById('split-lock-overlay').classList.remove('aktif');
-  let examEl = document.getElementById('exam-screen');
-  if (examEl) examEl.style.pointerEvents = '';
-}
-
-// ── Deteksi split screen via perubahan dimensi window ────────
-// Split screen menyebabkan innerWidth atau innerHeight berkurang
-// signifikan (> 30% dari ukuran awal layar).
-// Rotasi & keyboard virtual menyebabkan perubahan < threshold.
-function _cekSplitScreen() {
-  if (ujianSelesai) return;
-  let w = window.innerWidth, h = window.innerHeight;
-  // Ukuran layar fisik (orientasi-agnostik): max dari kombinasi
-  let screenW = Math.max(screen.width, screen.height);
-  let screenH = Math.min(screen.width, screen.height);
-  // Threshold: kurang dari 55% lebar atau tinggi layar = split screen
-  let THRESH_W = screenW * 0.55;
-  let THRESH_H = screenH * 0.55;
-  let isSplit  = (w < THRESH_W) || (h < THRESH_H);
-  if (isSplit && !_splitLocked) {
-    _tampilSplitLock();
-  } else if (!isSplit && _splitLocked) {
-    // Ukuran kembali normal — tunggu fokus dulu sebelum buka kunci
-    if (document.hasFocus()) {
-      _sembunyikanSplitLock();
-      _fokusHilang = false; // reset agar kehilangan fokus berikutnya dihitung
-    }
-  }
-}
-
-// ── Polling fokus halaman (Aturan 1) ─────────────────────────
-function _pollingFokus() {
-  if (ujianSelesai) {
-    clearInterval(_acIntervalId);
-    return;
-  }
-  // Jangan proses pelanggaran saat sesi dikunci karena split screen
-  if (_splitLocked) return;
-
-  let punya = document.hasFocus();
-  if (!punya && !_fokusHilang) {
-    // Kehilangan fokus yang baru → catat sebagai pelanggaran
-    _fokusHilang = true;
-    pelanggar++;
-    _kaburkanLayar(800);
-    if (pelanggar >= MAKS_P) {
-      alert(_pesanWarning(pelanggar, 0));
-      selesaiFinal();
-    } else {
-      alert(_pesanWarning(pelanggar, MAKS_P - pelanggar));
-      fullscreen();
-    }
-  } else if (punya && _fokusHilang) {
-    // Fokus kembali → reset state agar kehilangan berikutnya dihitung
-    _fokusHilang = false;
-  }
-}
-
-function antiCheat() {
-  // Simpan dimensi awal window sebagai acuan split screen
-  _lastInnerW = window.innerWidth;
-  _lastInnerH = window.innerHeight;
-
-  // ── Aturan 1: polling fokus setiap 400ms ──
-  _acIntervalId = setInterval(_pollingFokus, 400);
-
-  // ── Aturan 2: polling split screen setiap 500ms ──
-  _splitCheckId = setInterval(_cekSplitScreen, 500);
-
-  // blur: kaburkan saja (UX feedback), BUKAN pelanggaran
-  // Pelanggaran ditangani oleh polling hasFocus()
-  window.addEventListener('blur', () => {
-    if (!ujianSelesai && !_splitLocked) _kaburkanLayar(600);
-  });
-
-  // Saat fokus kembali dari tab switch → update state split screen juga
-  window.addEventListener('focus', () => {
-    if (_splitLocked && !(_cekSplitInline())) {
-      _sembunyikanSplitLock();
-      _fokusHilang = false;
-    }
-  });
-}
-
-// Helper inline cek split (dipanggil dari event focus)
-function _cekSplitInline() {
-  let w = window.innerWidth, h = window.innerHeight;
-  let screenW = Math.max(screen.width, screen.height);
-  let screenH = Math.min(screen.width, screen.height);
-  return (w < screenW * 0.55) || (h < screenH * 0.55);
-}
-
-// Hentikan semua interval anti-cheat saat ujian selesai
-function _hentikanAntiCheat() {
-  clearInterval(_acIntervalId);
-  clearInterval(_splitCheckId);
-  _sembunyikanSplitLock();
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  PORTAL SISWA — JavaScript (Refined Architecture)
-//
-//  Perubahan dari versi sebelumnya:
-//  [1] UUID permanen per profil (pUUID)
-//  [2] Riwayat diindeks per profilId — filter otomatis
-//  [3] Hook Premium dengan resolver chain yang bisa diextend
-//  [4] Backup dengan metadata versi + fungsi migrasi skema
-//  [5] Ad system provider-agnostic, slot dikonfigurasi via objek
-// ═══════════════════════════════════════════════════════════════
-
-// ── LocalStorage keys (terpisah dari CBT) ─────────────────────
-const LS_PROFIL   = 'portal_profil_list';   // array profil
-const LS_RIWAYAT  = 'portal_riwayat';       // array riwayat (per profilId)
-
-// ── Versi skema backup — naikkan saat struktur berubah ────────
-const BACKUP_SCHEMA_VERSION = 3;
-
-// ── [1] UUID generator permanen ───────────────────────────────
-// Dipakai saat membuat profil baru. Menggunakan crypto.randomUUID
-// jika tersedia (Chrome ≥ 92, Android ≥ 92), fallback ke random hex.
-function pUUID() {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  // Fallback: 8-4-4-4-12 hex
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    let r = Math.random() * 16 | 0;
-    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-  });
-}
-
-// ── [3] Registry kode CBT Free tier ───────────────────────────
-// Tambah mapping kode pendek di sini. Format: 'KODE': { url, label }
-const P_KODE_MAP = {
-  // Contoh:
-  // 'IPA-2026': { url: 'https://script.google.com/...', label: 'IPA 2026' },
-};
-
-// ── [3] Premium resolver chain ─────────────────────────────────
-// Setiap resolver adalah { id, label, resolve(kode) → Promise<{url,meta}|null> }
-// Tambah resolver baru tanpa mengubah pValidasiKode().
-const P_PREMIUM_RESOLVERS = [
-  // Contoh resolver masa depan:
-  // {
-  //   id: 'kabupaten-server',
-  //   label: 'Server Kabupaten KSM23',
-  //   resolve: async (kode) => {
-  //     let res = await fetch('https://api.ksm23.id/resolve?kode=' + kode);
-  //     let d = await res.json();
-  //     return d.url ? { url: d.url, meta: d } : null;
-  //   }
-  // },
-];
-
-// ── [5] Konfigurasi slot iklan (provider-agnostic) ─────────────
-// enabled    : false  → semua slot nonaktif (default keamanan)
-// slots      : map slotId → { provider, adUnitId, format, zones }
-// zones      : layar mana slot ini boleh tampil
-// inject(el) : fungsi yang memasang iklan ke elemen DOM
-//              kosongkan jika belum ada provider nyata
-const P_AD_CONFIG = {
-  enabled : false,  // ← set true untuk aktifkan
-  provider: null,   // 'google-adsense' | 'custom' | null
-  slots   : {
-    'ad-slot-home'   : { zones: ['portal-screen'],          format: 'banner', adUnitId: '' },
-    'ad-slot-riwayat': { zones: ['portal-riwayat-screen'],  format: 'banner', adUnitId: '' },
-    'ad-slot-detail' : { zones: ['portal-detail-screen'],   format: 'banner', adUnitId: '' },
-  },
-  // Inject dipanggil 1x per slot saat pertama kali zona aktif ditampilkan.
-  // Override fungsi ini untuk integrasi provider nyata.
-  inject(slotId, el, cfg) {
-    // Placeholder — konten dummy sampai provider diset
-    el.innerHTML = '<span style="font-size:11px;color:var(--gray-soft);">📢 Slot: ' + slotId + '</span>';
-  }
-};
-// Set zona aktif yang sudah diinisialisasi (hindari inject ganda)
-const _adInjected = new Set();
-
-// ── State runtime portal ───────────────────────────────────────
-let _pImporData  = null;   // data backup saat modal impor aktif
-let _pDetailAktif = null;  // riwayat yang sedang dibuka
-let _pKodeResolvedUrl = null;  // URL hasil resolusi kode CBT
-
-// ═══════════════════════════════════════════════
-//  NAVIGASI LAYAR
-// ═══════════════════════════════════════════════
-const P_SCREENS = [
-  'portal-screen','portal-cbt-screen','portal-riwayat-screen',
-  'portal-detail-screen','portal-profil-screen','portal-backup-screen',
-  'login-screen'
-];
-
-function pTampil(id) {
-  // Guard MASTER_CONFIG — cegah navigasi ke layar yang dinonaktifkan
-  if (id === 'portal-riwayat-screen' && !MASTER_CONFIG.allowHistory)    return;
-  if (id === 'portal-profil-screen'  && !MASTER_CONFIG.allowMultiProfile) return;
-  if (id === 'portal-backup-screen'  && !MASTER_CONFIG.allowBackup)     return;
-  // Sembunyikan semua layar dengan eksplisit display:none
-  P_SCREENS.forEach(s => {
-    let el = document.getElementById(s);
-    if (el) el.style.display = 'none';
-  });
-  // Sembunyikan juga exam dan hasil (dikelola terpisah tapi perlu ikut)
-  let examEl  = document.getElementById('exam-screen');
-  let hasilEl = document.getElementById('hasil-screen');
-  if (examEl)  examEl.style.display  = 'none';
-  if (hasilEl) hasilEl.style.display = 'none';
-
-  // Tampilkan target — exam pakai flex, sisanya block
-  let target = document.getElementById(id);
-  if (target) {
-    target.style.display = (id === 'exam-screen') ? 'flex' : 'block';
-  }
-  window.scrollTo(0, 0);
-
-  // Callback per layar
-  if (id === 'portal-screen')         pRenderBeranda();
-  if (id === 'portal-profil-screen')  pRenderProfilList();
-  if (id === 'portal-backup-screen')  pRenderBackupInfo();
-  if (id === 'portal-riwayat-screen') pMuatRiwayat();
-
-  // [5] Iklan: aktifkan slot yang relevan untuk layar ini
-  _adAktifkanZona(id);
-}
-
-// ═══════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════
-function portalInit() {
-  // Jalankan migrasi skema data jika perlu
-  _pMigrasi();
-
-  let exam  = document.getElementById('exam-screen');
-  let hasil = document.getElementById('hasil-screen');
-  if (exam)  exam.style.display  = 'none';
-  if (hasil) hasil.style.display = 'none';
-
-  // Terapkan MASTER_CONFIG ke Portal sejak awal (sebelum server branding tiba)
-  _applyMasterConfigToPortal();
-
-  pTampil('portal-screen');
-}
-
-// ═══════════════════════════════════════════════
-//  BERANDA
-// ═══════════════════════════════════════════════
-function pRenderBeranda() {
-  let profil = pProfilAktif();
-  let av = document.getElementById('p-header-av');
-  let nm = document.getElementById('p-header-nama');
-  let sb = document.getElementById('p-header-sub');
-  if (profil) {
-    av.textContent = profil.nama.charAt(0).toUpperCase();
-    nm.textContent = profil.nama;
-    // [1] Tampilkan UUID pendek sebagai identitas permanen
-    sb.textContent = 'ID: ' + profil.uuid.slice(0, 8).toUpperCase();
-  } else {
-    av.textContent = '?';
-    nm.textContent = 'Belum ada profil';
-    sb.textContent = 'Tap "Ganti" untuk membuat profil';
-  }
-  // [2] Badge riwayat hanya hitung milik profil aktif
-  let count = pRiwayatProfil().length;
-  let badge = document.getElementById('p-riwayat-badge');
-  if (badge) badge.textContent = count + ' ujian tersimpan';
-}
-
-// ═══════════════════════════════════════════════
-//  [1] KELOLA PROFIL — dengan UUID permanen
-// ═══════════════════════════════════════════════
-function pProfilSemua() {
-  try {
-    let list = JSON.parse(localStorage.getItem(LS_PROFIL)) || [];
-    // [A.1] Urutkan: aktif pertama, lalu terbaru digunakan
-    list.sort((a, b) => {
-      if (a.aktif && !b.aktif) return -1;
-      if (!a.aktif && b.aktif) return 1;
-      return (b.lastUsed || 0) - (a.lastUsed || 0);
-    });
-    return list;
-  } catch(e) { return []; }
-}
-function pProfilSimpan(list) {
-  try { localStorage.setItem(LS_PROFIL, JSON.stringify(list)); } catch(e) {}
-}
-function pProfilAktif() {
-  return pProfilSemua().find(p => p.aktif) || null;
-}
-function pProfilSetAktif(id) {
-  let list = pProfilSemua().map(p => ({
-    ...p,
-    aktif    : p.uuid === id,
-    lastUsed : p.uuid === id ? Date.now() : (p.lastUsed || 0)
-  }));
-  pProfilSimpan(list);
-}
-
-function pSimpanProfil() {
-  let inp  = document.getElementById('p-inp-profil');
-  let nama = inp.value.trim();
-  if (!nama) { alert('Nama tidak boleh kosong.'); return; }
-
-  let list = pProfilSemua();
-  let editId = inp.dataset.editId || '';
-
-  // Mode edit: ubah nama profil yang sudah ada
-  if (editId) {
-    let target = list.find(p => p.uuid === editId);
-    if (target && target.nama !== nama) {
-      // [1] UUID tidak berubah — hanya nama yang diperbarui
-      pModalTampil(
-        '✏️ Ubah Identitas',
-        'Nama lama: ' + target.nama + '\nNama baru: ' + nama + '\n\nLanjutkan perubahan?',
-        '', 'ya', function() {
-          list = list.map(p => p.uuid === editId ? { ...p, nama, diubah: new Date().toISOString() } : p);
-          pProfilSimpan(list);
-          inp.value = ''; inp.dataset.editId = '';
-          pRenderProfilList();
-          pModalTutup();
-        }
-      );
-      return;
-    }
-    inp.value = ''; inp.dataset.editId = '';
-    pRenderProfilList();
-    return;
-  }
-
-  // Cek nama duplikat
-  let existing = list.find(p => p.nama.toLowerCase() === nama.toLowerCase());
-  if (existing) {
-    pModalTampil(
-      'Profil Ditemukan',
-      '"' + existing.nama + '" sudah tersimpan. Jadikan profil aktif?',
-      '', 'ya', function() {
-        pProfilSetAktif(existing.uuid);
-        inp.value = '';
-        pRenderProfilList();
-        pModalTutup();
-      }
-    );
-    return;
-  }
-
-  // [A.1] Profil baru → UUID permanen + lastUsed
-  let jadikanAktif = list.length === 0;
-  list.push({
-    uuid     : pUUID(),
-    nama,
-    aktif    : jadikanAktif,
-    lastUsed : jadikanAktif ? Date.now() : 0,
-    dibuat   : new Date().toISOString(),
-    diubah   : null,
-    meta     : {}
-  });
-  pProfilSimpan(list);
-  inp.value = '';
-  pRenderProfilList();
-}
-
-function pProfilUbah(uuid) {
-  let profil = pProfilSemua().find(p => p.uuid === uuid);
-  if (!profil) return;
-  let inp = document.getElementById('p-inp-profil');
-  inp.value = profil.nama;
-  inp.dataset.editId = uuid;
-  inp.focus();
-  inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-function pProfilHapus(uuid) {
-  let profil = pProfilSemua().find(p => p.uuid === uuid);
-  if (!profil) return;
-  // [2] Hitung riwayat milik profil ini
-  let jmlRiwayat = pRiwayatSemua().filter(r => r.profilId === uuid).length;
-  let warningRiwayat = jmlRiwayat > 0
-    ? '\n\n⚠️ ' + jmlRiwayat + ' riwayat ujian milik profil ini TIDAK ikut dihapus dan masih bisa diakses via Backup.'
-    : '';
-  pModalTampil(
-    '🗑 Hapus Profil',
-    'Hapus profil "' + profil.nama + '"?' + warningRiwayat,
-    '', 'ya merah', function() {
-      let list = pProfilSemua().filter(p => p.uuid !== uuid);
-      if (profil.aktif && list.length > 0) list[0].aktif = true;
-      pProfilSimpan(list);
-      pRenderProfilList();
-      pModalTutup();
-    }
-  );
-}
-
-function pRenderProfilList() {
-  let list = pProfilSemua();
-  let el   = document.getElementById('p-profil-list');
-  if (!el) return;
-  if (list.length === 0) {
-    el.innerHTML = '<div class="p-riwayat-kosong"><span class="ico">👤</span>Belum ada profil. Tambahkan di atas.</div>';
-    return;
-  }
-  el.innerHTML = list.map(p => {
-    // [2] Jumlah riwayat per profil
-    let jml = pRiwayatSemua().filter(r => r.profilId === p.uuid).length;
-    return `
-    <div class="p-profil-item ${p.aktif ? 'aktif-profil' : ''}">
-      <div class="p-av">${p.nama.charAt(0).toUpperCase()}</div>
-      <div class="p-info">
-        <div class="p-pnama">${_esc(p.nama)}</div>
-        <div style="font-size:10px;color:var(--gray-soft);margin-top:1px;">
-          ${jml} ujian · ID: ${p.uuid.slice(0,8).toUpperCase()}
-        </div>
-        ${p.aktif ? '<div class="p-pbadge">✓ Aktif</div>' : ''}
-      </div>
-      <div class="p-profil-aksi">
-        ${!p.aktif ? `<button class="pilih" onclick="pProfilSetAktif('${p.uuid}');pRenderProfilList();pRenderBeranda()">Pilih</button>` : ''}
-        <button onclick="pProfilUbah('${p.uuid}')">Ubah</button>
-        <button class="hapus" onclick="pProfilHapus('${p.uuid}')">Hapus</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── Autocomplete ───────────────────────────────────────────────
-function pAcInput(val) {
-  let listEl = document.getElementById('p-ac-list');
-  if (!val.trim()) { listEl.style.display = 'none'; return; }
-  let cocok = pProfilSemua().filter(p => p.nama.toLowerCase().includes(val.toLowerCase()));
-  if (cocok.length === 0) { listEl.style.display = 'none'; return; }
-  listEl.innerHTML = cocok.map(p =>
-    `<div class="p-ac-item" onclick="pAcPilih('${_esc(p.nama)}','${p.uuid}')">${_esc(p.nama)}</div>`
-  ).join('');
-  listEl.style.display = 'block';
-}
-function pAcPilih(nama, uuid) {
-  let inp = document.getElementById('p-inp-profil');
-  inp.value = nama;
-  inp.dataset.editId = uuid;
-  document.getElementById('p-ac-list').style.display = 'none';
-}
-document.addEventListener('click', function(e) {
-  let listEl = document.getElementById('p-ac-list');
-  if (listEl && !listEl.contains(e.target) && e.target.id !== 'p-inp-profil')
-    listEl.style.display = 'none';
-});
-
-// ═══════════════════════════════════════════════
-//  MASUK UJIAN
-// ═══════════════════════════════════════════════
-function pTampilMasukUjian() {
-  let profil = pProfilAktif();
-  document.getElementById('p-cbt-av').textContent  = profil ? profil.nama.charAt(0).toUpperCase() : '?';
-  document.getElementById('p-cbt-nama').textContent = profil ? profil.nama : 'Belum ada profil — buat dulu di Kelola Profil';
-  document.getElementById('p-inp-kode').value       = '';
-  document.getElementById('p-kode-hint').textContent = '';
-  document.getElementById('p-btn-lanjut').disabled  = true;
-  document.getElementById('p-premium-pilihan').style.display = 'none';
-  _pKodeResolvedUrl = null;
-  pTampil('portal-cbt-screen');
-}
-
-function pKodeInput(val) {
-  let v    = val.trim();
-  let btn  = document.getElementById('p-btn-lanjut');
-  let hint = document.getElementById('p-kode-hint');
-  _pKodeResolvedUrl = null;
-  document.getElementById('p-premium-pilihan').style.display = 'none';
-
-  if (!v) { btn.disabled = true; hint.textContent = ''; return; }
-
-  if (v.startsWith('https://script.google.com/')) {
-    _pKodeResolvedUrl = v;
-    hint.textContent = '✅ URL Google Apps Script (Free)';
-    hint.style.color = 'var(--green)';
-    btn.disabled = false;
-  } else if (P_KODE_MAP[v.toUpperCase()]) {
-    _pKodeResolvedUrl = P_KODE_MAP[v.toUpperCase()].url;
-    hint.textContent  = '✅ ' + (P_KODE_MAP[v.toUpperCase()].label || v.toUpperCase()) + ' (Free)';
-    hint.style.color  = 'var(--green)';
-    btn.disabled = false;
-  } else if (v.length >= 4) {
-    hint.textContent = '🔑 Kode akan diverifikasi...';
-    hint.style.color = 'var(--gray-soft)';
-    btn.disabled = false;
-  } else {
-    btn.disabled = true;
-    hint.textContent = '';
-  }
-}
-
-// [3] Validasi kode — resolver chain
-async function pValidasiKode() {
-  let profil = pProfilAktif();
-  if (!profil) { alert('Buat profil terlebih dahulu di menu Kelola Profil.'); return; }
-
-  let kode  = document.getElementById('p-inp-kode').value.trim();
-  let hint  = document.getElementById('p-kode-hint');
-  let btn   = document.getElementById('p-btn-lanjut');
-  if (!kode) return;
-
-  // Free tier 1: URL langsung atau kode terdaftar
-  if (_pKodeResolvedUrl) {
-    pMasukCBT(_pKodeResolvedUrl);
-    return;
-  }
-
-  // [3] Premium resolver chain — coba satu per satu
-  if (MASTER_CONFIG.allowPremiumResolver && P_PREMIUM_RESOLVERS.length > 0) {
-    btn.disabled = true;
-    hint.textContent = '🔄 Memverifikasi kode...';
-    hint.style.color = 'var(--gray-soft)';
-    for (let resolver of P_PREMIUM_RESOLVERS) {
-      try {
-        let result = await resolver.resolve(kode);
-        if (result && result.url) {
-          // [3] Premium resolved: tampilkan pilihan kelas jika ada
-          _pKodeResolvedUrl = result.url;
-          if (result.meta && result.meta.kelas_tersedia) {
-            _pTampilPilihanKelas(result.meta.kelas_tersedia);
-          } else {
-            pMasukCBT(result.url);
-          }
-          btn.disabled = false;
-          return;
-        }
-      } catch(e) { console.warn('[Premium resolver ' + resolver.id + ']', e); }
-    }
-    // Semua resolver gagal
-    hint.textContent = '❌ Kode tidak dikenali oleh server manapun.';
-    hint.style.color = 'var(--red)';
-    btn.disabled = false;
-    return;
-  }
-
-  // [3] Tidak ada resolver aktif: tampilkan pilihan grup sebagai stub Premium
-  hint.textContent = '⚡ Kode Premium — pilih ' + (SERVER_BRAND.premium_selector_label||'grup') + ' untuk lanjut.';
-  hint.style.color = 'var(--orange)';
-  _pTampilPilihanKelas(SERVER_BRAND.selector_options.length > 0 ? SERVER_BRAND.selector_options : []);
-}
-
-// [3] Tampilkan opsi grup/kelas (bisa dari resolver meta atau default server branding)
-function _pTampilPilihanKelas(kelasArr) {
-  let sel   = document.getElementById('p-sel-kelas');
-  let wrap  = document.getElementById('p-premium-pilihan');
-  let label = SERVER_BRAND.premium_selector_label || 'Pilih Grup';
-  sel.innerHTML = '<option value="">-- ' + label + ' --</option>' +
-    kelasArr.map(k => {
-      let val = typeof k === 'object' ? (k.value || k) : k;
-      let lbl = typeof k === 'object' ? (k.label || k.value || k) : k;
-      return `<option value="${val}">${lbl}</option>`;
-    }).join('');
-  wrap.style.display = 'block';
-}
-
-function pMasukCBT(urlGAS) {
-  let profil = pProfilAktif();
-  if (!profil) { alert('Profil tidak ditemukan.'); return; }
-
-  if (!urlGAS) {
-    // Dari pilihan grup/kelas Premium
-    let kelas = document.getElementById('p-sel-kelas').value;
-    if (!kelas) { alert('Pilih ' + (SERVER_BRAND.premium_selector_label || 'grup') + ' terlebih dahulu.'); return; }
-    // [3] Gabungkan URL resolver + parameter kelas
-    urlGAS = (_pKodeResolvedUrl || URL_SCRIPT) + '&kelas=' + encodeURIComponent(kelas);
-  }
-
-  // Set URL aktif — semua fetch CBT pakai ini
-  _urlGasAktif = urlGAS;
-
-  // [A.1] Update lastUsed profil aktif saat masuk ujian
-  let listP = pProfilSemua();
-  listP = listP.map(p => p.aktif ? { ...p, lastUsed: Date.now() } : p);
-  pProfilSimpan(listP);
-
-  // Pre-isi nama dari profil aktif
-  let inpNama = document.getElementById('inp-nama');
-  if (inpNama) inpNama.value = profil.nama;
-
-  pTampil('login-screen');
-  muatSoal();
-}
-
-// ═══════════════════════════════════════════════
-//  [2] RIWAYAT — dipisah per profilId
-// ═══════════════════════════════════════════════
-function pRiwayatSemua() {
-  try { return JSON.parse(localStorage.getItem(LS_RIWAYAT)) || []; }
-  catch(e) { return []; }
-}
-function pRiwayatSimpanList(list) {
-  try { localStorage.setItem(LS_RIWAYAT, JSON.stringify(list)); } catch(e) {}
-}
-
-// [2] Hanya riwayat profil aktif
-function pRiwayatProfil(uuid) {
-  let id = uuid || (pProfilAktif() || {}).uuid || null;
-  if (!id) return [];
-  return pRiwayatSemua().filter(r => r.profilId === id);
-}
-
-// Hook dipanggil dari selesaiFinal()
-function portalSimpanRiwayat() {
-  try {
-    let hitung = hitungNilai();
-    let profil = pProfilAktif();
-    let list   = pRiwayatSemua();
-    let entry  = {
-      id          : 'rw_' + pUUID(),          // UUID permanen untuk riwayat
-      profilId    : profil ? profil.uuid : null, // [2] ikat ke profil
-      judul       : JUDUL,
-      siswa       : namaSiswa,
-      sekolah     : namaSekolah,
-      tanggal     : (tSelesai || new Date()).toISOString(),
-      nilai       : hitung.nilai,
-      predikat    : hitung.predikat,
-      benar       : hitung.benar,
-      salah       : hitung.salah,
-      esai        : hitung.esaiC,
-      poinD       : hitung.poinD,
-      poinM       : hitung.poinM,
-      pelanggaran : pelanggar,
-      soalSnapshot: soalData.map(s => ({...s})),
-      jawPG       : {...jawPG},
-      jawEsai     : {...jawEsai},
-      raguMap     : {...raguMap},
-      buka_pemb   : BUKA_PEMB,
-      gas_url     : _urlGasAktif,          // simpan URL sumber soal
-      snapshotVersion   : 1,               // [A.2] pondasi versioning snapshot
-      _peserta_label    : SERVER_BRAND.participant_field_label,   // label dinamis saat ujian
-      _institusi_label  : SERVER_BRAND.institution_field_label    // label dinamis saat ujian
-    };
-    // Dedup: judul + profilId + hari yang sama → timpa
-    let tgl = entry.tanggal.slice(0, 10);
-    list = list.filter(r => !(r.judul === entry.judul
-                             && r.profilId === entry.profilId
-                             && r.tanggal.slice(0, 10) === tgl));
-    list.unshift(entry);
-    if (list.length > 100) list = list.slice(0, 100); // naikkan limit dari 50
-    pRiwayatSimpanList(list);
-  } catch(e) { console.warn('portalSimpanRiwayat error:', e); }
-}
-
-function pMuatRiwayat() {
-  // [2] Hanya tampilkan riwayat profil aktif
-  let list = pRiwayatProfil();
-  let el   = document.getElementById('p-riwayat-list');
-  if (!el) return;
-
-  let profil = pProfilAktif();
-  let namaP  = profil ? profil.nama : '—';
-
-  // Header profil di atas daftar
-  let headerHtml = `
-    <div style="font-size:11px;font-weight:700;color:var(--gray-soft);
-      text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding:0 2px;">
-      Riwayat: ${_esc(namaP)}
-    </div>`;
-
-  if (list.length === 0) {
-    el.innerHTML = headerHtml + '<div class="p-riwayat-kosong"><span class="ico">📭</span>Belum ada riwayat untuk profil ini.</div>';
-    return;
-  }
-  el.innerHTML = headerHtml + list.map(r => {
-    let kls = _predikatKls(r.predikat);
-    let tgl = new Date(r.tanggal).toLocaleDateString('id-ID',
-      { day: 'numeric', month: 'short', year: 'numeric' });
-    return `<div class="p-riwayat-item" onclick="pBukaDetail('${r.id}')">
-      <div class="r-nilai ${kls}">${Math.round(r.nilai || 0)}</div>
-      <div class="r-info">
-        <div class="r-judul">${_esc(r.judul)}</div>
-        <div class="r-meta">${_esc(r.siswa)} · ${tgl}</div>
-      </div>
-      <div class="r-arrow">›</div>
-    </div>`;
-  }).join('');
-}
-
-function pBukaDetail(id) {
-  // [2] Cari di semua riwayat (bukan hanya profil aktif) agar link UUID tetap valid
-  let r = pRiwayatSemua().find(x => x.id === id);
-  if (!r) return;
-  _pDetailAktif = r;
-  _pRenderDetail(r);
-  pTampil('portal-detail-screen');
-
-  // [C] Server sync — jika ada gas_url di riwayat, cek nilai terbaru di background
-  if (r.gas_url && r.siswa && r.sekolah) {
-    _pSyncNilaiDariServer(r);
-  }
-}
-
-// [C] Ambil nilai terbaru dari GAS dan perbarui cache lokal jika ada perubahan
-function _pSyncNilaiDariServer(r) {
-  if (!r.gas_url) return;
-  let url = r.gas_url + '?action=getHasilSiswa'
-    + '&nama='    + encodeURIComponent(r.siswa)
-    + '&sekolah=' + encodeURIComponent(r.sekolah);
-
-  // Gunakan AbortSignal.timeout jika tersedia (Chrome ≥ 111), fallback manual
-  let fetchOpts = {};
-  try {
-    if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
-      fetchOpts.signal = AbortSignal.timeout(10000);
-    }
-  } catch(e) {}
-
-  fetch(url, fetchOpts)
-    .then(res => res.json())
-    .then(function(d) {
-      if (d.status !== 'ok') return;
-      let berubah = false;
-
-      // [C] Perbarui nilai akhir jika guru sudah koreksi esai
-      if (d.nilai_akhir && d.poin_esai > 0) {
-        // Esai sudah dikoreksi — nilai akhir resmi
-        if (d.nilai_akhir !== r.nilai) {
-          r.nilai    = d.nilai_akhir;
-          r.predikat = d.predikat ||
-            (r.nilai>=90?'Sangat Baik':r.nilai>=75?'Baik':r.nilai>=60?'Cukup':'Terus Semangat');
-          berubah    = true;
-        }
-        // Update info esai di cache
-        if (!r.esaiSudahDikoreksi) {
-          r.esaiSudahDikoreksi = true;
-          r.poinEsai = d.poin_esai;
-          berubah = true;
-        }
-      } else if (d.nilai_pg > 0 && !r.esaiSudahDikoreksi) {
-        // Esai belum dikoreksi — pakai nilai PG sementara
-        if (d.nilai_pg !== r.nilai) {
-          r.nilai  = d.nilai_pg;
-          r.predikat = r.nilai>=90?'Sangat Baik':r.nilai>=75?'Baik':r.nilai>=60?'Cukup':'Terus Semangat';
-          berubah  = true;
-        }
-      }
-
-      // [D] Sinkronisasi status pembahasan dari server
-      // GAS mengirim: buka_pembahasan (boolean) atau review_locked (boolean)
-      let bukaServer = null;
-      if (typeof d.buka_pembahasan !== 'undefined') {
-        bukaServer = !!d.buka_pembahasan;
-      } else if (typeof d.review_locked !== 'undefined') {
-        bukaServer = !d.review_locked;
-      }
-      if (bukaServer !== null && bukaServer !== r.buka_pemb) {
-        r.buka_pemb = bukaServer;
-        berubah     = true;
-      }
-
-      if (berubah) {
-        // Simpan cache lokal yang sudah diperbarui
-        let semua = pRiwayatSemua().map(x => x.id === r.id ? r : x);
-        pRiwayatSimpanList(semua);
-        _pDetailAktif = r;
-        // Re-render detail secara non-disruptive (siswa tidak merasakan ada fetch)
-        _pRenderDetail(r);
-      }
-    })
-    .catch(function() {
-      // Gagal sync — tampilkan data cache, tidak ada pesan error ke user
-    });
-}
-
-// Render konten layar detail (dipisah dari navigasi agar bisa dipanggil ulang setelah sync)
-function _pRenderDetail(r) {
-  document.getElementById('p-det-judul').textContent = r.judul;
-  let tgl = new Date(r.tanggal).toLocaleDateString('id-ID',
-    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  document.getElementById('p-det-tgl').textContent  = tgl;
-  document.getElementById('p-det-nilai').textContent = Math.round(r.nilai || 0);
-  document.getElementById('p-det-pred').textContent  = r.predikat || '--';
-  document.getElementById('p-det-pred').className    = 'skor-pred';
-
-  document.getElementById('p-det-stat').innerHTML = `
-    <div class="stat-c benar"><div class="stat-num">${r.benar||0}</div><div class="stat-lbl">Benar (PG)</div></div>
-    <div class="stat-c salah"><div class="stat-num">${r.salah||0}</div><div class="stat-lbl">Salah</div></div>
-    <div class="stat-c ragu"><div class="stat-num">${Object.keys(r.raguMap||{}).length}</div><div class="stat-lbl">Ragu-ragu</div></div>
-    <div class="stat-c esai"><div class="stat-num">${r.esai||0}</div><div class="stat-lbl">Esai</div></div>`;
-
-  // Gunakan label dari snapshot riwayat jika ada (untuk backward compat),
-  // fallback ke SERVER_BRAND aktif
-  let institusiLabel = r._institusi_label || SERVER_BRAND.institution_field_label;
-  let pesertaLabel   = r._peserta_label   || SERVER_BRAND.participant_field_label;
-
-  document.getElementById('p-det-info').innerHTML =
-    'Poin: <strong>' + (r.poinD||0) + ' / ' + (r.poinM||0) + '</strong>' +
-    (r.esaiSudahDikoreksi
-      ? ' · Esai: <strong style="color:var(--green)">✅ +' + (r.poinEsai||0) + ' poin (sudah dikoreksi)</strong>'
-      : (r.esai > 0 ? ' · Esai: <strong style="color:var(--orange)">⏳ Menunggu koreksi</strong>' : '')) +
-    ' · Pelanggaran: <strong>' + (r.pelanggaran||0) + '</strong>' +
-    ' · ' + institusiLabel + ': <strong>' + _esc(r.sekolah||'—') + '</strong>';
-
-  // [D] Tombol pembahasan — status ikuti server (via cache yang sudah diperbarui)
-  let btnPemb = document.getElementById('p-btn-buka-pemb');
-  if (!btnPemb) return;
-  if (r.buka_pemb && r.soalSnapshot && r.soalSnapshot.length > 0) {
-    btnPemb.disabled = false;
-    btnPemb.textContent = '📖 Lihat Pembahasan';
-  } else if (!r.buka_pemb) {
-    btnPemb.disabled = true;
-    btnPemb.textContent = '🔒 Pembahasan belum dibuka guru';
-  } else {
-    btnPemb.disabled = true;
-    btnPemb.textContent = '⚠️ Data pembahasan tidak tersedia';
-  }
-}
-
-function pBukaAnalisisRiwayat() {
-  if (!_pDetailAktif) return;
-  let r = _pDetailAktif;
-  if (!r.soalSnapshot || r.soalSnapshot.length === 0) {
-    alert('Data soal tidak tersedia di riwayat ini.'); return;
-  }
-  soalData  = r.soalSnapshot;
-  jawPG     = r.jawPG   || {};
-  jawEsai   = r.jawEsai || {};
-  raguMap   = r.raguMap || {};
-  namaSiswa   = r.siswa   || '';
-  namaSekolah = r.sekolah || '';
-  BUKA_PEMB = true;
-  bukaAnalisis();
-}
-
-// ═══════════════════════════════════════════════
-//  [4] BACKUP — metadata versi + migrasi skema
-// ═══════════════════════════════════════════════
-
-// Tabel migrasi: skema lama → baru
-// Tambah fungsi di sini saat BACKUP_SCHEMA_VERSION naik.
-const _pMigrators = {
-  // v1 → v2: tambah uuid ke profil + profilId ke riwayat + lastUsed + snapshotVersion
-  1: function(data) {
-    (data.profil || []).forEach(p => {
-      if (!p.uuid)     p.uuid     = p.id || pUUID();
-      if (!p.meta)     p.meta     = {};
-      if (!p.lastUsed) p.lastUsed = 0;   // [A.1] seed lastUsed
-    });
-    let profil = data.profil || [];
-    (data.riwayat || []).forEach(r => {
-      if (!r.profilId) {
-        let match = profil.find(p => p.nama && r.siswa &&
-          p.nama.toLowerCase() === r.siswa.toLowerCase());
-        r.profilId = match ? match.uuid : null;
-      }
-      if (!r.id || !r.id.startsWith('rw_')) r.id = 'rw_' + pUUID();
-      if (!r.snapshotVersion) r.snapshotVersion = 1; // [A.2] seed snapshotVersion
-    });
-    data._schema = 2;
-    return data;
-  },
-  // v2 → v3: tambah field _peserta_label dan _institusi_label pada riwayat
-  // Field ini opsional — null berarti Portal gunakan label default SERVER_BRAND
-  2: function(data) {
-    data.riwayat = (data.riwayat || []).map(function(r) {
-      return Object.assign({ _peserta_label: null, _institusi_label: null }, r);
-    });
-    data._schema = 3;
-    return data;
-  },
-};
-
-// Jalankan migrasi data di localStorage jika skema lama
-function _pMigrasi() {
-  try {
-    let profilRaw   = localStorage.getItem(LS_PROFIL);
-    let riwayatRaw  = localStorage.getItem(LS_RIWAYAT);
-    if (!profilRaw && !riwayatRaw) return; // data kosong, tidak perlu migrasi
-
-    let profil   = JSON.parse(profilRaw  || '[]');
-    let riwayat  = JSON.parse(riwayatRaw || '[]');
-
-    // Deteksi versi skema saat ini
-    let currentSchema = 1;
-    if (profil.length > 0 && profil[0].uuid) currentSchema = 2;
-    // v3: cek field _peserta_label di riwayat pertama
-    if (currentSchema >= 2 && riwayat.length > 0 && typeof riwayat[0]._peserta_label !== 'undefined') currentSchema = 3;
-
-    if (currentSchema >= BACKUP_SCHEMA_VERSION) return; // sudah up-to-date
-
-    console.log('[Portal] Migrasi skema v' + currentSchema + ' → v' + BACKUP_SCHEMA_VERSION);
-    let data = { profil, riwayat, _schema: currentSchema };
-    for (let v = currentSchema; v < BACKUP_SCHEMA_VERSION; v++) {
-      if (_pMigrators[v]) data = _pMigrators[v](data);
-    }
-    pProfilSimpan(data.profil);
-    pRiwayatSimpanList(data.riwayat);
-    console.log('[Portal] Migrasi selesai.');
-  } catch(e) { console.warn('[Portal] Migrasi error:', e); }
-}
-
-function pRenderBackupInfo() {
-  let profil  = pProfilSemua();
-  let riwayat = pRiwayatSemua();
-  let rProfil = pRiwayatProfil().length;
-  let el = document.getElementById('p-backup-info');
-  if (el) el.innerHTML =
-    '📋 <strong>' + profil.length + '</strong> profil · ' +
-    '<strong>' + riwayat.length + '</strong> total riwayat ' +
-    '(<strong>' + rProfil + '</strong> milik profil aktif) · ' +
-    'Skema v' + BACKUP_SCHEMA_VERSION + '<br>' +
-    '<small style="color:var(--gray-soft)">Semua data tersimpan lokal di perangkat ini.</small>';
-}
-
-function pEkspor() {
-  let profil  = pProfilSemua();
-  let riwayat = pRiwayatSemua();
-  // [4] Metadata versi & skema
-  let payload = {
-    _app          : 'CBT Kabut Digital Portal',
-    _schema       : BACKUP_SCHEMA_VERSION,
-    _versi_app    : 'v7.2.0',
-    _tanggal      : new Date().toISOString(),
-    _device       : typeof navigator !== 'undefined' ? navigator.userAgent.slice(0, 80) : '',
-    _profil_count : profil.length,
-    _riwayat_count: riwayat.length,
-    profil,
-    riwayat
-  };
-  let blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  let url  = URL.createObjectURL(blob);
-  let a    = document.createElement('a');
-  a.href   = url;
-  let tgl  = new Date().toISOString().slice(0, 10);
-  a.download = 'backup_portal_cbt_' + tgl + '_v' + BACKUP_SCHEMA_VERSION + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function pImpor() {
-  document.getElementById('p-file-impor').value = '';
-  document.getElementById('p-file-impor').click();
-}
-
-function pFileImpor(input) {
-  let file = input.files[0];
-  if (!file) return;
-  let reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      let data = JSON.parse(e.target.result);
-      if (!data.profil && !data.riwayat)
-        throw new Error('Format backup tidak valid.');
-
-      // [4] Jalankan migrasi skema jika backup berasal dari versi lama
-      let backupSchema = data._schema || 1;
-      if (backupSchema < BACKUP_SCHEMA_VERSION) {
-        console.log('[Portal] Migrasi backup v' + backupSchema + ' → v' + BACKUP_SCHEMA_VERSION);
-        for (let v = backupSchema; v < BACKUP_SCHEMA_VERSION; v++) {
-          if (_pMigrators[v]) data = _pMigrators[v](data);
-        }
-      }
-      _pImporData = data;
-
-      let jumlahP = (data.profil  || []).length;
-      let jumlahR = (data.riwayat || []).length;
-      document.getElementById('p-impor-info').innerHTML =
-        '<strong>Skema backup:</strong> v' + backupSchema +
-        (backupSchema < BACKUP_SCHEMA_VERSION ? ' (akan dimigrasi ke v' + BACKUP_SCHEMA_VERSION + ')' : '') +
-        '<br><strong>Profil:</strong> ' + jumlahP + ' profil' +
-        '<br><strong>Riwayat:</strong> ' + jumlahR + ' ujian' +
-        '<br><br><em>Pilih cara impor:</em>';
-      document.getElementById('p-modal-impor').classList.add('aktif');
-    } catch(err) {
-      alert('File tidak valid: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-function pImpor_Gabung() {
-  if (!_pImporData) return;
-  // [1] Gabung profil berdasarkan UUID (bukan nama)
-  let profil   = pProfilSemua();
-  let uuidAda  = new Set(profil.map(p => p.uuid));
-  (_pImporData.profil || []).forEach(p => {
-    if (!uuidAda.has(p.uuid)) profil.push(p);
-  });
-  pProfilSimpan(profil);
-  // [2] Gabung riwayat berdasarkan id UUID
-  let riwayat = pRiwayatSemua();
-  let idAda   = new Set(riwayat.map(r => r.id));
-  (_pImporData.riwayat || []).forEach(r => {
-    if (!idAda.has(r.id)) riwayat.push(r);
-  });
-  riwayat.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-  pRiwayatSimpanList(riwayat);
-  pModalImpTutup();
-  alert('✅ Data berhasil digabungkan.');
-  pRenderBackupInfo();
-}
-
-function pImpor_Ganti() {
-  if (!_pImporData) return;
-  pModalTampil(
-    '⚠️ Ganti Semua Data',
-    'Semua profil dan riwayat saat ini akan ditimpa. Lanjutkan?',
-    '', 'ya merah', function() {
-      pProfilSimpan(_pImporData.profil || []);
-      pRiwayatSimpanList(_pImporData.riwayat || []);
-      pModalImpTutup();
-      pModalTutup();
-      alert('✅ Data berhasil diganti.');
-      pRenderBackupInfo();
-    }
-  );
-}
-
-function pHapusSemua() {
-  pModalTampil(
-    '🗑 Hapus Semua Data Portal',
-    'Profil dan riwayat ujian akan dihapus permanen.\nData CBT (token, draft) tidak terpengaruh.',
-    '', 'ya merah', function() {
-      try {
-        localStorage.removeItem(LS_PROFIL);
-        localStorage.removeItem(LS_RIWAYAT);
-      } catch(e) {}
-      pModalTutup();
-      pRenderBackupInfo();
-      pRenderProfilList();
-      alert('✅ Data portal telah dihapus.');
-    }
-  );
-}
-
-// ═══════════════════════════════════════════════
-//  [5] IKLAN / PROMOSI — provider-agnostic
-// ═══════════════════════════════════════════════
-
-// Aktifkan slot yang relevan untuk zona (layar) yang sedang ditampilkan.
-// Inject hanya dijalankan sekali per slot (via _adInjected set).
-function _adAktifkanZona(zonaId) {
-  if (!MASTER_CONFIG.allowAds || !P_AD_CONFIG.enabled) return;
-  // Zona ujian: TIDAK PERNAH tampil iklan
-  if (['exam-screen', 'login-screen'].includes(zonaId)) return;
-
-  Object.entries(P_AD_CONFIG.slots).forEach(([slotId, cfg]) => {
-    if (!cfg.zones.includes(zonaId)) return;
-    let el = document.getElementById(slotId);
-    if (!el) return;
-    el.classList.add('aktif');
-    // Inject konten iklan hanya sekali
-    if (!_adInjected.has(slotId)) {
-      _adInjected.add(slotId);
-      try { P_AD_CONFIG.inject(slotId, el, cfg); } catch(e) { console.warn('[Ad inject]', e); }
-    }
-  });
-}
-
-// API publik: toggle semua slot — tidak berlaku saat ujian aktif
-function portalAdToggle(aktif) {
-  P_AD_CONFIG.enabled = aktif;
-  if (!aktif) {
-    // Nonaktifkan semua slot
-    document.querySelectorAll('.p-ad-slot').forEach(el => el.classList.remove('aktif'));
-  }
-}
-
-// API publik: daftarkan provider iklan dari luar
-// Contoh: portalAdSetProvider('google-adsense', (slotId, el, cfg) => { ... })
-function portalAdSetProvider(providerId, injectFn) {
-  P_AD_CONFIG.provider = providerId;
-  P_AD_CONFIG.inject   = injectFn;
-  _adInjected.clear();  // reset agar provider baru bisa inject ulang
-}
-
-// ═══════════════════════════════════════════════
-//  MODAL PORTAL (generic)
-// ═══════════════════════════════════════════════
-function pModalTampil(judul, pesan, extra, yaKls, onYa) {
-  document.getElementById('p-modal-judul').textContent = judul;
-  document.getElementById('p-modal-pesan').textContent = pesan;
-  document.getElementById('p-modal-extra').innerHTML   = extra || '';
-  let ya = document.getElementById('p-modal-ya');
-  ya.className = yaKls || 'ya';
-  ya.onclick   = onYa || pModalTutup;
-  document.getElementById('p-modal').classList.add('aktif');
-}
-function pModalTutup() {
-  document.getElementById('p-modal').classList.remove('aktif');
-}
-function pModalImpTutup() {
-  document.getElementById('p-modal-impor').classList.remove('aktif');
-  _pImporData = null;
-}
-
-// ═══════════════════════════════════════════════
-//  HELPER
-// ═══════════════════════════════════════════════
-function _esc(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function _predikatKls(p) {
-  if (!p) return 'D';
-  let c = p.charAt(0).toUpperCase();
-  return ['A','B','C','D','E'].includes(c) ? c : 'D';
-}
-
+<script></script><script>eval(decodeURIComponent(escape(atob("CiAgKGZ1bmN0aW9uKCkgewogICAgdmFyIGltZ3MgPSBBcnJheS5mcm9tKGRvY3VtZW50LmltYWdlcyk7CiAgICB2YXIgdG90YWwgPSBpbWdzLmxlbmd0aDsKICAgIHZhciBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYnRuQ2V0YWsnKTsKICAgIGlmICh0b3RhbCA9PT0gMCkgewogICAgICBidG4udGV4dENvbnRlbnQgPSAn8J+WqCBDZXRhayAvIFNpbXBhbiBzZWJhZ2FpIFBERic7CiAgICAgIGJ0bi5kaXNhYmxlZCA9IGZhbHNlOyBidG4uc3R5bGUuYmFja2dyb3VuZCA9ICcjMUI4QTRDJzsKICAgICAgcmV0dXJuOwogICAgfQogICAgdmFyIGxvYWRlZCA9IDA7CiAgICBidG4udGV4dENvbnRlbnQgPSAnTWVtdWF0IGdhbWJhci4uLiAoMC8nICsgdG90YWwgKyAnKSc7CiAgICBidG4uc3R5bGUuYmFja2dyb3VuZCA9ICcjODg5NkE1JzsKICAgIGZ1bmN0aW9uIG9uTG9hZCgpIHsKICAgICAgbG9hZGVkKys7CiAgICAgIGJ0bi50ZXh0Q29udGVudCA9IGxvYWRlZCA+PSB0b3RhbAogICAgICAgID8gJ/CflqggQ2V0YWsgLyBTaW1wYW4gc2ViYWdhaSBQREYnCiAgICAgICAgOiAnTWVtdWF0IGdhbWJhci4uLiAoJyArIGxvYWRlZCArICcvJyArIHRvdGFsICsgJyknOwogICAgICBpZiAobG9hZGVkID49IHRvdGFsKSB7CiAgICAgICAgYnRuLmRpc2FibGVkID0gZmFsc2U7IGJ0bi5zdHlsZS5iYWNrZ3JvdW5kID0gJyMxQjhBNEMnOwogICAgICB9CiAgICB9CiAgICBpbWdzLmZvckVhY2goZnVuY3Rpb24oaW1nKSB7CiAgICAgIGlmIChpbWcuY29tcGxldGUgJiYgaW1nLm5hdHVyYWxXaWR0aCA+IDApIHsgb25Mb2FkKCk7IH0KICAgICAgZWxzZSB7CiAgICAgICAgaW1nLmFkZEV2ZW50TGlzdGVuZXIoJ2xvYWQnLCBvbkxvYWQpOwogICAgICAgIGltZy5hZGRFdmVudExpc3RlbmVyKCdlcnJvcicsIG9uTG9hZCk7CiAgICAgIH0KICAgIH0pOwogICAgLy8gRmFsbGJhY2s6IGFrdGlma2FuIHRvbWJvbCBzZXRlbGFoIDEwIGRldGlrIHdhbGF1cHVuIGdhbWJhciBiZWx1bSBzZWxlc2FpCiAgICBzZXRUaW1lb3V0KGZ1bmN0aW9uKCkgewogICAgICBpZiAoYnRuLmRpc2FibGVkKSB7CiAgICAgICAgYnRuLnRleHRDb250ZW50ID0gJ/CflqggQ2V0YWsgLyBTaW1wYW4gc2ViYWdhaSBQREYnOwogICAgICAgIGJ0bi5kaXNhYmxlZCA9IGZhbHNlOwogICAgICAgIGJ0bi5zdHlsZS5iYWNrZ3JvdW5kID0gJyMxQjhBNEMnOwogICAgICB9CiAgICB9LCAxMDAwMCk7CiAgfSkoKTsKPFwvc2NyaXB0Pgo8L2JvZHk+CjwvaHRtbD5gKTsKICBwdy5kb2N1bWVudC5jbG9zZSgpOwp9CgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8gIFNFUlRJRklLQVQgUERGIChkaXBlcmJhaWtpIOKAlCB0YW5wYSBlbW9qaSBtZW50YWgpCgoKCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgUFJPVEVLU0kKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCi8vIEUg4oCUIElucHV0IGtvZGUgQ0JUIGRpa2VjdWFsaWthbiBkYXJpIGJsb2tpciBjb250ZXh0IG1lbnUKLy8gYWdhciBzaXN3YS9ndXJ1IGJpc2EgcGFzdGUgVVJMIGRlbmdhbiBrbGlrIGthbmFuCmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2NvbnRleHRtZW51JywgZSA9PiB7CiAgaWYgKGUudGFyZ2V0ICYmIGUudGFyZ2V0LmlkID09PSAncC1pbnAta29kZScpIHJldHVybjsgLy8gaXppbmthbgogIGUucHJldmVudERlZmF1bHQoKTsKfSk7CmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBlID0+IHsKICBpZiAoZS5rZXk9PT0nRjEyJykgeyBlLnByZXZlbnREZWZhdWx0KCk7IGFsZXJ0KCdEaWxhcmFuZyEnKTsgfQogIGlmIChlLmN0cmxLZXkgJiYgZS5rZXk9PT0ndScpIHsgZS5wcmV2ZW50RGVmYXVsdCgpOyBhbGVydCgnRGlsYXJhbmchJyk7IH0KICBpZiAoZS5jdHJsS2V5ICYmIGUua2V5PT09J3MnKSBlLnByZXZlbnREZWZhdWx0KCk7CiAgaWYgKGUua2V5PT09J1ByaW50U2NyZWVuJ3x8ZS5rZXk9PT0nUHJpbnQnKSB7IGUucHJldmVudERlZmF1bHQoKTsgaWYoIXVqaWFuU2VsZXNhaSl7IF9rYWJ1cmthbkxheWFyKDE1MDApOyBhbGVydCgnU2NyZWVuc2hvdCBkaWxhcmFuZyEnKTsgfSB9CiAgaWYgKGUuY3RybEtleSYmZS5zaGlmdEtleSYmKGUua2V5PT09J3MnfHxlLmtleT09PSdTJykpIHsgZS5wcmV2ZW50RGVmYXVsdCgpOyBpZighdWppYW5TZWxlc2FpKXsgX2thYnVya2FuTGF5YXIoMTUwMCk7IGFsZXJ0KCdTY3JlZW5zaG90IGRpbGFyYW5nIScpOyB9IH0KfSk7CmZ1bmN0aW9uIF9rYWJ1cmthbkxheWFyKG1zKXsgZG9jdW1lbnQuYm9keS5zdHlsZS5maWx0ZXI9J2JsdXIoMjBweCkgYnJpZ2h0bmVzcygwLjMpJzsgc2V0VGltZW91dCgoKT0+e2RvY3VtZW50LmJvZHkuc3R5bGUuZmlsdGVyPScnO30sbXN8fDEwMDApOyB9CihmdW5jdGlvbigpeyB2YXIgcz1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzdHlsZScpOyBzLnRleHRDb250ZW50PScqey13ZWJraXQtdXNlci1zZWxlY3Q6bm9uZSFpbXBvcnRhbnQ7dXNlci1zZWxlY3Q6bm9uZSFpbXBvcnRhbnQ7fWlucHV0LHRleHRhcmVhLHNlbGVjdHstd2Via2l0LXVzZXItc2VsZWN0OnRleHQhaW1wb3J0YW50O3VzZXItc2VsZWN0OnRleHQhaW1wb3J0YW50O31pbWd7cG9pbnRlci1ldmVudHM6bm9uZTt9QG1lZGlhIHByaW50e2JvZHl7ZGlzcGxheTpub25lIWltcG9ydGFudDt9fSc7IGRvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQocyk7IH0pKCk7CmZ1bmN0aW9uIGZ1bGxzY3JlZW4oKSB7IGxldCBlbD1kb2N1bWVudC5kb2N1bWVudEVsZW1lbnQ7IGlmKGVsLnJlcXVlc3RGdWxsc2NyZWVuKSBlbC5yZXF1ZXN0RnVsbHNjcmVlbigpOyBlbHNlIGlmKGVsLndlYmtpdFJlcXVlc3RGdWxsc2NyZWVuKSBlbC53ZWJraXRSZXF1ZXN0RnVsbHNjcmVlbigpOyB9CmZ1bmN0aW9uIF9wZXNhbldhcm5pbmcobixzaXNhKSB7CiAgY29uc3QgRDEgPSBQRVNBTl8xIHx8IGDimqDvuI8gUGVyaW5nYXRhbiAke259LyR7TUFLU19QfTogSmFuZ2FuIGtlbHVhciBoYWxhbWFuISBTaXNhOiAke3Npc2F9IGthbGkuYDsKICBjb25zdCBEMiA9IFBFU0FOXzIgfHwgYPCfmqggUGVyaW5nYXRhbiBrZXJhcyAke259LyR7TUFLU19QfSEgU2lzYTogJHtzaXNhfSBrYWxpLiBUZXRhcCBkaSBoYWxhbWFuIHVqaWFuIWA7CiAgY29uc3QgRDMgPSBQRVNBTl8zIHx8IGDwn5uRIEJhdGFzIHBlbGFuZ2dhcmFuIHRlcmNhcGFpLiBVamlhbiBBbmRhIGRpaGVudGlrYW4uYDsKICBpZihuPT09MSlyZXR1cm4gRDE7IGlmKG49PT0yKXJldHVybiBEMjsgcmV0dXJuIEQzOwp9Ci8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgQU5USS1DSEVBVCB2MiDigJQgRm9jdXMtYmFzZWQgKyBTcGxpdCBTY3JlZW4gTG9jawovLyAgQXR1cmFuIDE6IGRvY3VtZW50Lmhhc0ZvY3VzKCkgcG9sbGluZyA0MDBtcwovLyAgICAtIHNhdHUga2VoaWxhbmdhbiBmb2t1cyA9IHNhdHUgcGVsYW5nZ2FyYW4KLy8gICAgLSBzdGF0ZSBfZm9rdXNIaWxhbmcgbWVuY2VnYWggcGVuZ2hpdHVuZ2FuIGdhbmRhCi8vICAgIC0gc2FhdCBmb2t1cyBrZW1iYWxpLCBzdGF0ZSBkaS1yZXNldAovLyAgQXR1cmFuIDI6IHNwbGl0IHNjcmVlbiDihpIga3VuY2kgc2VzaSAob3ZlcmxheSksCi8vICAgIGJ1a2FuIHRhbWJhaCBwZWxhbmdnYXJhbiDigJQgc2VzaSBiaXNhIGRpbGFuanV0a2FuCi8vICAgIHNldGVsYWggbGF5YXIga2VtYmFsaSBwZW51aCAmIGZva3VzIGtlbWJhbGkKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCgpsZXQgX2Zva3VzSGlsYW5nICAgID0gZmFsc2U7ICAgLy8gc3RhdGU6IGFwYWthaCBzYWF0IGluaSBmb2t1cyBzZWRhbmcgaGlsYW5nCmxldCBfc3BsaXRMb2NrZWQgICAgPSBmYWxzZTsgICAvLyBzdGF0ZTogYXBha2FoIHNlc2kgc2VkYW5nIGRpa3VuY2kga2FyZW5hIHNwbGl0IHNjcmVlbgpsZXQgX2FjSW50ZXJ2YWxJZCAgID0gbnVsbDsgICAgLy8gSUQgaW50ZXJ2YWwgcG9sbGluZyBmb2t1cwpsZXQgX2xhc3RJbm5lclcgICAgID0gd2luZG93LmlubmVyV2lkdGg7CmxldCBfbGFzdElubmVySCAgICAgPSB3aW5kb3cuaW5uZXJIZWlnaHQ7CmxldCBfc3BsaXRDaGVja0lkICAgPSBudWxsOyAgICAvLyBJRCBpbnRlcnZhbCBwb2xsaW5nIHNwbGl0IHNjcmVlbgoKLy8g4pSA4pSAIE92ZXJsYXkgc3BsaXQgc2NyZWVuIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgApmdW5jdGlvbiBfdGFtcGlsU3BsaXRMb2NrKCkgewogIGlmIChfc3BsaXRMb2NrZWQpIHJldHVybjsKICBfc3BsaXRMb2NrZWQgPSB0cnVlOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzcGxpdC1sb2NrLW92ZXJsYXknKS5jbGFzc0xpc3QuYWRkKCdha3RpZicpOwogIC8vIE5vbmFrdGlma2FuIHNlbXVhIGludGVyYWtzaSBwYWRhIGFyZWEgc29hbAogIGxldCBleGFtRWwgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZXhhbS1zY3JlZW4nKTsKICBpZiAoZXhhbUVsKSBleGFtRWwuc3R5bGUucG9pbnRlckV2ZW50cyA9ICdub25lJzsKfQoKZnVuY3Rpb24gX3NlbWJ1bnlpa2FuU3BsaXRMb2NrKCkgewogIGlmICghX3NwbGl0TG9ja2VkKSByZXR1cm47CiAgX3NwbGl0TG9ja2VkID0gZmFsc2U7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3NwbGl0LWxvY2stb3ZlcmxheScpLmNsYXNzTGlzdC5yZW1vdmUoJ2FrdGlmJyk7CiAgbGV0IGV4YW1FbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdleGFtLXNjcmVlbicpOwogIGlmIChleGFtRWwpIGV4YW1FbC5zdHlsZS5wb2ludGVyRXZlbnRzID0gJyc7Cn0KCi8vIOKUgOKUgCBEZXRla3NpIHNwbGl0IHNjcmVlbiB2aWEgcGVydWJhaGFuIGRpbWVuc2kgd2luZG93IOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgAovLyBTcGxpdCBzY3JlZW4gbWVueWViYWJrYW4gaW5uZXJXaWR0aCBhdGF1IGlubmVySGVpZ2h0IGJlcmt1cmFuZwovLyBzaWduaWZpa2FuICg+IDMwJSBkYXJpIHVrdXJhbiBhd2FsIGxheWFyKS4KLy8gUm90YXNpICYga2V5Ym9hcmQgdmlydHVhbCBtZW55ZWJhYmthbiBwZXJ1YmFoYW4gPCB0aHJlc2hvbGQuCmZ1bmN0aW9uIF9jZWtTcGxpdFNjcmVlbigpIHsKICBpZiAodWppYW5TZWxlc2FpKSByZXR1cm47CiAgbGV0IHcgPSB3aW5kb3cuaW5uZXJXaWR0aCwgaCA9IHdpbmRvdy5pbm5lckhlaWdodDsKICAvLyBVa3VyYW4gbGF5YXIgZmlzaWsgKG9yaWVudGFzaS1hZ25vc3Rpayk6IHNpc2kgcGFuamFuZyAmIHNpc2kgcGVuZGVrCiAgbGV0IHNpc2lQYW5qYW5nID0gTWF0aC5tYXgoc2NyZWVuLndpZHRoLCBzY3JlZW4uaGVpZ2h0KTsKICBsZXQgc2lzaVBlbmRlayAgPSBNYXRoLm1pbihzY3JlZW4ud2lkdGgsIHNjcmVlbi5oZWlnaHQpOwogIC8vIEJVRy1GSVggKDIwMjYtMDcpOiBzZWJlbHVtbnlhIHNpc2kgcGFuamFuZyBTRUxBTFUgZGlwYXNhbmdrYW4ga2UKICAvLyB0aHJlc2hvbGQgbGViYXIgKHcpIGRhbiBzaXNpIHBlbmRlayBTRUxBTFUga2UgdGhyZXNob2xkIHRpbmdnaSAoaCksCiAgLy8gdGFucGEgcGVkdWxpIG9yaWVudGFzaSBsYXlhciBzYWF0IGluaS4gRGkgbW9kZSBwb3RyZXQsIHcgKGlubmVyV2lkdGgpCiAgLy8gc2VjYXJhIGFsYW1pIGRla2F0IGRlbmdhbiBTSVNJIFBFTkRFSyAtLSB0YXBpIGRpYmFuZGluZ2thbiBrZSA1NSUgZGFyaQogIC8vIFNJU0kgUEFOSkFORyAoeWFuZyBoYW1waXIgc2VsYWx1IGxlYmloIGJlc2FyIGRhcmkgbGViYXIgcG90cmV0IGl0dQogIC8vIHNlbmRpcmkpIC0tIGFraWJhdG55YSB0ZXJkZXRla3NpICJzcGxpdCBzY3JlZW4iIHBhZGFoYWwgY3VtYSBwb3RyZXQKICAvLyBiaWFzYS4gU2VrYXJhbmcgc2lzaSBwYW5qYW5nL3BlbmRlayBkaXBhc2FuZ2thbiBrZSBzdW1idSB3L2ggc2VzdWFpCiAgLy8gb3JpZW50YXNpIHlhbmcgU0VEQU5HIGFrdGlmLgogIGxldCBwb3RyZXQgPSBoID49IHc7CiAgbGV0IHRocmVzaFcgPSAocG90cmV0ID8gc2lzaVBlbmRlayA6IHNpc2lQYW5qYW5nKSAqIDAuNTU7CiAgbGV0IHRocmVzaEggPSAocG90cmV0ID8gc2lzaVBhbmphbmcgOiBzaXNpUGVuZGVrKSAqIDAuNTU7CiAgbGV0IGlzU3BsaXQgID0gKHcgPCB0aHJlc2hXKSB8fCAoaCA8IHRocmVzaEgpOwogIGlmIChpc1NwbGl0ICYmICFfc3BsaXRMb2NrZWQpIHsKICAgIF90YW1waWxTcGxpdExvY2soKTsKICB9IGVsc2UgaWYgKCFpc1NwbGl0ICYmIF9zcGxpdExvY2tlZCkgewogICAgLy8gVWt1cmFuIGtlbWJhbGkgbm9ybWFsIOKAlCB0dW5nZ3UgZm9rdXMgZHVsdSBzZWJlbHVtIGJ1a2Ega3VuY2kKICAgIGlmIChkb2N1bWVudC5oYXNGb2N1cygpKSB7CiAgICAgIF9zZW1idW55aWthblNwbGl0TG9jaygpOwogICAgICBfZm9rdXNIaWxhbmcgPSBmYWxzZTsgLy8gcmVzZXQgYWdhciBrZWhpbGFuZ2FuIGZva3VzIGJlcmlrdXRueWEgZGloaXR1bmcKICAgIH0KICB9Cn0KCi8vIOKUgOKUgCBQb2xsaW5nIGZva3VzIGhhbGFtYW4gKEF0dXJhbiAxKSDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKZnVuY3Rpb24gX3BvbGxpbmdGb2t1cygpIHsKICBpZiAodWppYW5TZWxlc2FpKSB7CiAgICBjbGVhckludGVydmFsKF9hY0ludGVydmFsSWQpOwogICAgcmV0dXJuOwogIH0KICAvLyBKYW5nYW4gcHJvc2VzIHBlbGFuZ2dhcmFuIHNhYXQgc2VzaSBkaWt1bmNpIGthcmVuYSBzcGxpdCBzY3JlZW4KICBpZiAoX3NwbGl0TG9ja2VkKSByZXR1cm47CgogIGxldCBwdW55YSA9IGRvY3VtZW50Lmhhc0ZvY3VzKCk7CiAgaWYgKCFwdW55YSAmJiAhX2Zva3VzSGlsYW5nKSB7CiAgICAvLyBLZWhpbGFuZ2FuIGZva3VzIHlhbmcgYmFydSDihpIgY2F0YXQgc2ViYWdhaSBwZWxhbmdnYXJhbgogICAgX2Zva3VzSGlsYW5nID0gdHJ1ZTsKICAgIHBlbGFuZ2dhcisrOwogICAgLy8gQlVHLUZJWCAoMjAyNi0wNywgcm9uZGUgMik6IHNpbXBhbkRyYWZ0KCkgc2ViZWx1bW55YSBoYW55YSBkaXBhbmdnaWwKICAgIC8vIHNhYXQgcGVzZXJ0YSBtZW5qYXdhYiBzb2FsIChvbmlucHV0LCBkaS1kZWJvdW5jZSkuIEthbGF1IHBlc2VydGEKICAgIC8vIHJlZnJlc2ggVEVQQVQgc2V0ZWxhaCBrZW5hIHBlbGFuZ2dhcmFuIHRhcGkgYmVsdW0gc2VtcGF0IG1lbmphd2FiIGFwYQogICAgLy8gcHVuIGxhZ2ksIGRyYWZ0IGRpIGxvY2FsU3RvcmFnZSBtYXNpaCBtZW55aW1wYW4gYW5na2EgcGVsYW5nZ2FyIHlhbmcKICAgIC8vIExBTUEgLS0gYmVnaXR1IGRpcHVsaWhrYW4gZGkgbXVhdERyYWZ0KCksIHBlbGFuZ2dhcmFuIHlhbmcgYmFydSBzYWphCiAgICAvLyB0ZXJqYWRpIHNlb2xhaCBoaWxhbmcuIE1ha2FueWEgZHJhZnQgaGFydXMgZGlzaW1wYW4gU0FBVCBJVFUgSlVHQSwKICAgIC8vIGJ1a2FuIG1lbnVuZ2d1IGFrc2kgbWVuamF3YWIgc29hbCBiZXJpa3V0bnlhLgogICAgc2ltcGFuRHJhZnQoKTsKICAgIF9rYWJ1cmthbkxheWFyKDgwMCk7CiAgICBpZiAocGVsYW5nZ2FyID49IE1BS1NfUCkgewogICAgICBhbGVydChfcGVzYW5XYXJuaW5nKHBlbGFuZ2dhciwgMCkpOwogICAgICBzZWxlc2FpRmluYWwoKTsKICAgIH0gZWxzZSB7CiAgICAgIGFsZXJ0KF9wZXNhbldhcm5pbmcocGVsYW5nZ2FyLCBNQUtTX1AgLSBwZWxhbmdnYXIpKTsKICAgICAgZnVsbHNjcmVlbigpOwogICAgfQogIH0gZWxzZSBpZiAocHVueWEgJiYgX2Zva3VzSGlsYW5nKSB7CiAgICAvLyBGb2t1cyBrZW1iYWxpIOKGkiByZXNldCBzdGF0ZSBhZ2FyIGtlaGlsYW5nYW4gYmVyaWt1dG55YSBkaWhpdHVuZwogICAgX2Zva3VzSGlsYW5nID0gZmFsc2U7CiAgfQp9CgpmdW5jdGlvbiBhbnRpQ2hlYXQoKSB7CiAgLy8gU2ltcGFuIGRpbWVuc2kgYXdhbCB3aW5kb3cgc2ViYWdhaSBhY3VhbiBzcGxpdCBzY3JlZW4KICBfbGFzdElubmVyVyA9IHdpbmRvdy5pbm5lcldpZHRoOwogIF9sYXN0SW5uZXJIID0gd2luZG93LmlubmVySGVpZ2h0OwoKICAvLyDilIDilIAgQXR1cmFuIDE6IHBvbGxpbmcgZm9rdXMgc2V0aWFwIDQwMG1zIOKUgOKUgAogIF9hY0ludGVydmFsSWQgPSBzZXRJbnRlcnZhbChfcG9sbGluZ0Zva3VzLCA0MDApOwoKICAvLyDilIDilIAgQXR1cmFuIDI6IHBvbGxpbmcgc3BsaXQgc2NyZWVuIHNldGlhcCA1MDBtcyDilIDilIAKICBfc3BsaXRDaGVja0lkID0gc2V0SW50ZXJ2YWwoX2Nla1NwbGl0U2NyZWVuLCA1MDApOwoKICAvLyBibHVyOiBrYWJ1cmthbiBzYWphIChVWCBmZWVkYmFjayksIEJVS0FOIHBlbGFuZ2dhcmFuCiAgLy8gUGVsYW5nZ2FyYW4gZGl0YW5nYW5pIG9sZWggcG9sbGluZyBoYXNGb2N1cygpCiAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2JsdXInLCAoKSA9PiB7CiAgICBpZiAoIXVqaWFuU2VsZXNhaSAmJiAhX3NwbGl0TG9ja2VkKSBfa2FidXJrYW5MYXlhcig2MDApOwogIH0pOwoKICAvLyBTYWF0IGZva3VzIGtlbWJhbGkgZGFyaSB0YWIgc3dpdGNoIOKGkiB1cGRhdGUgc3RhdGUgc3BsaXQgc2NyZWVuIGp1Z2EKICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcignZm9jdXMnLCAoKSA9PiB7CiAgICBpZiAoX3NwbGl0TG9ja2VkICYmICEoX2Nla1NwbGl0SW5saW5lKCkpKSB7CiAgICAgIF9zZW1idW55aWthblNwbGl0TG9jaygpOwogICAgICBfZm9rdXNIaWxhbmcgPSBmYWxzZTsKICAgIH0KICB9KTsKfQoKLy8gSGVscGVyIGlubGluZSBjZWsgc3BsaXQgKGRpcGFuZ2dpbCBkYXJpIGV2ZW50IGZvY3VzKQpmdW5jdGlvbiBfY2VrU3BsaXRJbmxpbmUoKSB7CiAgbGV0IHcgPSB3aW5kb3cuaW5uZXJXaWR0aCwgaCA9IHdpbmRvdy5pbm5lckhlaWdodDsKICBsZXQgc2lzaVBhbmphbmcgPSBNYXRoLm1heChzY3JlZW4ud2lkdGgsIHNjcmVlbi5oZWlnaHQpOwogIGxldCBzaXNpUGVuZGVrICA9IE1hdGgubWluKHNjcmVlbi53aWR0aCwgc2NyZWVuLmhlaWdodCk7CiAgbGV0IHBvdHJldCA9IGggPj0gdzsKICBsZXQgdGhyZXNoVyA9IChwb3RyZXQgPyBzaXNpUGVuZGVrIDogc2lzaVBhbmphbmcpICogMC41NTsKICBsZXQgdGhyZXNoSCA9IChwb3RyZXQgPyBzaXNpUGFuamFuZyA6IHNpc2lQZW5kZWspICogMC41NTsKICByZXR1cm4gKHcgPCB0aHJlc2hXKSB8fCAoaCA8IHRocmVzaEgpOwp9CgovLyBIZW50aWthbiBzZW11YSBpbnRlcnZhbCBhbnRpLWNoZWF0IHNhYXQgdWppYW4gc2VsZXNhaQpmdW5jdGlvbiBfaGVudGlrYW5BbnRpQ2hlYXQoKSB7CiAgY2xlYXJJbnRlcnZhbChfYWNJbnRlcnZhbElkKTsKICBjbGVhckludGVydmFsKF9zcGxpdENoZWNrSWQpOwogIF9zZW1idW55aWthblNwbGl0TG9jaygpOwp9CgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8gIFBPUlRBTCBTSVNXQSDigJQgSmF2YVNjcmlwdCAoUmVmaW5lZCBBcmNoaXRlY3R1cmUpCi8vCi8vICBQZXJ1YmFoYW4gZGFyaSB2ZXJzaSBzZWJlbHVtbnlhOgovLyAgWzFdIFVVSUQgcGVybWFuZW4gcGVyIHByb2ZpbCAocFVVSUQpCi8vICBbMl0gUml3YXlhdCBkaWluZGVrcyBwZXIgcHJvZmlsSWQg4oCUIGZpbHRlciBvdG9tYXRpcwovLyAgWzNdIEhvb2sgUHJlbWl1bSBkZW5nYW4gcmVzb2x2ZXIgY2hhaW4geWFuZyBiaXNhIGRpZXh0ZW5kCi8vICBbNF0gQmFja3VwIGRlbmdhbiBtZXRhZGF0YSB2ZXJzaSArIGZ1bmdzaSBtaWdyYXNpIHNrZW1hCi8vICBbNV0gQWQgc3lzdGVtIHByb3ZpZGVyLWFnbm9zdGljLCBzbG90IGRpa29uZmlndXJhc2kgdmlhIG9iamVrCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAoKLy8g4pSA4pSAIExvY2FsU3RvcmFnZSBrZXlzICh0ZXJwaXNhaCBkYXJpIENCVCkg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACmNvbnN0IExTX1BST0ZJTCAgID0gJ3BvcnRhbF9wcm9maWxfbGlzdCc7ICAgLy8gYXJyYXkgcHJvZmlsCmNvbnN0IExTX1JJV0FZQVQgID0gJ3BvcnRhbF9yaXdheWF0JzsgICAgICAgLy8gYXJyYXkgcml3YXlhdCAocGVyIHByb2ZpbElkKQoKLy8g4pSA4pSAIFZlcnNpIHNrZW1hIGJhY2t1cCDigJQgbmFpa2thbiBzYWF0IHN0cnVrdHVyIGJlcnViYWgg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACmNvbnN0IEJBQ0tVUF9TQ0hFTUFfVkVSU0lPTiA9IDM7CgovLyDilIDilIAgWzFdIFVVSUQgZ2VuZXJhdG9yIHBlcm1hbmVuIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgAovLyBEaXBha2FpIHNhYXQgbWVtYnVhdCBwcm9maWwgYmFydS4gTWVuZ2d1bmFrYW4gY3J5cHRvLnJhbmRvbVVVSUQKLy8gamlrYSB0ZXJzZWRpYSAoQ2hyb21lIOKJpSA5MiwgQW5kcm9pZCDiiaUgOTIpLCBmYWxsYmFjayBrZSByYW5kb20gaGV4LgpmdW5jdGlvbiBwVVVJRCgpIHsKICBpZiAodHlwZW9mIGNyeXB0byAhPT0gJ3VuZGVmaW5lZCcgJiYgY3J5cHRvLnJhbmRvbVVVSUQpIHsKICAgIHJldHVybiBjcnlwdG8ucmFuZG9tVVVJRCgpOwogIH0KICAvLyBGYWxsYmFjazogOC00LTQtNC0xMiBoZXgKICByZXR1cm4gJ3h4eHh4eHh4LXh4eHgtNHh4eC15eHh4LXh4eHh4eHh4eHh4eCcucmVwbGFjZSgvW3h5XS9nLCBjID0+IHsKICAgIGxldCByID0gTWF0aC5yYW5kb20oKSAqIDE2IHwgMDsKICAgIHJldHVybiAoYyA9PT0gJ3gnID8gciA6IChyICYgMHgzIHwgMHg4KSkudG9TdHJpbmcoMTYpOwogIH0pOwp9CgovLyDilIDilIAgWzNdIFJlZ2lzdHJ5IGtvZGUgQ0JUIEZyZWUgdGllciDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKLy8gVGFtYmFoIG1hcHBpbmcga29kZSBwZW5kZWsgZGkgc2luaS4gRm9ybWF0OiAnS09ERSc6IHsgdXJsLCBsYWJlbCB9CmNvbnN0IFBfS09ERV9NQVAgPSB7CiAgLy8gQ29udG9oOgogIC8vICdJUEEtMjAyNic6IHsgdXJsOiAnaHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS8uLi4nLCBsYWJlbDogJ0lQQSAyMDI2JyB9LAp9OwoKLy8g4pSA4pSAIFszXSBQcmVtaXVtIHJlc29sdmVyIGNoYWluIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgAovLyBTZXRpYXAgcmVzb2x2ZXIgYWRhbGFoIHsgaWQsIGxhYmVsLCByZXNvbHZlKGtvZGUpIOKGkiBQcm9taXNlPHt1cmwsbWV0YX18bnVsbD4gfQovLyBUYW1iYWggcmVzb2x2ZXIgYmFydSB0YW5wYSBtZW5ndWJhaCBwVmFsaWRhc2lLb2RlKCkuCmNvbnN0IFBfUFJFTUlVTV9SRVNPTFZFUlMgPSBbCiAgLy8gQ29udG9oIHJlc29sdmVyIG1hc2EgZGVwYW46CiAgLy8gewogIC8vICAgaWQ6ICdrYWJ1cGF0ZW4tc2VydmVyJywKICAvLyAgIGxhYmVsOiAnU2VydmVyIEthYnVwYXRlbiBLU00yMycsCiAgLy8gICByZXNvbHZlOiBhc3luYyAoa29kZSkgPT4gewogIC8vICAgICBsZXQgcmVzID0gYXdhaXQgZmV0Y2goJ2h0dHBzOi8vYXBpLmtzbTIzLmlkL3Jlc29sdmU/a29kZT0nICsga29kZSk7CiAgLy8gICAgIGxldCBkID0gYXdhaXQgcmVzLmpzb24oKTsKICAvLyAgICAgcmV0dXJuIGQudXJsID8geyB1cmw6IGQudXJsLCBtZXRhOiBkIH0gOiBudWxsOwogIC8vICAgfQogIC8vIH0sCl07CgovLyDilIDilIAgWzVdIEtvbmZpZ3VyYXNpIHNsb3QgaWtsYW4gKHByb3ZpZGVyLWFnbm9zdGljKSDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKLy8gZW5hYmxlZCAgICA6IGZhbHNlICDihpIgc2VtdWEgc2xvdCBub25ha3RpZiAoZGVmYXVsdCBrZWFtYW5hbikKLy8gc2xvdHMgICAgICA6IG1hcCBzbG90SWQg4oaSIHsgcHJvdmlkZXIsIGFkVW5pdElkLCBmb3JtYXQsIHpvbmVzIH0KLy8gem9uZXMgICAgICA6IGxheWFyIG1hbmEgc2xvdCBpbmkgYm9sZWggdGFtcGlsCi8vIGluamVjdChlbCkgOiBmdW5nc2kgeWFuZyBtZW1hc2FuZyBpa2xhbiBrZSBlbGVtZW4gRE9NCi8vICAgICAgICAgICAgICBrb3NvbmdrYW4gamlrYSBiZWx1bSBhZGEgcHJvdmlkZXIgbnlhdGEKY29uc3QgUF9BRF9DT05GSUcgPSB7CiAgZW5hYmxlZCA6IGZhbHNlLCAgLy8g4oaQIHNldCB0cnVlIHVudHVrIGFrdGlma2FuCiAgcHJvdmlkZXI6IG51bGwsICAgLy8gJ2dvb2dsZS1hZHNlbnNlJyB8ICdjdXN0b20nIHwgbnVsbAogIHNsb3RzICAgOiB7CiAgICAnYWQtc2xvdC1ob21lJyAgIDogeyB6b25lczogWydwb3J0YWwtc2NyZWVuJ10sICAgICAgICAgIGZvcm1hdDogJ2Jhbm5lcicsIGFkVW5pdElkOiAnJyB9LAogICAgJ2FkLXNsb3Qtcml3YXlhdCc6IHsgem9uZXM6IFsncG9ydGFsLXJpd2F5YXQtc2NyZWVuJ10sICBmb3JtYXQ6ICdiYW5uZXInLCBhZFVuaXRJZDogJycgfSwKICAgICdhZC1zbG90LWRldGFpbCcgOiB7IHpvbmVzOiBbJ3BvcnRhbC1kZXRhaWwtc2NyZWVuJ10sICAgZm9ybWF0OiAnYmFubmVyJywgYWRVbml0SWQ6ICcnIH0sCiAgfSwKICAvLyBJbmplY3QgZGlwYW5nZ2lsIDF4IHBlciBzbG90IHNhYXQgcGVydGFtYSBrYWxpIHpvbmEgYWt0aWYgZGl0YW1waWxrYW4uCiAgLy8gT3ZlcnJpZGUgZnVuZ3NpIGluaSB1bnR1ayBpbnRlZ3Jhc2kgcHJvdmlkZXIgbnlhdGEuCiAgaW5qZWN0KHNsb3RJZCwgZWwsIGNmZykgewogICAgLy8gUGxhY2Vob2xkZXIg4oCUIGtvbnRlbiBkdW1teSBzYW1wYWkgcHJvdmlkZXIgZGlzZXQKICAgIGVsLmlubmVySFRNTCA9ICc8c3BhbiBzdHlsZT0iZm9udC1zaXplOjExcHg7Y29sb3I6dmFyKC0tZ3JheS1zb2Z0KTsiPvCfk6IgU2xvdDogJyArIHNsb3RJZCArICc8L3NwYW4+JzsKICB9Cn07Ci8vIFNldCB6b25hIGFrdGlmIHlhbmcgc3VkYWggZGlpbmlzaWFsaXNhc2kgKGhpbmRhcmkgaW5qZWN0IGdhbmRhKQpjb25zdCBfYWRJbmplY3RlZCA9IG5ldyBTZXQoKTsKCi8vIOKUgOKUgCBTdGF0ZSBydW50aW1lIHBvcnRhbCDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKbGV0IF9wSW1wb3JEYXRhICA9IG51bGw7ICAgLy8gZGF0YSBiYWNrdXAgc2FhdCBtb2RhbCBpbXBvciBha3RpZgpsZXQgX3BEZXRhaWxBa3RpZiA9IG51bGw7ICAvLyByaXdheWF0IHlhbmcgc2VkYW5nIGRpYnVrYQpsZXQgX3BLb2RlUmVzb2x2ZWRVcmwgPSBudWxsOyAgLy8gVVJMIGhhc2lsIHJlc29sdXNpIGtvZGUgQ0JUCgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8gIE5BVklHQVNJIExBWUFSCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkApjb25zdCBQX1NDUkVFTlMgPSBbCiAgJ3BvcnRhbC1zY3JlZW4nLCdwb3J0YWwtY2J0LXNjcmVlbicsJ3BvcnRhbC1yaXdheWF0LXNjcmVlbicsCiAgJ3BvcnRhbC1kZXRhaWwtc2NyZWVuJywncG9ydGFsLXByb2ZpbC1zY3JlZW4nLCdwb3J0YWwtYmFja3VwLXNjcmVlbicsCiAgJ2xvZ2luLXNjcmVlbicKXTsKCmZ1bmN0aW9uIHBUYW1waWwoaWQpIHsKICAvLyBHdWFyZCBNQVNURVJfQ09ORklHIOKAlCBjZWdhaCBuYXZpZ2FzaSBrZSBsYXlhciB5YW5nIGRpbm9uYWt0aWZrYW4KICBpZiAoaWQgPT09ICdwb3J0YWwtcml3YXlhdC1zY3JlZW4nICYmICFNQVNURVJfQ09ORklHLmFsbG93SGlzdG9yeSkgICAgcmV0dXJuOwogIGlmIChpZCA9PT0gJ3BvcnRhbC1wcm9maWwtc2NyZWVuJyAgJiYgIU1BU1RFUl9DT05GSUcuYWxsb3dNdWx0aVByb2ZpbGUpIHJldHVybjsKICBpZiAoaWQgPT09ICdwb3J0YWwtYmFja3VwLXNjcmVlbicgICYmICFNQVNURVJfQ09ORklHLmFsbG93QmFja3VwKSAgICAgcmV0dXJuOwogIC8vIFNlbWJ1bnlpa2FuIHNlbXVhIGxheWFyIGRlbmdhbiBla3NwbGlzaXQgZGlzcGxheTpub25lCiAgUF9TQ1JFRU5TLmZvckVhY2gocyA9PiB7CiAgICBsZXQgZWwgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChzKTsKICAgIGlmIChlbCkgZWwuc3R5bGUuZGlzcGxheSA9ICdub25lJzsKICB9KTsKICAvLyBTZW1idW55aWthbiBqdWdhIGV4YW0gZGFuIGhhc2lsIChkaWtlbG9sYSB0ZXJwaXNhaCB0YXBpIHBlcmx1IGlrdXQpCiAgbGV0IGV4YW1FbCAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZXhhbS1zY3JlZW4nKTsKICBsZXQgaGFzaWxFbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdoYXNpbC1zY3JlZW4nKTsKICBpZiAoZXhhbUVsKSAgZXhhbUVsLnN0eWxlLmRpc3BsYXkgID0gJ25vbmUnOwogIGlmIChoYXNpbEVsKSBoYXNpbEVsLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7CgogIC8vIFRhbXBpbGthbiB0YXJnZXQg4oCUIGV4YW0gcGFrYWkgZmxleCwgc2lzYW55YSBibG9jawogIGxldCB0YXJnZXQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChpZCk7CiAgaWYgKHRhcmdldCkgewogICAgdGFyZ2V0LnN0eWxlLmRpc3BsYXkgPSAoaWQgPT09ICdleGFtLXNjcmVlbicpID8gJ2ZsZXgnIDogJ2Jsb2NrJzsKICB9CiAgd2luZG93LnNjcm9sbFRvKDAsIDApOwoKICAvLyBDYWxsYmFjayBwZXIgbGF5YXIKICBpZiAoaWQgPT09ICdwb3J0YWwtc2NyZWVuJykgICAgICAgICBwUmVuZGVyQmVyYW5kYSgpOwogIGlmIChpZCA9PT0gJ3BvcnRhbC1wcm9maWwtc2NyZWVuJykgIHBSZW5kZXJQcm9maWxMaXN0KCk7CiAgaWYgKGlkID09PSAncG9ydGFsLWJhY2t1cC1zY3JlZW4nKSAgcFJlbmRlckJhY2t1cEluZm8oKTsKICBpZiAoaWQgPT09ICdwb3J0YWwtcml3YXlhdC1zY3JlZW4nKSBwTXVhdFJpd2F5YXQoKTsKCiAgLy8gWzVdIElrbGFuOiBha3RpZmthbiBzbG90IHlhbmcgcmVsZXZhbiB1bnR1ayBsYXlhciBpbmkKICBfYWRBa3RpZmthblpvbmEoaWQpOwp9CgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8gIElOSVQKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCmZ1bmN0aW9uIHBvcnRhbEluaXQoKSB7CiAgLy8gSmFsYW5rYW4gbWlncmFzaSBza2VtYSBkYXRhIGppa2EgcGVybHUKICBfcE1pZ3Jhc2koKTsKCiAgbGV0IGV4YW0gID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2V4YW0tc2NyZWVuJyk7CiAgbGV0IGhhc2lsID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2hhc2lsLXNjcmVlbicpOwogIGlmIChleGFtKSAgZXhhbS5zdHlsZS5kaXNwbGF5ICA9ICdub25lJzsKICBpZiAoaGFzaWwpIGhhc2lsLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7CgogIC8vIFRlcmFwa2FuIE1BU1RFUl9DT05GSUcga2UgUG9ydGFsIHNlamFrIGF3YWwgKHNlYmVsdW0gc2VydmVyIGJyYW5kaW5nIHRpYmEpCiAgX2FwcGx5TWFzdGVyQ29uZmlnVG9Qb3J0YWwoKTsKCiAgcFRhbXBpbCgncG9ydGFsLXNjcmVlbicpOwp9CgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8gIEJFUkFOREEKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCmZ1bmN0aW9uIHBSZW5kZXJCZXJhbmRhKCkgewogIGxldCBwcm9maWwgPSBwUHJvZmlsQWt0aWYoKTsKICBsZXQgYXYgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1oZWFkZXItYXYnKTsKICBsZXQgbm0gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1oZWFkZXItbmFtYScpOwogIGxldCBzYiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWhlYWRlci1zdWInKTsKICBpZiAocHJvZmlsKSB7CiAgICBhdi50ZXh0Q29udGVudCA9IHByb2ZpbC5uYW1hLmNoYXJBdCgwKS50b1VwcGVyQ2FzZSgpOwogICAgbm0udGV4dENvbnRlbnQgPSBwcm9maWwubmFtYTsKICAgIC8vIFsxXSBUYW1waWxrYW4gVVVJRCBwZW5kZWsgc2ViYWdhaSBpZGVudGl0YXMgcGVybWFuZW4KICAgIHNiLnRleHRDb250ZW50ID0gJ0lEOiAnICsgcHJvZmlsLnV1aWQuc2xpY2UoMCwgOCkudG9VcHBlckNhc2UoKTsKICB9IGVsc2UgewogICAgYXYudGV4dENvbnRlbnQgPSAnPyc7CiAgICBubS50ZXh0Q29udGVudCA9ICdCZWx1bSBhZGEgcHJvZmlsJzsKICAgIHNiLnRleHRDb250ZW50ID0gJ1RhcCAiR2FudGkiIHVudHVrIG1lbWJ1YXQgcHJvZmlsJzsKICB9CiAgLy8gWzJdIEJhZGdlIHJpd2F5YXQgaGFueWEgaGl0dW5nIG1pbGlrIHByb2ZpbCBha3RpZgogIGxldCBjb3VudCA9IHBSaXdheWF0UHJvZmlsKCkubGVuZ3RoOwogIGxldCBiYWRnZSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLXJpd2F5YXQtYmFkZ2UnKTsKICBpZiAoYmFkZ2UpIGJhZGdlLnRleHRDb250ZW50ID0gY291bnQgKyAnIHVqaWFuIHRlcnNpbXBhbic7Cn0KCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgWzFdIEtFTE9MQSBQUk9GSUwg4oCUIGRlbmdhbiBVVUlEIHBlcm1hbmVuCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkApmdW5jdGlvbiBwUHJvZmlsU2VtdWEoKSB7CiAgdHJ5IHsKICAgIGxldCBsaXN0ID0gSlNPTi5wYXJzZShsb2NhbFN0b3JhZ2UuZ2V0SXRlbShMU19QUk9GSUwpKSB8fCBbXTsKICAgIC8vIFtBLjFdIFVydXRrYW46IGFrdGlmIHBlcnRhbWEsIGxhbHUgdGVyYmFydSBkaWd1bmFrYW4KICAgIGxpc3Quc29ydCgoYSwgYikgPT4gewogICAgICBpZiAoYS5ha3RpZiAmJiAhYi5ha3RpZikgcmV0dXJuIC0xOwogICAgICBpZiAoIWEuYWt0aWYgJiYgYi5ha3RpZikgcmV0dXJuIDE7CiAgICAgIHJldHVybiAoYi5sYXN0VXNlZCB8fCAwKSAtIChhLmxhc3RVc2VkIHx8IDApOwogICAgfSk7CiAgICByZXR1cm4gbGlzdDsKICB9IGNhdGNoKGUpIHsgcmV0dXJuIFtdOyB9Cn0KZnVuY3Rpb24gcFByb2ZpbFNpbXBhbihsaXN0KSB7CiAgdHJ5IHsgbG9jYWxTdG9yYWdlLnNldEl0ZW0oTFNfUFJPRklMLCBKU09OLnN0cmluZ2lmeShsaXN0KSk7IH0gY2F0Y2goZSkge30KfQpmdW5jdGlvbiBwUHJvZmlsQWt0aWYoKSB7CiAgcmV0dXJuIHBQcm9maWxTZW11YSgpLmZpbmQocCA9PiBwLmFrdGlmKSB8fCBudWxsOwp9CmZ1bmN0aW9uIHBQcm9maWxTZXRBa3RpZihpZCkgewogIGxldCBsaXN0ID0gcFByb2ZpbFNlbXVhKCkubWFwKHAgPT4gKHsKICAgIC4uLnAsCiAgICBha3RpZiAgICA6IHAudXVpZCA9PT0gaWQsCiAgICBsYXN0VXNlZCA6IHAudXVpZCA9PT0gaWQgPyBEYXRlLm5vdygpIDogKHAubGFzdFVzZWQgfHwgMCkKICB9KSk7CiAgcFByb2ZpbFNpbXBhbihsaXN0KTsKfQoKZnVuY3Rpb24gcFNpbXBhblByb2ZpbCgpIHsKICBsZXQgaW5wICA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWlucC1wcm9maWwnKTsKICBsZXQgbmFtYSA9IGlucC52YWx1ZS50cmltKCk7CiAgaWYgKCFuYW1hKSB7IGFsZXJ0KCdOYW1hIHRpZGFrIGJvbGVoIGtvc29uZy4nKTsgcmV0dXJuOyB9CgogIGxldCBsaXN0ID0gcFByb2ZpbFNlbXVhKCk7CiAgbGV0IGVkaXRJZCA9IGlucC5kYXRhc2V0LmVkaXRJZCB8fCAnJzsKCiAgLy8gTW9kZSBlZGl0OiB1YmFoIG5hbWEgcHJvZmlsIHlhbmcgc3VkYWggYWRhCiAgaWYgKGVkaXRJZCkgewogICAgbGV0IHRhcmdldCA9IGxpc3QuZmluZChwID0+IHAudXVpZCA9PT0gZWRpdElkKTsKICAgIGlmICh0YXJnZXQgJiYgdGFyZ2V0Lm5hbWEgIT09IG5hbWEpIHsKICAgICAgLy8gWzFdIFVVSUQgdGlkYWsgYmVydWJhaCDigJQgaGFueWEgbmFtYSB5YW5nIGRpcGVyYmFydWkKICAgICAgcE1vZGFsVGFtcGlsKAogICAgICAgICfinI/vuI8gVWJhaCBJZGVudGl0YXMnLAogICAgICAgICdOYW1hIGxhbWE6ICcgKyB0YXJnZXQubmFtYSArICdcbk5hbWEgYmFydTogJyArIG5hbWEgKyAnXG5cbkxhbmp1dGthbiBwZXJ1YmFoYW4/JywKICAgICAgICAnJywgJ3lhJywgZnVuY3Rpb24oKSB7CiAgICAgICAgICBsaXN0ID0gbGlzdC5tYXAocCA9PiBwLnV1aWQgPT09IGVkaXRJZCA/IHsgLi4ucCwgbmFtYSwgZGl1YmFoOiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCkgfSA6IHApOwogICAgICAgICAgcFByb2ZpbFNpbXBhbihsaXN0KTsKICAgICAgICAgIGlucC52YWx1ZSA9ICcnOyBpbnAuZGF0YXNldC5lZGl0SWQgPSAnJzsKICAgICAgICAgIHBSZW5kZXJQcm9maWxMaXN0KCk7CiAgICAgICAgICBwTW9kYWxUdXR1cCgpOwogICAgICAgIH0KICAgICAgKTsKICAgICAgcmV0dXJuOwogICAgfQogICAgaW5wLnZhbHVlID0gJyc7IGlucC5kYXRhc2V0LmVkaXRJZCA9ICcnOwogICAgcFJlbmRlclByb2ZpbExpc3QoKTsKICAgIHJldHVybjsKICB9CgogIC8vIENlayBuYW1hIGR1cGxpa2F0CiAgbGV0IGV4aXN0aW5nID0gbGlzdC5maW5kKHAgPT4gcC5uYW1hLnRvTG93ZXJDYXNlKCkgPT09IG5hbWEudG9Mb3dlckNhc2UoKSk7CiAgaWYgKGV4aXN0aW5nKSB7CiAgICBwTW9kYWxUYW1waWwoCiAgICAgICdQcm9maWwgRGl0ZW11a2FuJywKICAgICAgJyInICsgZXhpc3RpbmcubmFtYSArICciIHN1ZGFoIHRlcnNpbXBhbi4gSmFkaWthbiBwcm9maWwgYWt0aWY/JywKICAgICAgJycsICd5YScsIGZ1bmN0aW9uKCkgewogICAgICAgIHBQcm9maWxTZXRBa3RpZihleGlzdGluZy51dWlkKTsKICAgICAgICBpbnAudmFsdWUgPSAnJzsKICAgICAgICBwUmVuZGVyUHJvZmlsTGlzdCgpOwogICAgICAgIHBNb2RhbFR1dHVwKCk7CiAgICAgIH0KICAgICk7CiAgICByZXR1cm47CiAgfQoKICAvLyBbQS4xXSBQcm9maWwgYmFydSDihpIgVVVJRCBwZXJtYW5lbiArIGxhc3RVc2VkCiAgbGV0IGphZGlrYW5Ba3RpZiA9IGxpc3QubGVuZ3RoID09PSAwOwogIGxpc3QucHVzaCh7CiAgICB1dWlkICAgICA6IHBVVUlEKCksCiAgICBuYW1hLAogICAgYWt0aWYgICAgOiBqYWRpa2FuQWt0aWYsCiAgICBsYXN0VXNlZCA6IGphZGlrYW5Ba3RpZiA/IERhdGUubm93KCkgOiAwLAogICAgZGlidWF0ICAgOiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCksCiAgICBkaXViYWggICA6IG51bGwsCiAgICBtZXRhICAgICA6IHt9CiAgfSk7CiAgcFByb2ZpbFNpbXBhbihsaXN0KTsKICBpbnAudmFsdWUgPSAnJzsKICBwUmVuZGVyUHJvZmlsTGlzdCgpOwp9CgpmdW5jdGlvbiBwUHJvZmlsVWJhaCh1dWlkKSB7CiAgbGV0IHByb2ZpbCA9IHBQcm9maWxTZW11YSgpLmZpbmQocCA9PiBwLnV1aWQgPT09IHV1aWQpOwogIGlmICghcHJvZmlsKSByZXR1cm47CiAgbGV0IGlucCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWlucC1wcm9maWwnKTsKICBpbnAudmFsdWUgPSBwcm9maWwubmFtYTsKICBpbnAuZGF0YXNldC5lZGl0SWQgPSB1dWlkOwogIGlucC5mb2N1cygpOwogIGlucC5zY3JvbGxJbnRvVmlldyh7IGJlaGF2aW9yOiAnc21vb3RoJywgYmxvY2s6ICdjZW50ZXInIH0pOwp9CgpmdW5jdGlvbiBwUHJvZmlsSGFwdXModXVpZCkgewogIGxldCBwcm9maWwgPSBwUHJvZmlsU2VtdWEoKS5maW5kKHAgPT4gcC51dWlkID09PSB1dWlkKTsKICBpZiAoIXByb2ZpbCkgcmV0dXJuOwogIC8vIFsyXSBIaXR1bmcgcml3YXlhdCBtaWxpayBwcm9maWwgaW5pCiAgbGV0IGptbFJpd2F5YXQgPSBwUml3YXlhdFNlbXVhKCkuZmlsdGVyKHIgPT4gci5wcm9maWxJZCA9PT0gdXVpZCkubGVuZ3RoOwogIGxldCB3YXJuaW5nUml3YXlhdCA9IGptbFJpd2F5YXQgPiAwCiAgICA/ICdcblxu4pqg77iPICcgKyBqbWxSaXdheWF0ICsgJyByaXdheWF0IHVqaWFuIG1pbGlrIHByb2ZpbCBpbmkgVElEQUsgaWt1dCBkaWhhcHVzIGRhbiBtYXNpaCBiaXNhIGRpYWtzZXMgdmlhIEJhY2t1cC4nCiAgICA6ICcnOwogIHBNb2RhbFRhbXBpbCgKICAgICfwn5eRIEhhcHVzIFByb2ZpbCcsCiAgICAnSGFwdXMgcHJvZmlsICInICsgcHJvZmlsLm5hbWEgKyAnIj8nICsgd2FybmluZ1Jpd2F5YXQsCiAgICAnJywgJ3lhIG1lcmFoJywgZnVuY3Rpb24oKSB7CiAgICAgIGxldCBsaXN0ID0gcFByb2ZpbFNlbXVhKCkuZmlsdGVyKHAgPT4gcC51dWlkICE9PSB1dWlkKTsKICAgICAgaWYgKHByb2ZpbC5ha3RpZiAmJiBsaXN0Lmxlbmd0aCA+IDApIGxpc3RbMF0uYWt0aWYgPSB0cnVlOwogICAgICBwUHJvZmlsU2ltcGFuKGxpc3QpOwogICAgICBwUmVuZGVyUHJvZmlsTGlzdCgpOwogICAgICBwTW9kYWxUdXR1cCgpOwogICAgfQogICk7Cn0KCmZ1bmN0aW9uIHBSZW5kZXJQcm9maWxMaXN0KCkgewogIGxldCBsaXN0ID0gcFByb2ZpbFNlbXVhKCk7CiAgbGV0IGVsICAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1wcm9maWwtbGlzdCcpOwogIGlmICghZWwpIHJldHVybjsKICBpZiAobGlzdC5sZW5ndGggPT09IDApIHsKICAgIGVsLmlubmVySFRNTCA9ICc8ZGl2IGNsYXNzPSJwLXJpd2F5YXQta29zb25nIj48c3BhbiBjbGFzcz0iaWNvIj7wn5GkPC9zcGFuPkJlbHVtIGFkYSBwcm9maWwuIFRhbWJhaGthbiBkaSBhdGFzLjwvZGl2Pic7CiAgICByZXR1cm47CiAgfQogIGVsLmlubmVySFRNTCA9IGxpc3QubWFwKHAgPT4gewogICAgLy8gWzJdIEp1bWxhaCByaXdheWF0IHBlciBwcm9maWwKICAgIGxldCBqbWwgPSBwUml3YXlhdFNlbXVhKCkuZmlsdGVyKHIgPT4gci5wcm9maWxJZCA9PT0gcC51dWlkKS5sZW5ndGg7CiAgICByZXR1cm4gYAogICAgPGRpdiBjbGFzcz0icC1wcm9maWwtaXRlbSAke3AuYWt0aWYgPyAnYWt0aWYtcHJvZmlsJyA6ICcnfSI+CiAgICAgIDxkaXYgY2xhc3M9InAtYXYiPiR7cC5uYW1hLmNoYXJBdCgwKS50b1VwcGVyQ2FzZSgpfTwvZGl2PgogICAgICA8ZGl2IGNsYXNzPSJwLWluZm8iPgogICAgICAgIDxkaXYgY2xhc3M9InAtcG5hbWEiPiR7X2VzYyhwLm5hbWEpfTwvZGl2PgogICAgICAgIDxkaXYgc3R5bGU9ImZvbnQtc2l6ZToxMHB4O2NvbG9yOnZhcigtLWdyYXktc29mdCk7bWFyZ2luLXRvcDoxcHg7Ij4KICAgICAgICAgICR7am1sfSB1amlhbiDCtyBJRDogJHtwLnV1aWQuc2xpY2UoMCw4KS50b1VwcGVyQ2FzZSgpfQogICAgICAgIDwvZGl2PgogICAgICAgICR7cC5ha3RpZiA/ICc8ZGl2IGNsYXNzPSJwLXBiYWRnZSI+4pyTIEFrdGlmPC9kaXY+JyA6ICcnfQogICAgICA8L2Rpdj4KICAgICAgPGRpdiBjbGFzcz0icC1wcm9maWwtYWtzaSI+CiAgICAgICAgJHshcC5ha3RpZiA/IGA8YnV0dG9uIGNsYXNzPSJwaWxpaCIgb25jbGljaz0icFByb2ZpbFNldEFrdGlmKCcke3AudXVpZH0nKTtwUmVuZGVyUHJvZmlsTGlzdCgpO3BSZW5kZXJCZXJhbmRhKCkiPlBpbGloPC9idXR0b24+YCA6ICcnfQogICAgICAgIDxidXR0b24gb25jbGljaz0icFByb2ZpbFViYWgoJyR7cC51dWlkfScpIj5VYmFoPC9idXR0b24+CiAgICAgICAgPGJ1dHRvbiBjbGFzcz0iaGFwdXMiIG9uY2xpY2s9InBQcm9maWxIYXB1cygnJHtwLnV1aWR9JykiPkhhcHVzPC9idXR0b24+CiAgICAgIDwvZGl2PgogICAgPC9kaXY+YDsKICB9KS5qb2luKCcnKTsKfQoKLy8g4pSA4pSAIEF1dG9jb21wbGV0ZSDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKZnVuY3Rpb24gcEFjSW5wdXQodmFsKSB7CiAgbGV0IGxpc3RFbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWFjLWxpc3QnKTsKICBpZiAoIXZhbC50cmltKCkpIHsgbGlzdEVsLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7IHJldHVybjsgfQogIGxldCBjb2NvayA9IHBQcm9maWxTZW11YSgpLmZpbHRlcihwID0+IHAubmFtYS50b0xvd2VyQ2FzZSgpLmluY2x1ZGVzKHZhbC50b0xvd2VyQ2FzZSgpKSk7CiAgaWYgKGNvY29rLmxlbmd0aCA9PT0gMCkgeyBsaXN0RWwuc3R5bGUuZGlzcGxheSA9ICdub25lJzsgcmV0dXJuOyB9CiAgbGlzdEVsLmlubmVySFRNTCA9IGNvY29rLm1hcChwID0+CiAgICBgPGRpdiBjbGFzcz0icC1hYy1pdGVtIiBvbmNsaWNrPSJwQWNQaWxpaCgnJHtfZXNjKHAubmFtYSl9JywnJHtwLnV1aWR9JykiPiR7X2VzYyhwLm5hbWEpfTwvZGl2PmAKICApLmpvaW4oJycpOwogIGxpc3RFbC5zdHlsZS5kaXNwbGF5ID0gJ2Jsb2NrJzsKfQpmdW5jdGlvbiBwQWNQaWxpaChuYW1hLCB1dWlkKSB7CiAgbGV0IGlucCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWlucC1wcm9maWwnKTsKICBpbnAudmFsdWUgPSBuYW1hOwogIGlucC5kYXRhc2V0LmVkaXRJZCA9IHV1aWQ7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3AtYWMtbGlzdCcpLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7Cn0KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCBmdW5jdGlvbihlKSB7CiAgbGV0IGxpc3RFbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWFjLWxpc3QnKTsKICBpZiAobGlzdEVsICYmICFsaXN0RWwuY29udGFpbnMoZS50YXJnZXQpICYmIGUudGFyZ2V0LmlkICE9PSAncC1pbnAtcHJvZmlsJykKICAgIGxpc3RFbC5zdHlsZS5kaXNwbGF5ID0gJ25vbmUnOwp9KTsKCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgTUFTVUsgVUpJQU4KLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCmZ1bmN0aW9uIHBUYW1waWxNYXN1a1VqaWFuKCkgewogIGxldCBwcm9maWwgPSBwUHJvZmlsQWt0aWYoKTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1jYnQtYXYnKS50ZXh0Q29udGVudCAgPSBwcm9maWwgPyBwcm9maWwubmFtYS5jaGFyQXQoMCkudG9VcHBlckNhc2UoKSA6ICc/JzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1jYnQtbmFtYScpLnRleHRDb250ZW50ID0gcHJvZmlsID8gcHJvZmlsLm5hbWEgOiAnQmVsdW0gYWRhIHByb2ZpbCDigJQgYnVhdCBkdWx1IGRpIEtlbG9sYSBQcm9maWwnOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWlucC1rb2RlJykudmFsdWUgICAgICAgPSAnJzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1rb2RlLWhpbnQnKS50ZXh0Q29udGVudCA9ICcnOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWJ0bi1sYW5qdXQnKS5kaXNhYmxlZCAgPSB0cnVlOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLXByZW1pdW0tcGlsaWhhbicpLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7CiAgX3BLb2RlUmVzb2x2ZWRVcmwgPSBudWxsOwogIHBUYW1waWwoJ3BvcnRhbC1jYnQtc2NyZWVuJyk7Cn0KCmZ1bmN0aW9uIHBLb2RlSW5wdXQodmFsKSB7CiAgbGV0IHYgICAgPSB2YWwudHJpbSgpOwogIGxldCBidG4gID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3AtYnRuLWxhbmp1dCcpOwogIGxldCBoaW50ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Ata29kZS1oaW50Jyk7CiAgX3BLb2RlUmVzb2x2ZWRVcmwgPSBudWxsOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLXByZW1pdW0tcGlsaWhhbicpLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7CgogIGlmICghdikgeyBidG4uZGlzYWJsZWQgPSB0cnVlOyBoaW50LnRleHRDb250ZW50ID0gJyc7IHJldHVybjsgfQoKICBpZiAodi5zdGFydHNXaXRoKCdodHRwczovL3NjcmlwdC5nb29nbGUuY29tLycpKSB7CiAgICBfcEtvZGVSZXNvbHZlZFVybCA9IHY7CiAgICBoaW50LnRleHRDb250ZW50ID0gJ+KchSBVUkwgR29vZ2xlIEFwcHMgU2NyaXB0IChGcmVlKSc7CiAgICBoaW50LnN0eWxlLmNvbG9yID0gJ3ZhcigtLWdyZWVuKSc7CiAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICB9IGVsc2UgaWYgKFBfS09ERV9NQVBbdi50b1VwcGVyQ2FzZSgpXSkgewogICAgX3BLb2RlUmVzb2x2ZWRVcmwgPSBQX0tPREVfTUFQW3YudG9VcHBlckNhc2UoKV0udXJsOwogICAgaGludC50ZXh0Q29udGVudCAgPSAn4pyFICcgKyAoUF9LT0RFX01BUFt2LnRvVXBwZXJDYXNlKCldLmxhYmVsIHx8IHYudG9VcHBlckNhc2UoKSkgKyAnIChGcmVlKSc7CiAgICBoaW50LnN0eWxlLmNvbG9yICA9ICd2YXIoLS1ncmVlbiknOwogICAgYnRuLmRpc2FibGVkID0gZmFsc2U7CiAgfSBlbHNlIGlmICh2Lmxlbmd0aCA+PSA0KSB7CiAgICBoaW50LnRleHRDb250ZW50ID0gJ/CflJEgS29kZSBha2FuIGRpdmVyaWZpa2FzaS4uLic7CiAgICBoaW50LnN0eWxlLmNvbG9yID0gJ3ZhcigtLWdyYXktc29mdCknOwogICAgYnRuLmRpc2FibGVkID0gZmFsc2U7CiAgfSBlbHNlIHsKICAgIGJ0bi5kaXNhYmxlZCA9IHRydWU7CiAgICBoaW50LnRleHRDb250ZW50ID0gJyc7CiAgfQp9CgovLyBbM10gVmFsaWRhc2kga29kZSDigJQgcmVzb2x2ZXIgY2hhaW4KYXN5bmMgZnVuY3Rpb24gcFZhbGlkYXNpS29kZSgpIHsKICBsZXQgcHJvZmlsID0gcFByb2ZpbEFrdGlmKCk7CiAgaWYgKCFwcm9maWwpIHsgYWxlcnQoJ0J1YXQgcHJvZmlsIHRlcmxlYmloIGRhaHVsdSBkaSBtZW51IEtlbG9sYSBQcm9maWwuJyk7IHJldHVybjsgfQoKICBsZXQga29kZSAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1pbnAta29kZScpLnZhbHVlLnRyaW0oKTsKICBsZXQgaGludCAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1rb2RlLWhpbnQnKTsKICBsZXQgYnRuICAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1idG4tbGFuanV0Jyk7CiAgaWYgKCFrb2RlKSByZXR1cm47CgogIC8vIEZyZWUgdGllciAxOiBVUkwgbGFuZ3N1bmcgYXRhdSBrb2RlIHRlcmRhZnRhcgogIGlmIChfcEtvZGVSZXNvbHZlZFVybCkgewogICAgcE1hc3VrQ0JUKF9wS29kZVJlc29sdmVkVXJsKTsKICAgIHJldHVybjsKICB9CgogIC8vIFszXSBQcmVtaXVtIHJlc29sdmVyIGNoYWluIOKAlCBjb2JhIHNhdHUgcGVyIHNhdHUKICBpZiAoTUFTVEVSX0NPTkZJRy5hbGxvd1ByZW1pdW1SZXNvbHZlciAmJiBQX1BSRU1JVU1fUkVTT0xWRVJTLmxlbmd0aCA+IDApIHsKICAgIGJ0bi5kaXNhYmxlZCA9IHRydWU7CiAgICBoaW50LnRleHRDb250ZW50ID0gJ/CflIQgTWVtdmVyaWZpa2FzaSBrb2RlLi4uJzsKICAgIGhpbnQuc3R5bGUuY29sb3IgPSAndmFyKC0tZ3JheS1zb2Z0KSc7CiAgICBmb3IgKGxldCByZXNvbHZlciBvZiBQX1BSRU1JVU1fUkVTT0xWRVJTKSB7CiAgICAgIHRyeSB7CiAgICAgICAgbGV0IHJlc3VsdCA9IGF3YWl0IHJlc29sdmVyLnJlc29sdmUoa29kZSk7CiAgICAgICAgaWYgKHJlc3VsdCAmJiByZXN1bHQudXJsKSB7CiAgICAgICAgICAvLyBbM10gUHJlbWl1bSByZXNvbHZlZDogdGFtcGlsa2FuIHBpbGloYW4ga2VsYXMgamlrYSBhZGEKICAgICAgICAgIF9wS29kZVJlc29sdmVkVXJsID0gcmVzdWx0LnVybDsKICAgICAgICAgIGlmIChyZXN1bHQubWV0YSAmJiByZXN1bHQubWV0YS5rZWxhc190ZXJzZWRpYSkgewogICAgICAgICAgICBfcFRhbXBpbFBpbGloYW5LZWxhcyhyZXN1bHQubWV0YS5rZWxhc190ZXJzZWRpYSk7CiAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBwTWFzdWtDQlQocmVzdWx0LnVybCk7CiAgICAgICAgICB9CiAgICAgICAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgICAgICAgIHJldHVybjsKICAgICAgICB9CiAgICAgIH0gY2F0Y2goZSkgeyBjb25zb2xlLndhcm4oJ1tQcmVtaXVtIHJlc29sdmVyICcgKyByZXNvbHZlci5pZCArICddJywgZSk7IH0KICAgIH0KICAgIC8vIFNlbXVhIHJlc29sdmVyIGdhZ2FsCiAgICBoaW50LnRleHRDb250ZW50ID0gJ+KdjCBLb2RlIHRpZGFrIGRpa2VuYWxpIG9sZWggc2VydmVyIG1hbmFwdW4uJzsKICAgIGhpbnQuc3R5bGUuY29sb3IgPSAndmFyKC0tcmVkKSc7CiAgICBidG4uZGlzYWJsZWQgPSBmYWxzZTsKICAgIHJldHVybjsKICB9CgogIC8vIFszXSBUaWRhayBhZGEgcmVzb2x2ZXIgYWt0aWY6IHRhbXBpbGthbiBwaWxpaGFuIGdydXAgc2ViYWdhaSBzdHViIFByZW1pdW0KICBoaW50LnRleHRDb250ZW50ID0gJ+KaoSBLb2RlIFByZW1pdW0g4oCUIHBpbGloICcgKyAoU0VSVkVSX0JSQU5ELnByZW1pdW1fc2VsZWN0b3JfbGFiZWx8fCdncnVwJykgKyAnIHVudHVrIGxhbmp1dC4nOwogIGhpbnQuc3R5bGUuY29sb3IgPSAndmFyKC0tb3JhbmdlKSc7CiAgX3BUYW1waWxQaWxpaGFuS2VsYXMoU0VSVkVSX0JSQU5ELnNlbGVjdG9yX29wdGlvbnMubGVuZ3RoID4gMCA/IFNFUlZFUl9CUkFORC5zZWxlY3Rvcl9vcHRpb25zIDogW10pOwp9CgovLyBbM10gVGFtcGlsa2FuIG9wc2kgZ3J1cC9rZWxhcyAoYmlzYSBkYXJpIHJlc29sdmVyIG1ldGEgYXRhdSBkZWZhdWx0IHNlcnZlciBicmFuZGluZykKZnVuY3Rpb24gX3BUYW1waWxQaWxpaGFuS2VsYXMoa2VsYXNBcnIpIHsKICBsZXQgc2VsICAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1zZWwta2VsYXMnKTsKICBsZXQgd3JhcCAgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1wcmVtaXVtLXBpbGloYW4nKTsKICBsZXQgbGFiZWwgPSBTRVJWRVJfQlJBTkQucHJlbWl1bV9zZWxlY3Rvcl9sYWJlbCB8fCAnUGlsaWggR3J1cCc7CiAgc2VsLmlubmVySFRNTCA9ICc8b3B0aW9uIHZhbHVlPSIiPi0tICcgKyBsYWJlbCArICcgLS08L29wdGlvbj4nICsKICAgIGtlbGFzQXJyLm1hcChrID0+IHsKICAgICAgbGV0IHZhbCA9IHR5cGVvZiBrID09PSAnb2JqZWN0JyA/IChrLnZhbHVlIHx8IGspIDogazsKICAgICAgbGV0IGxibCA9IHR5cGVvZiBrID09PSAnb2JqZWN0JyA/IChrLmxhYmVsIHx8IGsudmFsdWUgfHwgaykgOiBrOwogICAgICByZXR1cm4gYDxvcHRpb24gdmFsdWU9IiR7dmFsfSI+JHtsYmx9PC9vcHRpb24+YDsKICAgIH0pLmpvaW4oJycpOwogIHdyYXAuc3R5bGUuZGlzcGxheSA9ICdibG9jayc7Cn0KCmZ1bmN0aW9uIHBNYXN1a0NCVCh1cmxHQVMpIHsKICBsZXQgcHJvZmlsID0gcFByb2ZpbEFrdGlmKCk7CiAgaWYgKCFwcm9maWwpIHsgYWxlcnQoJ1Byb2ZpbCB0aWRhayBkaXRlbXVrYW4uJyk7IHJldHVybjsgfQoKICBpZiAoIXVybEdBUykgewogICAgLy8gRGFyaSBwaWxpaGFuIGdydXAva2VsYXMgUHJlbWl1bQogICAgbGV0IGtlbGFzID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Atc2VsLWtlbGFzJykudmFsdWU7CiAgICBpZiAoIWtlbGFzKSB7IGFsZXJ0KCdQaWxpaCAnICsgKFNFUlZFUl9CUkFORC5wcmVtaXVtX3NlbGVjdG9yX2xhYmVsIHx8ICdncnVwJykgKyAnIHRlcmxlYmloIGRhaHVsdS4nKTsgcmV0dXJuOyB9CiAgICAvLyBbM10gR2FidW5na2FuIFVSTCByZXNvbHZlciArIHBhcmFtZXRlciBrZWxhcwogICAgdXJsR0FTID0gKF9wS29kZVJlc29sdmVkVXJsIHx8IFVSTF9TQ1JJUFQpICsgJyZrZWxhcz0nICsgZW5jb2RlVVJJQ29tcG9uZW50KGtlbGFzKTsKICB9CgogIC8vIFNldCBVUkwgYWt0aWYg4oCUIHNlbXVhIGZldGNoIENCVCBwYWthaSBpbmkKICBfdXJsR2FzQWt0aWYgPSB1cmxHQVM7CgogIC8vIFtBLjFdIFVwZGF0ZSBsYXN0VXNlZCBwcm9maWwgYWt0aWYgc2FhdCBtYXN1ayB1amlhbgogIGxldCBsaXN0UCA9IHBQcm9maWxTZW11YSgpOwogIGxpc3RQID0gbGlzdFAubWFwKHAgPT4gcC5ha3RpZiA/IHsgLi4ucCwgbGFzdFVzZWQ6IERhdGUubm93KCkgfSA6IHApOwogIHBQcm9maWxTaW1wYW4obGlzdFApOwoKICAvLyBQcmUtaXNpIG5hbWEgZGFyaSBwcm9maWwgYWt0aWYKICBsZXQgaW5wTmFtYSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdpbnAtbmFtYScpOwogIGlmIChpbnBOYW1hKSBpbnBOYW1hLnZhbHVlID0gcHJvZmlsLm5hbWE7CgogIHBUYW1waWwoJ2xvZ2luLXNjcmVlbicpOwogIG11YXRTb2FsKCk7Cn0KCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgWzJdIFJJV0FZQVQg4oCUIGRpcGlzYWggcGVyIHByb2ZpbElkCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkApmdW5jdGlvbiBwUml3YXlhdFNlbXVhKCkgewogIHRyeSB7IHJldHVybiBKU09OLnBhcnNlKGxvY2FsU3RvcmFnZS5nZXRJdGVtKExTX1JJV0FZQVQpKSB8fCBbXTsgfQogIGNhdGNoKGUpIHsgcmV0dXJuIFtdOyB9Cn0KZnVuY3Rpb24gcFJpd2F5YXRTaW1wYW5MaXN0KGxpc3QpIHsKICB0cnkgeyBsb2NhbFN0b3JhZ2Uuc2V0SXRlbShMU19SSVdBWUFULCBKU09OLnN0cmluZ2lmeShsaXN0KSk7IH0gY2F0Y2goZSkge30KfQoKLy8gWzJdIEhhbnlhIHJpd2F5YXQgcHJvZmlsIGFrdGlmCmZ1bmN0aW9uIHBSaXdheWF0UHJvZmlsKHV1aWQpIHsKICBsZXQgaWQgPSB1dWlkIHx8IChwUHJvZmlsQWt0aWYoKSB8fCB7fSkudXVpZCB8fCBudWxsOwogIGlmICghaWQpIHJldHVybiBbXTsKICByZXR1cm4gcFJpd2F5YXRTZW11YSgpLmZpbHRlcihyID0+IHIucHJvZmlsSWQgPT09IGlkKTsKfQoKLy8gSG9vayBkaXBhbmdnaWwgZGFyaSBzZWxlc2FpRmluYWwoKQpmdW5jdGlvbiBwb3J0YWxTaW1wYW5SaXdheWF0KCkgewogIHRyeSB7CiAgICBsZXQgaGl0dW5nID0gaGl0dW5nTmlsYWkoKTsKICAgIGxldCBwcm9maWwgPSBwUHJvZmlsQWt0aWYoKTsKICAgIGxldCBsaXN0ICAgPSBwUml3YXlhdFNlbXVhKCk7CiAgICBsZXQgZW50cnkgID0gewogICAgICBpZCAgICAgICAgICA6ICdyd18nICsgcFVVSUQoKSwgICAgICAgICAgLy8gVVVJRCBwZXJtYW5lbiB1bnR1ayByaXdheWF0CiAgICAgIHByb2ZpbElkICAgIDogcHJvZmlsID8gcHJvZmlsLnV1aWQgOiBudWxsLCAvLyBbMl0gaWthdCBrZSBwcm9maWwKICAgICAganVkdWwgICAgICAgOiBKVURVTCwKICAgICAgc2lzd2EgICAgICAgOiBuYW1hU2lzd2EsCiAgICAgIHNla29sYWggICAgIDogbmFtYVNla29sYWgsCiAgICAgIHRhbmdnYWwgICAgIDogKHRTZWxlc2FpIHx8IG5ldyBEYXRlKCkpLnRvSVNPU3RyaW5nKCksCiAgICAgIG5pbGFpICAgICAgIDogaGl0dW5nLm5pbGFpLAogICAgICBwcmVkaWthdCAgICA6IGhpdHVuZy5wcmVkaWthdCwKICAgICAgYmVuYXIgICAgICAgOiBoaXR1bmcuYmVuYXIsCiAgICAgIHNhbGFoICAgICAgIDogaGl0dW5nLnNhbGFoLAogICAgICBlc2FpICAgICAgICA6IGhpdHVuZy5lc2FpQywKICAgICAgcG9pbkQgICAgICAgOiBoaXR1bmcucG9pbkQsCiAgICAgIHBvaW5NICAgICAgIDogaGl0dW5nLnBvaW5NLAogICAgICBwZWxhbmdnYXJhbiA6IHBlbGFuZ2dhciwKICAgICAgc29hbFNuYXBzaG90OiBzb2FsRGF0YS5tYXAocyA9PiAoey4uLnN9KSksCiAgICAgIGphd1BHICAgICAgIDogey4uLmphd1BHfSwKICAgICAgamF3RXNhaSAgICAgOiB7Li4uamF3RXNhaX0sCiAgICAgIHJhZ3VNYXAgICAgIDogey4uLnJhZ3VNYXB9LAogICAgICBidWthX3BlbWIgICA6IEJVS0FfUEVNQiwKICAgICAgZ2FzX3VybCAgICAgOiBfdXJsR2FzQWt0aWYsICAgICAgICAgIC8vIHNpbXBhbiBVUkwgc3VtYmVyIHNvYWwKICAgICAgc25hcHNob3RWZXJzaW9uICAgOiAxLCAgICAgICAgICAgICAgIC8vIFtBLjJdIHBvbmRhc2kgdmVyc2lvbmluZyBzbmFwc2hvdAogICAgICBfcGVzZXJ0YV9sYWJlbCAgICA6IFNFUlZFUl9CUkFORC5wYXJ0aWNpcGFudF9maWVsZF9sYWJlbCwgICAvLyBsYWJlbCBkaW5hbWlzIHNhYXQgdWppYW4KICAgICAgX2luc3RpdHVzaV9sYWJlbCAgOiBTRVJWRVJfQlJBTkQuaW5zdGl0dXRpb25fZmllbGRfbGFiZWwgICAgLy8gbGFiZWwgZGluYW1pcyBzYWF0IHVqaWFuCiAgICB9OwogICAgLy8gRGVkdXA6IGp1ZHVsICsgcHJvZmlsSWQgKyBoYXJpIHlhbmcgc2FtYSDihpIgdGltcGEKICAgIGxldCB0Z2wgPSBlbnRyeS50YW5nZ2FsLnNsaWNlKDAsIDEwKTsKICAgIGxpc3QgPSBsaXN0LmZpbHRlcihyID0+ICEoci5qdWR1bCA9PT0gZW50cnkuanVkdWwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmJiByLnByb2ZpbElkID09PSBlbnRyeS5wcm9maWxJZAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICYmIHIudGFuZ2dhbC5zbGljZSgwLCAxMCkgPT09IHRnbCkpOwogICAgbGlzdC51bnNoaWZ0KGVudHJ5KTsKICAgIGlmIChsaXN0Lmxlbmd0aCA+IDEwMCkgbGlzdCA9IGxpc3Quc2xpY2UoMCwgMTAwKTsgLy8gbmFpa2thbiBsaW1pdCBkYXJpIDUwCiAgICBwUml3YXlhdFNpbXBhbkxpc3QobGlzdCk7CiAgfSBjYXRjaChlKSB7IGNvbnNvbGUud2FybigncG9ydGFsU2ltcGFuUml3YXlhdCBlcnJvcjonLCBlKTsgfQp9CgpmdW5jdGlvbiBwTXVhdFJpd2F5YXQoKSB7CiAgLy8gWzJdIEhhbnlhIHRhbXBpbGthbiByaXdheWF0IHByb2ZpbCBha3RpZgogIGxldCBsaXN0ID0gcFJpd2F5YXRQcm9maWwoKTsKICBsZXQgZWwgICA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLXJpd2F5YXQtbGlzdCcpOwogIGlmICghZWwpIHJldHVybjsKCiAgbGV0IHByb2ZpbCA9IHBQcm9maWxBa3RpZigpOwogIGxldCBuYW1hUCAgPSBwcm9maWwgPyBwcm9maWwubmFtYSA6ICfigJQnOwoKICAvLyBIZWFkZXIgcHJvZmlsIGRpIGF0YXMgZGFmdGFyCiAgbGV0IGhlYWRlckh0bWwgPSBgCiAgICA8ZGl2IHN0eWxlPSJmb250LXNpemU6MTFweDtmb250LXdlaWdodDo3MDA7Y29sb3I6dmFyKC0tZ3JheS1zb2Z0KTsKICAgICAgdGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlO2xldHRlci1zcGFjaW5nOi41cHg7bWFyZ2luLWJvdHRvbToxMHB4O3BhZGRpbmc6MCAycHg7Ij4KICAgICAgUml3YXlhdDogJHtfZXNjKG5hbWFQKX0KICAgIDwvZGl2PmA7CgogIGlmIChsaXN0Lmxlbmd0aCA9PT0gMCkgewogICAgZWwuaW5uZXJIVE1MID0gaGVhZGVySHRtbCArICc8ZGl2IGNsYXNzPSJwLXJpd2F5YXQta29zb25nIj48c3BhbiBjbGFzcz0iaWNvIj7wn5OtPC9zcGFuPkJlbHVtIGFkYSByaXdheWF0IHVudHVrIHByb2ZpbCBpbmkuPC9kaXY+JzsKICAgIHJldHVybjsKICB9CiAgZWwuaW5uZXJIVE1MID0gaGVhZGVySHRtbCArIGxpc3QubWFwKHIgPT4gewogICAgbGV0IGtscyA9IF9wcmVkaWthdEtscyhyLnByZWRpa2F0KTsKICAgIGxldCB0Z2wgPSBuZXcgRGF0ZShyLnRhbmdnYWwpLnRvTG9jYWxlRGF0ZVN0cmluZygnaWQtSUQnLAogICAgICB7IGRheTogJ251bWVyaWMnLCBtb250aDogJ3Nob3J0JywgeWVhcjogJ251bWVyaWMnIH0pOwogICAgcmV0dXJuIGA8ZGl2IGNsYXNzPSJwLXJpd2F5YXQtaXRlbSIgb25jbGljaz0icEJ1a2FEZXRhaWwoJyR7ci5pZH0nKSI+CiAgICAgIDxkaXYgY2xhc3M9InItbmlsYWkgJHtrbHN9Ij4ke01hdGgucm91bmQoci5uaWxhaSB8fCAwKX08L2Rpdj4KICAgICAgPGRpdiBjbGFzcz0ici1pbmZvIj4KICAgICAgICA8ZGl2IGNsYXNzPSJyLWp1ZHVsIj4ke19lc2Moci5qdWR1bCl9PC9kaXY+CiAgICAgICAgPGRpdiBjbGFzcz0ici1tZXRhIj4ke19lc2Moci5zaXN3YSl9IMK3ICR7dGdsfTwvZGl2PgogICAgICA8L2Rpdj4KICAgICAgPGRpdiBjbGFzcz0ici1hcnJvdyI+4oC6PC9kaXY+CiAgICA8L2Rpdj5gOwogIH0pLmpvaW4oJycpOwp9CgpmdW5jdGlvbiBwQnVrYURldGFpbChpZCkgewogIC8vIFsyXSBDYXJpIGRpIHNlbXVhIHJpd2F5YXQgKGJ1a2FuIGhhbnlhIHByb2ZpbCBha3RpZikgYWdhciBsaW5rIFVVSUQgdGV0YXAgdmFsaWQKICBsZXQgciA9IHBSaXdheWF0U2VtdWEoKS5maW5kKHggPT4geC5pZCA9PT0gaWQpOwogIGlmICghcikgcmV0dXJuOwogIF9wRGV0YWlsQWt0aWYgPSByOwogIF9wUmVuZGVyRGV0YWlsKHIpOwogIHBUYW1waWwoJ3BvcnRhbC1kZXRhaWwtc2NyZWVuJyk7CgogIC8vIFtDXSBTZXJ2ZXIgc3luYyDigJQgamlrYSBhZGEgZ2FzX3VybCBkaSByaXdheWF0LCBjZWsgbmlsYWkgdGVyYmFydSBkaSBiYWNrZ3JvdW5kCiAgaWYgKHIuZ2FzX3VybCAmJiByLnNpc3dhICYmIHIuc2Vrb2xhaCkgewogICAgX3BTeW5jTmlsYWlEYXJpU2VydmVyKHIpOwogIH0KfQoKLy8gW0NdIEFtYmlsIG5pbGFpIHRlcmJhcnUgZGFyaSBHQVMgZGFuIHBlcmJhcnVpIGNhY2hlIGxva2FsIGppa2EgYWRhIHBlcnViYWhhbgpmdW5jdGlvbiBfcFN5bmNOaWxhaURhcmlTZXJ2ZXIocikgewogIGlmICghci5nYXNfdXJsKSByZXR1cm47CiAgbGV0IHVybCA9IHIuZ2FzX3VybCArICc/YWN0aW9uPWdldEhhc2lsU2lzd2EnCiAgICArICcmbmFtYT0nICAgICsgZW5jb2RlVVJJQ29tcG9uZW50KHIuc2lzd2EpCiAgICArICcmc2Vrb2xhaD0nICsgZW5jb2RlVVJJQ29tcG9uZW50KHIuc2Vrb2xhaCk7CgogIC8vIEd1bmFrYW4gQWJvcnRTaWduYWwudGltZW91dCBqaWthIHRlcnNlZGlhIChDaHJvbWUg4omlIDExMSksIGZhbGxiYWNrIG1hbnVhbAogIGxldCBmZXRjaE9wdHMgPSB7fTsKICB0cnkgewogICAgaWYgKHR5cGVvZiBBYm9ydFNpZ25hbCAhPT0gJ3VuZGVmaW5lZCcgJiYgQWJvcnRTaWduYWwudGltZW91dCkgewogICAgICBmZXRjaE9wdHMuc2lnbmFsID0gQWJvcnRTaWduYWwudGltZW91dCgxMDAwMCk7CiAgICB9CiAgfSBjYXRjaChlKSB7fQoKICBmZXRjaCh1cmwsIGZldGNoT3B0cykKICAgIC50aGVuKHJlcyA9PiByZXMuanNvbigpKQogICAgLnRoZW4oZnVuY3Rpb24oZCkgewogICAgICBpZiAoZC5zdGF0dXMgIT09ICdvaycpIHJldHVybjsKICAgICAgbGV0IGJlcnViYWggPSBmYWxzZTsKCiAgICAgIC8vIFtDXSBQZXJiYXJ1aSBuaWxhaSBha2hpciBqaWthIGd1cnUgc3VkYWgga29yZWtzaSBlc2FpCiAgICAgIGlmIChkLm5pbGFpX2FraGlyICYmIGQucG9pbl9lc2FpID4gMCkgewogICAgICAgIC8vIEVzYWkgc3VkYWggZGlrb3Jla3NpIOKAlCBuaWxhaSBha2hpciByZXNtaQogICAgICAgIGlmIChkLm5pbGFpX2FraGlyICE9PSByLm5pbGFpKSB7CiAgICAgICAgICByLm5pbGFpICAgID0gZC5uaWxhaV9ha2hpcjsKICAgICAgICAgIHIucHJlZGlrYXQgPSBkLnByZWRpa2F0IHx8CiAgICAgICAgICAgIChyLm5pbGFpPj05MD8nU2FuZ2F0IEJhaWsnOnIubmlsYWk+PTc1PydCYWlrJzpyLm5pbGFpPj02MD8nQ3VrdXAnOidUZXJ1cyBTZW1hbmdhdCcpOwogICAgICAgICAgYmVydWJhaCAgICA9IHRydWU7CiAgICAgICAgfQogICAgICAgIC8vIFVwZGF0ZSBpbmZvIGVzYWkgZGkgY2FjaGUKICAgICAgICBpZiAoIXIuZXNhaVN1ZGFoRGlrb3Jla3NpKSB7CiAgICAgICAgICByLmVzYWlTdWRhaERpa29yZWtzaSA9IHRydWU7CiAgICAgICAgICByLnBvaW5Fc2FpID0gZC5wb2luX2VzYWk7CiAgICAgICAgICBiZXJ1YmFoID0gdHJ1ZTsKICAgICAgICB9CiAgICAgIH0gZWxzZSBpZiAoZC5uaWxhaV9wZyA+IDAgJiYgIXIuZXNhaVN1ZGFoRGlrb3Jla3NpKSB7CiAgICAgICAgLy8gRXNhaSBiZWx1bSBkaWtvcmVrc2kg4oCUIHBha2FpIG5pbGFpIFBHIHNlbWVudGFyYQogICAgICAgIGlmIChkLm5pbGFpX3BnICE9PSByLm5pbGFpKSB7CiAgICAgICAgICByLm5pbGFpICA9IGQubmlsYWlfcGc7CiAgICAgICAgICByLnByZWRpa2F0ID0gci5uaWxhaT49OTA/J1NhbmdhdCBCYWlrJzpyLm5pbGFpPj03NT8nQmFpayc6ci5uaWxhaT49NjA/J0N1a3VwJzonVGVydXMgU2VtYW5nYXQnOwogICAgICAgICAgYmVydWJhaCAgPSB0cnVlOwogICAgICAgIH0KICAgICAgfQoKICAgICAgLy8gW0RdIFNpbmtyb25pc2FzaSBzdGF0dXMgcGVtYmFoYXNhbiBkYXJpIHNlcnZlcgogICAgICAvLyBHQVMgbWVuZ2lyaW06IGJ1a2FfcGVtYmFoYXNhbiAoYm9vbGVhbikgYXRhdSByZXZpZXdfbG9ja2VkIChib29sZWFuKQogICAgICBsZXQgYnVrYVNlcnZlciA9IG51bGw7CiAgICAgIGlmICh0eXBlb2YgZC5idWthX3BlbWJhaGFzYW4gIT09ICd1bmRlZmluZWQnKSB7CiAgICAgICAgYnVrYVNlcnZlciA9ICEhZC5idWthX3BlbWJhaGFzYW47CiAgICAgIH0gZWxzZSBpZiAodHlwZW9mIGQucmV2aWV3X2xvY2tlZCAhPT0gJ3VuZGVmaW5lZCcpIHsKICAgICAgICBidWthU2VydmVyID0gIWQucmV2aWV3X2xvY2tlZDsKICAgICAgfQogICAgICBpZiAoYnVrYVNlcnZlciAhPT0gbnVsbCAmJiBidWthU2VydmVyICE9PSByLmJ1a2FfcGVtYikgewogICAgICAgIHIuYnVrYV9wZW1iID0gYnVrYVNlcnZlcjsKICAgICAgICBiZXJ1YmFoICAgICA9IHRydWU7CiAgICAgIH0KCiAgICAgIGlmIChiZXJ1YmFoKSB7CiAgICAgICAgLy8gU2ltcGFuIGNhY2hlIGxva2FsIHlhbmcgc3VkYWggZGlwZXJiYXJ1aQogICAgICAgIGxldCBzZW11YSA9IHBSaXdheWF0U2VtdWEoKS5tYXAoeCA9PiB4LmlkID09PSByLmlkID8gciA6IHgpOwogICAgICAgIHBSaXdheWF0U2ltcGFuTGlzdChzZW11YSk7CiAgICAgICAgX3BEZXRhaWxBa3RpZiA9IHI7CiAgICAgICAgLy8gUmUtcmVuZGVyIGRldGFpbCBzZWNhcmEgbm9uLWRpc3J1cHRpdmUgKHNpc3dhIHRpZGFrIG1lcmFzYWthbiBhZGEgZmV0Y2gpCiAgICAgICAgX3BSZW5kZXJEZXRhaWwocik7CiAgICAgIH0KICAgIH0pCiAgICAuY2F0Y2goZnVuY3Rpb24oKSB7CiAgICAgIC8vIEdhZ2FsIHN5bmMg4oCUIHRhbXBpbGthbiBkYXRhIGNhY2hlLCB0aWRhayBhZGEgcGVzYW4gZXJyb3Iga2UgdXNlcgogICAgfSk7Cn0KCi8vIFJlbmRlciBrb250ZW4gbGF5YXIgZGV0YWlsIChkaXBpc2FoIGRhcmkgbmF2aWdhc2kgYWdhciBiaXNhIGRpcGFuZ2dpbCB1bGFuZyBzZXRlbGFoIHN5bmMpCmZ1bmN0aW9uIF9wUmVuZGVyRGV0YWlsKHIpIHsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1kZXQtanVkdWwnKS50ZXh0Q29udGVudCA9IHIuanVkdWw7CiAgbGV0IHRnbCA9IG5ldyBEYXRlKHIudGFuZ2dhbCkudG9Mb2NhbGVEYXRlU3RyaW5nKCdpZC1JRCcsCiAgICB7IHdlZWtkYXk6ICdsb25nJywgZGF5OiAnbnVtZXJpYycsIG1vbnRoOiAnbG9uZycsIHllYXI6ICdudW1lcmljJyB9KTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1kZXQtdGdsJykudGV4dENvbnRlbnQgID0gdGdsOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWRldC1uaWxhaScpLnRleHRDb250ZW50ID0gTWF0aC5yb3VuZChyLm5pbGFpIHx8IDApOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWRldC1wcmVkJykudGV4dENvbnRlbnQgID0gci5wcmVkaWthdCB8fCAnLS0nOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWRldC1wcmVkJykuY2xhc3NOYW1lICAgID0gJ3Nrb3ItcHJlZCc7CgogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWRldC1zdGF0JykuaW5uZXJIVE1MID0gYAogICAgPGRpdiBjbGFzcz0ic3RhdC1jIGJlbmFyIj48ZGl2IGNsYXNzPSJzdGF0LW51bSI+JHtyLmJlbmFyfHwwfTwvZGl2PjxkaXYgY2xhc3M9InN0YXQtbGJsIj5CZW5hciAoUEcpPC9kaXY+PC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJzdGF0LWMgc2FsYWgiPjxkaXYgY2xhc3M9InN0YXQtbnVtIj4ke3Iuc2FsYWh8fDB9PC9kaXY+PGRpdiBjbGFzcz0ic3RhdC1sYmwiPlNhbGFoPC9kaXY+PC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJzdGF0LWMgcmFndSI+PGRpdiBjbGFzcz0ic3RhdC1udW0iPiR7T2JqZWN0LmtleXMoci5yYWd1TWFwfHx7fSkubGVuZ3RofTwvZGl2PjxkaXYgY2xhc3M9InN0YXQtbGJsIj5SYWd1LXJhZ3U8L2Rpdj48L2Rpdj4KICAgIDxkaXYgY2xhc3M9InN0YXQtYyBlc2FpIj48ZGl2IGNsYXNzPSJzdGF0LW51bSI+JHtyLmVzYWl8fDB9PC9kaXY+PGRpdiBjbGFzcz0ic3RhdC1sYmwiPkVzYWk8L2Rpdj48L2Rpdj5gOwoKICAvLyBHdW5ha2FuIGxhYmVsIGRhcmkgc25hcHNob3Qgcml3YXlhdCBqaWthIGFkYSAodW50dWsgYmFja3dhcmQgY29tcGF0KSwKICAvLyBmYWxsYmFjayBrZSBTRVJWRVJfQlJBTkQgYWt0aWYKICBsZXQgaW5zdGl0dXNpTGFiZWwgPSByLl9pbnN0aXR1c2lfbGFiZWwgfHwgU0VSVkVSX0JSQU5ELmluc3RpdHV0aW9uX2ZpZWxkX2xhYmVsOwogIGxldCBwZXNlcnRhTGFiZWwgICA9IHIuX3Blc2VydGFfbGFiZWwgICB8fCBTRVJWRVJfQlJBTkQucGFydGljaXBhbnRfZmllbGRfbGFiZWw7CgogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWRldC1pbmZvJykuaW5uZXJIVE1MID0KICAgICdQb2luOiA8c3Ryb25nPicgKyAoci5wb2luRHx8MCkgKyAnIC8gJyArIChyLnBvaW5NfHwwKSArICc8L3N0cm9uZz4nICsKICAgIChyLmVzYWlTdWRhaERpa29yZWtzaQogICAgICA/ICcgwrcgRXNhaTogPHN0cm9uZyBzdHlsZT0iY29sb3I6dmFyKC0tZ3JlZW4pIj7inIUgKycgKyAoci5wb2luRXNhaXx8MCkgKyAnIHBvaW4gKHN1ZGFoIGRpa29yZWtzaSk8L3N0cm9uZz4nCiAgICAgIDogKHIuZXNhaSA+IDAgPyAnIMK3IEVzYWk6IDxzdHJvbmcgc3R5bGU9ImNvbG9yOnZhcigtLW9yYW5nZSkiPuKPsyBNZW51bmdndSBrb3Jla3NpPC9zdHJvbmc+JyA6ICcnKSkgKwogICAgJyDCtyBQZWxhbmdnYXJhbjogPHN0cm9uZz4nICsgKHIucGVsYW5nZ2FyYW58fDApICsgJzwvc3Ryb25nPicgKwogICAgJyDCtyAnICsgaW5zdGl0dXNpTGFiZWwgKyAnOiA8c3Ryb25nPicgKyBfZXNjKHIuc2Vrb2xhaHx8J+KAlCcpICsgJzwvc3Ryb25nPic7CgogIC8vIFtEXSBUb21ib2wgcGVtYmFoYXNhbiDigJQgc3RhdHVzIGlrdXRpIHNlcnZlciAodmlhIGNhY2hlIHlhbmcgc3VkYWggZGlwZXJiYXJ1aSkKICBsZXQgYnRuUGVtYiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWJ0bi1idWthLXBlbWInKTsKICBpZiAoIWJ0blBlbWIpIHJldHVybjsKICBpZiAoci5idWthX3BlbWIgJiYgci5zb2FsU25hcHNob3QgJiYgci5zb2FsU25hcHNob3QubGVuZ3RoID4gMCkgewogICAgYnRuUGVtYi5kaXNhYmxlZCA9IGZhbHNlOwogICAgYnRuUGVtYi50ZXh0Q29udGVudCA9ICfwn5OWIExpaGF0IFBlbWJhaGFzYW4nOwogIH0gZWxzZSBpZiAoIXIuYnVrYV9wZW1iKSB7CiAgICBidG5QZW1iLmRpc2FibGVkID0gdHJ1ZTsKICAgIGJ0blBlbWIudGV4dENvbnRlbnQgPSAn8J+UkiBQZW1iYWhhc2FuIGJlbHVtIGRpYnVrYSBndXJ1JzsKICB9IGVsc2UgewogICAgYnRuUGVtYi5kaXNhYmxlZCA9IHRydWU7CiAgICBidG5QZW1iLnRleHRDb250ZW50ID0gJ+KaoO+4jyBEYXRhIHBlbWJhaGFzYW4gdGlkYWsgdGVyc2VkaWEnOwogIH0KfQoKZnVuY3Rpb24gcEJ1a2FBbmFsaXNpc1Jpd2F5YXQoKSB7CiAgaWYgKCFfcERldGFpbEFrdGlmKSByZXR1cm47CiAgbGV0IHIgPSBfcERldGFpbEFrdGlmOwogIGlmICghci5zb2FsU25hcHNob3QgfHwgci5zb2FsU25hcHNob3QubGVuZ3RoID09PSAwKSB7CiAgICBhbGVydCgnRGF0YSBzb2FsIHRpZGFrIHRlcnNlZGlhIGRpIHJpd2F5YXQgaW5pLicpOyByZXR1cm47CiAgfQogIHNvYWxEYXRhICA9IHIuc29hbFNuYXBzaG90OwogIGphd1BHICAgICA9IHIuamF3UEcgICB8fCB7fTsKICBqYXdFc2FpICAgPSByLmphd0VzYWkgfHwge307CiAgcmFndU1hcCAgID0gci5yYWd1TWFwIHx8IHt9OwogIG5hbWFTaXN3YSAgID0gci5zaXN3YSAgIHx8ICcnOwogIG5hbWFTZWtvbGFoID0gci5zZWtvbGFoIHx8ICcnOwogIEJVS0FfUEVNQiA9IHRydWU7CiAgYnVrYUFuYWxpc2lzKCk7Cn0KCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgWzRdIEJBQ0tVUCDigJQgbWV0YWRhdGEgdmVyc2kgKyBtaWdyYXNpIHNrZW1hCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAoKLy8gVGFiZWwgbWlncmFzaTogc2tlbWEgbGFtYSDihpIgYmFydQovLyBUYW1iYWggZnVuZ3NpIGRpIHNpbmkgc2FhdCBCQUNLVVBfU0NIRU1BX1ZFUlNJT04gbmFpay4KY29uc3QgX3BNaWdyYXRvcnMgPSB7CiAgLy8gdjEg4oaSIHYyOiB0YW1iYWggdXVpZCBrZSBwcm9maWwgKyBwcm9maWxJZCBrZSByaXdheWF0ICsgbGFzdFVzZWQgKyBzbmFwc2hvdFZlcnNpb24KICAxOiBmdW5jdGlvbihkYXRhKSB7CiAgICAoZGF0YS5wcm9maWwgfHwgW10pLmZvckVhY2gocCA9PiB7CiAgICAgIGlmICghcC51dWlkKSAgICAgcC51dWlkICAgICA9IHAuaWQgfHwgcFVVSUQoKTsKICAgICAgaWYgKCFwLm1ldGEpICAgICBwLm1ldGEgICAgID0ge307CiAgICAgIGlmICghcC5sYXN0VXNlZCkgcC5sYXN0VXNlZCA9IDA7ICAgLy8gW0EuMV0gc2VlZCBsYXN0VXNlZAogICAgfSk7CiAgICBsZXQgcHJvZmlsID0gZGF0YS5wcm9maWwgfHwgW107CiAgICAoZGF0YS5yaXdheWF0IHx8IFtdKS5mb3JFYWNoKHIgPT4gewogICAgICBpZiAoIXIucHJvZmlsSWQpIHsKICAgICAgICBsZXQgbWF0Y2ggPSBwcm9maWwuZmluZChwID0+IHAubmFtYSAmJiByLnNpc3dhICYmCiAgICAgICAgICBwLm5hbWEudG9Mb3dlckNhc2UoKSA9PT0gci5zaXN3YS50b0xvd2VyQ2FzZSgpKTsKICAgICAgICByLnByb2ZpbElkID0gbWF0Y2ggPyBtYXRjaC51dWlkIDogbnVsbDsKICAgICAgfQogICAgICBpZiAoIXIuaWQgfHwgIXIuaWQuc3RhcnRzV2l0aCgncndfJykpIHIuaWQgPSAncndfJyArIHBVVUlEKCk7CiAgICAgIGlmICghci5zbmFwc2hvdFZlcnNpb24pIHIuc25hcHNob3RWZXJzaW9uID0gMTsgLy8gW0EuMl0gc2VlZCBzbmFwc2hvdFZlcnNpb24KICAgIH0pOwogICAgZGF0YS5fc2NoZW1hID0gMjsKICAgIHJldHVybiBkYXRhOwogIH0sCiAgLy8gdjIg4oaSIHYzOiB0YW1iYWggZmllbGQgX3Blc2VydGFfbGFiZWwgZGFuIF9pbnN0aXR1c2lfbGFiZWwgcGFkYSByaXdheWF0CiAgLy8gRmllbGQgaW5pIG9wc2lvbmFsIOKAlCBudWxsIGJlcmFydGkgUG9ydGFsIGd1bmFrYW4gbGFiZWwgZGVmYXVsdCBTRVJWRVJfQlJBTkQKICAyOiBmdW5jdGlvbihkYXRhKSB7CiAgICBkYXRhLnJpd2F5YXQgPSAoZGF0YS5yaXdheWF0IHx8IFtdKS5tYXAoZnVuY3Rpb24ocikgewogICAgICByZXR1cm4gT2JqZWN0LmFzc2lnbih7IF9wZXNlcnRhX2xhYmVsOiBudWxsLCBfaW5zdGl0dXNpX2xhYmVsOiBudWxsIH0sIHIpOwogICAgfSk7CiAgICBkYXRhLl9zY2hlbWEgPSAzOwogICAgcmV0dXJuIGRhdGE7CiAgfSwKfTsKCi8vIEphbGFua2FuIG1pZ3Jhc2kgZGF0YSBkaSBsb2NhbFN0b3JhZ2UgamlrYSBza2VtYSBsYW1hCmZ1bmN0aW9uIF9wTWlncmFzaSgpIHsKICB0cnkgewogICAgbGV0IHByb2ZpbFJhdyAgID0gbG9jYWxTdG9yYWdlLmdldEl0ZW0oTFNfUFJPRklMKTsKICAgIGxldCByaXdheWF0UmF3ICA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKExTX1JJV0FZQVQpOwogICAgaWYgKCFwcm9maWxSYXcgJiYgIXJpd2F5YXRSYXcpIHJldHVybjsgLy8gZGF0YSBrb3NvbmcsIHRpZGFrIHBlcmx1IG1pZ3Jhc2kKCiAgICBsZXQgcHJvZmlsICAgPSBKU09OLnBhcnNlKHByb2ZpbFJhdyAgfHwgJ1tdJyk7CiAgICBsZXQgcml3YXlhdCAgPSBKU09OLnBhcnNlKHJpd2F5YXRSYXcgfHwgJ1tdJyk7CgogICAgLy8gRGV0ZWtzaSB2ZXJzaSBza2VtYSBzYWF0IGluaQogICAgbGV0IGN1cnJlbnRTY2hlbWEgPSAxOwogICAgaWYgKHByb2ZpbC5sZW5ndGggPiAwICYmIHByb2ZpbFswXS51dWlkKSBjdXJyZW50U2NoZW1hID0gMjsKICAgIC8vIHYzOiBjZWsgZmllbGQgX3Blc2VydGFfbGFiZWwgZGkgcml3YXlhdCBwZXJ0YW1hCiAgICBpZiAoY3VycmVudFNjaGVtYSA+PSAyICYmIHJpd2F5YXQubGVuZ3RoID4gMCAmJiB0eXBlb2Ygcml3YXlhdFswXS5fcGVzZXJ0YV9sYWJlbCAhPT0gJ3VuZGVmaW5lZCcpIGN1cnJlbnRTY2hlbWEgPSAzOwoKICAgIGlmIChjdXJyZW50U2NoZW1hID49IEJBQ0tVUF9TQ0hFTUFfVkVSU0lPTikgcmV0dXJuOyAvLyBzdWRhaCB1cC10by1kYXRlCgogICAgY29uc29sZS5sb2coJ1tQb3J0YWxdIE1pZ3Jhc2kgc2tlbWEgdicgKyBjdXJyZW50U2NoZW1hICsgJyDihpIgdicgKyBCQUNLVVBfU0NIRU1BX1ZFUlNJT04pOwogICAgbGV0IGRhdGEgPSB7IHByb2ZpbCwgcml3YXlhdCwgX3NjaGVtYTogY3VycmVudFNjaGVtYSB9OwogICAgZm9yIChsZXQgdiA9IGN1cnJlbnRTY2hlbWE7IHYgPCBCQUNLVVBfU0NIRU1BX1ZFUlNJT047IHYrKykgewogICAgICBpZiAoX3BNaWdyYXRvcnNbdl0pIGRhdGEgPSBfcE1pZ3JhdG9yc1t2XShkYXRhKTsKICAgIH0KICAgIHBQcm9maWxTaW1wYW4oZGF0YS5wcm9maWwpOwogICAgcFJpd2F5YXRTaW1wYW5MaXN0KGRhdGEucml3YXlhdCk7CiAgICBjb25zb2xlLmxvZygnW1BvcnRhbF0gTWlncmFzaSBzZWxlc2FpLicpOwogIH0gY2F0Y2goZSkgeyBjb25zb2xlLndhcm4oJ1tQb3J0YWxdIE1pZ3Jhc2kgZXJyb3I6JywgZSk7IH0KfQoKZnVuY3Rpb24gcFJlbmRlckJhY2t1cEluZm8oKSB7CiAgbGV0IHByb2ZpbCAgPSBwUHJvZmlsU2VtdWEoKTsKICBsZXQgcml3YXlhdCA9IHBSaXdheWF0U2VtdWEoKTsKICBsZXQgclByb2ZpbCA9IHBSaXdheWF0UHJvZmlsKCkubGVuZ3RoOwogIGxldCBlbCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLWJhY2t1cC1pbmZvJyk7CiAgaWYgKGVsKSBlbC5pbm5lckhUTUwgPQogICAgJ/Cfk4sgPHN0cm9uZz4nICsgcHJvZmlsLmxlbmd0aCArICc8L3N0cm9uZz4gcHJvZmlsIMK3ICcgKwogICAgJzxzdHJvbmc+JyArIHJpd2F5YXQubGVuZ3RoICsgJzwvc3Ryb25nPiB0b3RhbCByaXdheWF0ICcgKwogICAgJyg8c3Ryb25nPicgKyByUHJvZmlsICsgJzwvc3Ryb25nPiBtaWxpayBwcm9maWwgYWt0aWYpIMK3ICcgKwogICAgJ1NrZW1hIHYnICsgQkFDS1VQX1NDSEVNQV9WRVJTSU9OICsgJzxicj4nICsKICAgICc8c21hbGwgc3R5bGU9ImNvbG9yOnZhcigtLWdyYXktc29mdCkiPlNlbXVhIGRhdGEgdGVyc2ltcGFuIGxva2FsIGRpIHBlcmFuZ2thdCBpbmkuPC9zbWFsbD4nOwp9CgpmdW5jdGlvbiBwRWtzcG9yKCkgewogIGxldCBwcm9maWwgID0gcFByb2ZpbFNlbXVhKCk7CiAgbGV0IHJpd2F5YXQgPSBwUml3YXlhdFNlbXVhKCk7CiAgLy8gWzRdIE1ldGFkYXRhIHZlcnNpICYgc2tlbWEKICBsZXQgcGF5bG9hZCA9IHsKICAgIF9hcHAgICAgICAgICAgOiAnQ0JUIEthYnV0IERpZ2l0YWwgUG9ydGFsJywKICAgIF9zY2hlbWEgICAgICAgOiBCQUNLVVBfU0NIRU1BX1ZFUlNJT04sCiAgICBfdmVyc2lfYXBwICAgIDogJ3Y3LjIuMCcsCiAgICBfdGFuZ2dhbCAgICAgIDogbmV3IERhdGUoKS50b0lTT1N0cmluZygpLAogICAgX2RldmljZSAgICAgICA6IHR5cGVvZiBuYXZpZ2F0b3IgIT09ICd1bmRlZmluZWQnID8gbmF2aWdhdG9yLnVzZXJBZ2VudC5zbGljZSgwLCA4MCkgOiAnJywKICAgIF9wcm9maWxfY291bnQgOiBwcm9maWwubGVuZ3RoLAogICAgX3Jpd2F5YXRfY291bnQ6IHJpd2F5YXQubGVuZ3RoLAogICAgcHJvZmlsLAogICAgcml3YXlhdAogIH07CiAgbGV0IGJsb2IgPSBuZXcgQmxvYihbSlNPTi5zdHJpbmdpZnkocGF5bG9hZCwgbnVsbCwgMildLCB7IHR5cGU6ICdhcHBsaWNhdGlvbi9qc29uJyB9KTsKICBsZXQgdXJsICA9IFVSTC5jcmVhdGVPYmplY3RVUkwoYmxvYik7CiAgbGV0IGEgICAgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdhJyk7CiAgYS5ocmVmICAgPSB1cmw7CiAgbGV0IHRnbCAgPSBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCkuc2xpY2UoMCwgMTApOwogIGEuZG93bmxvYWQgPSAnYmFja3VwX3BvcnRhbF9jYnRfJyArIHRnbCArICdfdicgKyBCQUNLVVBfU0NIRU1BX1ZFUlNJT04gKyAnLmpzb24nOwogIGEuY2xpY2soKTsKICBVUkwucmV2b2tlT2JqZWN0VVJMKHVybCk7Cn0KCmZ1bmN0aW9uIHBJbXBvcigpIHsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1maWxlLWltcG9yJykudmFsdWUgPSAnJzsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1maWxlLWltcG9yJykuY2xpY2soKTsKfQoKZnVuY3Rpb24gcEZpbGVJbXBvcihpbnB1dCkgewogIGxldCBmaWxlID0gaW5wdXQuZmlsZXNbMF07CiAgaWYgKCFmaWxlKSByZXR1cm47CiAgbGV0IHJlYWRlciA9IG5ldyBGaWxlUmVhZGVyKCk7CiAgcmVhZGVyLm9ubG9hZCA9IGZ1bmN0aW9uKGUpIHsKICAgIHRyeSB7CiAgICAgIGxldCBkYXRhID0gSlNPTi5wYXJzZShlLnRhcmdldC5yZXN1bHQpOwogICAgICBpZiAoIWRhdGEucHJvZmlsICYmICFkYXRhLnJpd2F5YXQpCiAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdGb3JtYXQgYmFja3VwIHRpZGFrIHZhbGlkLicpOwoKICAgICAgLy8gWzRdIEphbGFua2FuIG1pZ3Jhc2kgc2tlbWEgamlrYSBiYWNrdXAgYmVyYXNhbCBkYXJpIHZlcnNpIGxhbWEKICAgICAgbGV0IGJhY2t1cFNjaGVtYSA9IGRhdGEuX3NjaGVtYSB8fCAxOwogICAgICBpZiAoYmFja3VwU2NoZW1hIDwgQkFDS1VQX1NDSEVNQV9WRVJTSU9OKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1tQb3J0YWxdIE1pZ3Jhc2kgYmFja3VwIHYnICsgYmFja3VwU2NoZW1hICsgJyDihpIgdicgKyBCQUNLVVBfU0NIRU1BX1ZFUlNJT04pOwogICAgICAgIGZvciAobGV0IHYgPSBiYWNrdXBTY2hlbWE7IHYgPCBCQUNLVVBfU0NIRU1BX1ZFUlNJT047IHYrKykgewogICAgICAgICAgaWYgKF9wTWlncmF0b3JzW3ZdKSBkYXRhID0gX3BNaWdyYXRvcnNbdl0oZGF0YSk7CiAgICAgICAgfQogICAgICB9CiAgICAgIF9wSW1wb3JEYXRhID0gZGF0YTsKCiAgICAgIGxldCBqdW1sYWhQID0gKGRhdGEucHJvZmlsICB8fCBbXSkubGVuZ3RoOwogICAgICBsZXQganVtbGFoUiA9IChkYXRhLnJpd2F5YXQgfHwgW10pLmxlbmd0aDsKICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3AtaW1wb3ItaW5mbycpLmlubmVySFRNTCA9CiAgICAgICAgJzxzdHJvbmc+U2tlbWEgYmFja3VwOjwvc3Ryb25nPiB2JyArIGJhY2t1cFNjaGVtYSArCiAgICAgICAgKGJhY2t1cFNjaGVtYSA8IEJBQ0tVUF9TQ0hFTUFfVkVSU0lPTiA/ICcgKGFrYW4gZGltaWdyYXNpIGtlIHYnICsgQkFDS1VQX1NDSEVNQV9WRVJTSU9OICsgJyknIDogJycpICsKICAgICAgICAnPGJyPjxzdHJvbmc+UHJvZmlsOjwvc3Ryb25nPiAnICsganVtbGFoUCArICcgcHJvZmlsJyArCiAgICAgICAgJzxicj48c3Ryb25nPlJpd2F5YXQ6PC9zdHJvbmc+ICcgKyBqdW1sYWhSICsgJyB1amlhbicgKwogICAgICAgICc8YnI+PGJyPjxlbT5QaWxpaCBjYXJhIGltcG9yOjwvZW0+JzsKICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3AtbW9kYWwtaW1wb3InKS5jbGFzc0xpc3QuYWRkKCdha3RpZicpOwogICAgfSBjYXRjaChlcnIpIHsKICAgICAgYWxlcnQoJ0ZpbGUgdGlkYWsgdmFsaWQ6ICcgKyBlcnIubWVzc2FnZSk7CiAgICB9CiAgfTsKICByZWFkZXIucmVhZEFzVGV4dChmaWxlKTsKfQoKZnVuY3Rpb24gcEltcG9yX0dhYnVuZygpIHsKICBpZiAoIV9wSW1wb3JEYXRhKSByZXR1cm47CiAgLy8gWzFdIEdhYnVuZyBwcm9maWwgYmVyZGFzYXJrYW4gVVVJRCAoYnVrYW4gbmFtYSkKICBsZXQgcHJvZmlsICAgPSBwUHJvZmlsU2VtdWEoKTsKICBsZXQgdXVpZEFkYSAgPSBuZXcgU2V0KHByb2ZpbC5tYXAocCA9PiBwLnV1aWQpKTsKICAoX3BJbXBvckRhdGEucHJvZmlsIHx8IFtdKS5mb3JFYWNoKHAgPT4gewogICAgaWYgKCF1dWlkQWRhLmhhcyhwLnV1aWQpKSBwcm9maWwucHVzaChwKTsKICB9KTsKICBwUHJvZmlsU2ltcGFuKHByb2ZpbCk7CiAgLy8gWzJdIEdhYnVuZyByaXdheWF0IGJlcmRhc2Fya2FuIGlkIFVVSUQKICBsZXQgcml3YXlhdCA9IHBSaXdheWF0U2VtdWEoKTsKICBsZXQgaWRBZGEgICA9IG5ldyBTZXQocml3YXlhdC5tYXAociA9PiByLmlkKSk7CiAgKF9wSW1wb3JEYXRhLnJpd2F5YXQgfHwgW10pLmZvckVhY2gociA9PiB7CiAgICBpZiAoIWlkQWRhLmhhcyhyLmlkKSkgcml3YXlhdC5wdXNoKHIpOwogIH0pOwogIHJpd2F5YXQuc29ydCgoYSwgYikgPT4gbmV3IERhdGUoYi50YW5nZ2FsKSAtIG5ldyBEYXRlKGEudGFuZ2dhbCkpOwogIHBSaXdheWF0U2ltcGFuTGlzdChyaXdheWF0KTsKICBwTW9kYWxJbXBUdXR1cCgpOwogIGFsZXJ0KCfinIUgRGF0YSBiZXJoYXNpbCBkaWdhYnVuZ2thbi4nKTsKICBwUmVuZGVyQmFja3VwSW5mbygpOwp9CgpmdW5jdGlvbiBwSW1wb3JfR2FudGkoKSB7CiAgaWYgKCFfcEltcG9yRGF0YSkgcmV0dXJuOwogIHBNb2RhbFRhbXBpbCgKICAgICfimqDvuI8gR2FudGkgU2VtdWEgRGF0YScsCiAgICAnU2VtdWEgcHJvZmlsIGRhbiByaXdheWF0IHNhYXQgaW5pIGFrYW4gZGl0aW1wYS4gTGFuanV0a2FuPycsCiAgICAnJywgJ3lhIG1lcmFoJywgZnVuY3Rpb24oKSB7CiAgICAgIHBQcm9maWxTaW1wYW4oX3BJbXBvckRhdGEucHJvZmlsIHx8IFtdKTsKICAgICAgcFJpd2F5YXRTaW1wYW5MaXN0KF9wSW1wb3JEYXRhLnJpd2F5YXQgfHwgW10pOwogICAgICBwTW9kYWxJbXBUdXR1cCgpOwogICAgICBwTW9kYWxUdXR1cCgpOwogICAgICBhbGVydCgn4pyFIERhdGEgYmVyaGFzaWwgZGlnYW50aS4nKTsKICAgICAgcFJlbmRlckJhY2t1cEluZm8oKTsKICAgIH0KICApOwp9CgpmdW5jdGlvbiBwSGFwdXNTZW11YSgpIHsKICBwTW9kYWxUYW1waWwoCiAgICAn8J+XkSBIYXB1cyBTZW11YSBEYXRhIFBvcnRhbCcsCiAgICAnUHJvZmlsIGRhbiByaXdheWF0IHVqaWFuIGFrYW4gZGloYXB1cyBwZXJtYW5lbi5cbkRhdGEgQ0JUICh0b2tlbiwgZHJhZnQpIHRpZGFrIHRlcnBlbmdhcnVoLicsCiAgICAnJywgJ3lhIG1lcmFoJywgZnVuY3Rpb24oKSB7CiAgICAgIHRyeSB7CiAgICAgICAgbG9jYWxTdG9yYWdlLnJlbW92ZUl0ZW0oTFNfUFJPRklMKTsKICAgICAgICBsb2NhbFN0b3JhZ2UucmVtb3ZlSXRlbShMU19SSVdBWUFUKTsKICAgICAgfSBjYXRjaChlKSB7fQogICAgICBwTW9kYWxUdXR1cCgpOwogICAgICBwUmVuZGVyQmFja3VwSW5mbygpOwogICAgICBwUmVuZGVyUHJvZmlsTGlzdCgpOwogICAgICBhbGVydCgn4pyFIERhdGEgcG9ydGFsIHRlbGFoIGRpaGFwdXMuJyk7CiAgICB9CiAgKTsKfQoKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCi8vICBbNV0gSUtMQU4gLyBQUk9NT1NJIOKAlCBwcm92aWRlci1hZ25vc3RpYwovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKCi8vIEFrdGlma2FuIHNsb3QgeWFuZyByZWxldmFuIHVudHVrIHpvbmEgKGxheWFyKSB5YW5nIHNlZGFuZyBkaXRhbXBpbGthbi4KLy8gSW5qZWN0IGhhbnlhIGRpamFsYW5rYW4gc2VrYWxpIHBlciBzbG90ICh2aWEgX2FkSW5qZWN0ZWQgc2V0KS4KZnVuY3Rpb24gX2FkQWt0aWZrYW5ab25hKHpvbmFJZCkgewogIGlmICghTUFTVEVSX0NPTkZJRy5hbGxvd0FkcyB8fCAhUF9BRF9DT05GSUcuZW5hYmxlZCkgcmV0dXJuOwogIC8vIFpvbmEgdWppYW46IFRJREFLIFBFUk5BSCB0YW1waWwgaWtsYW4KICBpZiAoWydleGFtLXNjcmVlbicsICdsb2dpbi1zY3JlZW4nXS5pbmNsdWRlcyh6b25hSWQpKSByZXR1cm47CgogIE9iamVjdC5lbnRyaWVzKFBfQURfQ09ORklHLnNsb3RzKS5mb3JFYWNoKChbc2xvdElkLCBjZmddKSA9PiB7CiAgICBpZiAoIWNmZy56b25lcy5pbmNsdWRlcyh6b25hSWQpKSByZXR1cm47CiAgICBsZXQgZWwgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChzbG90SWQpOwogICAgaWYgKCFlbCkgcmV0dXJuOwogICAgZWwuY2xhc3NMaXN0LmFkZCgnYWt0aWYnKTsKICAgIC8vIEluamVjdCBrb250ZW4gaWtsYW4gaGFueWEgc2VrYWxpCiAgICBpZiAoIV9hZEluamVjdGVkLmhhcyhzbG90SWQpKSB7CiAgICAgIF9hZEluamVjdGVkLmFkZChzbG90SWQpOwogICAgICB0cnkgeyBQX0FEX0NPTkZJRy5pbmplY3Qoc2xvdElkLCBlbCwgY2ZnKTsgfSBjYXRjaChlKSB7IGNvbnNvbGUud2FybignW0FkIGluamVjdF0nLCBlKTsgfQogICAgfQogIH0pOwp9CgovLyBBUEkgcHVibGlrOiB0b2dnbGUgc2VtdWEgc2xvdCDigJQgdGlkYWsgYmVybGFrdSBzYWF0IHVqaWFuIGFrdGlmCmZ1bmN0aW9uIHBvcnRhbEFkVG9nZ2xlKGFrdGlmKSB7CiAgUF9BRF9DT05GSUcuZW5hYmxlZCA9IGFrdGlmOwogIGlmICghYWt0aWYpIHsKICAgIC8vIE5vbmFrdGlma2FuIHNlbXVhIHNsb3QKICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJy5wLWFkLXNsb3QnKS5mb3JFYWNoKGVsID0+IGVsLmNsYXNzTGlzdC5yZW1vdmUoJ2FrdGlmJykpOwogIH0KfQoKLy8gQVBJIHB1YmxpazogZGFmdGFya2FuIHByb3ZpZGVyIGlrbGFuIGRhcmkgbHVhcgovLyBDb250b2g6IHBvcnRhbEFkU2V0UHJvdmlkZXIoJ2dvb2dsZS1hZHNlbnNlJywgKHNsb3RJZCwgZWwsIGNmZykgPT4geyAuLi4gfSkKZnVuY3Rpb24gcG9ydGFsQWRTZXRQcm92aWRlcihwcm92aWRlcklkLCBpbmplY3RGbikgewogIFBfQURfQ09ORklHLnByb3ZpZGVyID0gcHJvdmlkZXJJZDsKICBQX0FEX0NPTkZJRy5pbmplY3QgICA9IGluamVjdEZuOwogIF9hZEluamVjdGVkLmNsZWFyKCk7ICAvLyByZXNldCBhZ2FyIHByb3ZpZGVyIGJhcnUgYmlzYSBpbmplY3QgdWxhbmcKfQoKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCi8vICBNT0RBTCBQT1JUQUwgKGdlbmVyaWMpCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkApmdW5jdGlvbiBwTW9kYWxUYW1waWwoanVkdWwsIHBlc2FuLCBleHRyYSwgeWFLbHMsIG9uWWEpIHsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1tb2RhbC1qdWR1bCcpLnRleHRDb250ZW50ID0ganVkdWw7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3AtbW9kYWwtcGVzYW4nKS50ZXh0Q29udGVudCA9IHBlc2FuOwogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLW1vZGFsLWV4dHJhJykuaW5uZXJIVE1MICAgPSBleHRyYSB8fCAnJzsKICBsZXQgeWEgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1tb2RhbC15YScpOwogIHlhLmNsYXNzTmFtZSA9IHlhS2xzIHx8ICd5YSc7CiAgeWEub25jbGljayAgID0gb25ZYSB8fCBwTW9kYWxUdXR1cDsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncC1tb2RhbCcpLmNsYXNzTGlzdC5hZGQoJ2FrdGlmJyk7Cn0KZnVuY3Rpb24gcE1vZGFsVHV0dXAoKSB7CiAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3AtbW9kYWwnKS5jbGFzc0xpc3QucmVtb3ZlKCdha3RpZicpOwp9CmZ1bmN0aW9uIHBNb2RhbEltcFR1dHVwKCkgewogIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwLW1vZGFsLWltcG9yJykuY2xhc3NMaXN0LnJlbW92ZSgnYWt0aWYnKTsKICBfcEltcG9yRGF0YSA9IG51bGw7Cn0KCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAovLyAgSEVMUEVSCi8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkApmdW5jdGlvbiBfZXNjKHMpIHsKICByZXR1cm4gU3RyaW5nKHMgfHwgJycpLnJlcGxhY2UoLyYvZywnJmFtcDsnKS5yZXBsYWNlKC88L2csJyZsdDsnKS5yZXBsYWNlKC8+L2csJyZndDsnKTsKfQpmdW5jdGlvbiBfcHJlZGlrYXRLbHMocCkgewogIGlmICghcCkgcmV0dXJuICdEJzsKICBsZXQgYyA9IHAuY2hhckF0KDApLnRvVXBwZXJDYXNlKCk7CiAgcmV0dXJuIFsnQScsJ0InLCdDJywnRCcsJ0UnXS5pbmNsdWRlcyhjKSA/IGMgOiAnRCc7Cn0KCg=="))))</script>
+
+
+
+<!-- PROTECTED:WM-MRQ5FS3BDQLRC -->
+<script data-pid="WM-MRQ5FS3BDQLRC">
+(function(){
+var _a=39788,_b=91644,_c=98139,_d=35189,_e=35799;
+document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&e.key==='U')){e.preventDefault();}});
+(function(){var _dt=false;setInterval(function(){if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){if(!_dt){_dt=true;document.body.innerHTML='<div style="font:16px sans-serif;text-align:center;padding:4rem"><h2>⚠ Sesi Tidak Valid</h2></div>';}}},1000);})();
+console.log('%c⚠ HAK CIPTA\n%c© 2026 Rapian Hasanuddin | rapian0279@gmail.com\nID: WM-MRQ5FS3BDQLRC','color:#f26b6b;font-size:15px;font-weight:bold','color:#888;font-size:12px');
+(function(){var h=window.location.hostname;if(h&&h!=='github.com'&&h!=='www.github.com'){document.body.innerHTML='<div style="font:16px sans-serif;text-align:center;padding:4rem"><h2>Akses Tidak Sah</h2></div>';}})();
+})();
 </script>
-
-
-<script data-pwa-converter="v2">
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('[PWA] SW registered:', reg.scope))
-      .catch(err => console.error('[PWA] SW failed:', err));
-  });
-}
-let _pwaPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  _pwaPrompt = e;
-  const b = document.getElementById('_pwa_banner');
-  if (b) b.style.display = 'flex';
-});
-function _pwaInstall() {
-  if (!_pwaPrompt) return;
-  _pwaPrompt.prompt();
-  _pwaPrompt.userChoice.then(r => {
-    console.log('[PWA] Install:', r.outcome);
-    _pwaPrompt = null;
-    const b = document.getElementById('_pwa_banner');
-    if (b) b.style.display = 'none';
-  });
-}
-window.addEventListener('appinstalled', () => {
-  const b = document.getElementById('_pwa_banner');
-  if (b) b.style.display = 'none';
-});</script></body></html>
+</body></html>/* __WM:WM-MRQ5FS3BDQLRC:494fff8e */--_wm-id:"WM-MRQ5F";--_wm-d:"2026-07-18";
