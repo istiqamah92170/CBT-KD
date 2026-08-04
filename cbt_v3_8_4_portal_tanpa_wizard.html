@@ -1348,17 +1348,21 @@ function simpanStatusSelesai(data) {
 
 // A-3: guru bisa hapus cache GAS via HTML agar perubahan konfigurasi (termasuk
 // buka_pembahasan) langsung efektif tanpa menunggu 5 menit TTL cache GAS
+function _kirimHapusCacheGAS(url) {
+  if (!url) return;
+  try {
+    fetch(url, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'hapusCache' })
+    }).catch(function(){});
+  } catch(e) {}
+}
+
 function hapusCacheGAS() {
   if (!_urlGasAktif) { alert('Belum terhubung ke GAS.'); return; }
-  fetch(_urlGasAktif, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify({ action: 'hapusCache' })
-  }).then(function() {
-    alert('✅ Cache GAS berhasil dihapus. Perubahan konfigurasi aktif pada login berikutnya.');
-  }).catch(function() {
-    alert('⚠️ Permintaan terkirim (tidak bisa dikonfirmasi karena mode no-cors).');
-  });
+  _kirimHapusCacheGAS(_urlGasAktif);
+  alert('✅ Permintaan hapus cache terkirim. Perubahan konfigurasi aktif pada login berikutnya.');
 }
 
 function resetDevice() {
@@ -1451,6 +1455,14 @@ function getOrInitDevice() {
 // perlu token apa pun. Berguna kalau ternyata link yang ditempel salah/lama.
 function pKembaliKeInputLink() {
   _muatSoalReqId++; // batalkan efek permintaan lama yang mungkin masih berjalan di background
+  // BUG-FIX (2026-07): reset ini dulu cuma bersihkan tampilan di browser --
+  // kalau soal yang salah itu masih nyangkut di cache SERVER (mis. karena
+  // guru belum sempat klik "Hapus Cache Soal" di sheet-nya), reset di sini
+  // tidak berpengaruh. Sekarang reset juga otomatis mengirim permintaan
+  // hapus cache ke server untuk URL yang sedang aktif -- setara klik "Hapus
+  // Cache Soal" di menu sheet, tapi dari sisi peserta/guru, tanpa perlu
+  // buka spreadsheet-nya sama sekali.
+  _kirimHapusCacheGAS(_urlGasAktif);
   JUDUL = '';
   soalData = [];
   soalReady = false;
