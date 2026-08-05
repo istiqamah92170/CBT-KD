@@ -1196,20 +1196,21 @@ document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible' && ujianAktif) aktifkanWakeLock();
 });
 
-// Render teks pertanyaan: teks Arab dibungkus span khusus (perilaku LAMA,
-// dipertahankan apa adanya untuk baris campuran latin+arab atau latin murni).
-// FITUR BARU (2026-07): baris yang MURNI Arab (tanpa huruf latin, dipisah
-// Enter di sheet) dirender sebagai blok tersendiri rata kanan (RTL) --
-// permintaan khusus, logika diadaptasi dari referensi yang diberikan.
-function renderTeksQ(el, teks) {
-  if (!teks) { el.textContent = ''; return; }
+// FITUR BARU (2026-07): format teks Arab (dipakai untuk pertanyaan & pembahasan
+// saja -- field lain seperti rubrik/kunci dan jawaban peserta TIDAK disentuh).
+// Baris yang MURNI Arab (tanpa huruf latin, dipisah Enter) dirender sebagai
+// blok tersendiri rata kanan (RTL). Baris campuran latin+arab atau latin murni
+// TIDAK diubah perataannya -- perilaku LAMA dipertahankan apa adanya, cuma teks
+// Arab-nya dibungkus span (ukuran font ikut var(--font-arab) yang sudah ada).
+function formatTeksArabHTML(teks) {
+  if (!teks) return '';
   let arabRe       = new RegExp('[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+', 'g');
   let adaArabRe    = new RegExp('[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]');
   let adaLatinRe   = /[a-zA-Z]/;
   let escHtml      = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   let baris = teks.split('\n');
-  let html  = baris.map((line, i) => {
+  return baris.map((line, i) => {
     let bersih = line.trim();
     // SYARAT rata kanan: baris ada teks Arab-nya, DAN sama sekali tidak
     // bercampur huruf latin -- persis syarat yang diminta.
@@ -1221,8 +1222,13 @@ function renderTeksQ(el, teks) {
     let processed = escHtml(line).replace(arabRe, '<span class="arab-txt">$&</span>');
     return (i === baris.length - 1) ? processed : processed + '\n'; // pertahankan baris baru lewat white-space:pre-wrap seperti sebelumnya
   }).join('');
+}
 
-  el.innerHTML = html;
+// Render teks pertanyaan ke satu elemen DOM (halaman ujian) -- tinggal
+// memanggil formatTeksArabHTML() di atas.
+function renderTeksQ(el, teks) {
+  if (!teks) { el.textContent = ''; return; }
+  el.innerHTML = formatTeksArabHTML(teks);
 }
 let BOBOT_ESAI = 30;       // bobot Esai (dari konfigurasi)
 let resetToken = "";   // token khusus reset perangkat (dari sheet Konfigurasi: reset_token)
@@ -2268,14 +2274,14 @@ function buatHtmlAnalisis() {
   let soalUrutAsli = soalData.slice().sort((a, b) => a.no - b.no);
   soalUrutAsli.forEach(s => {
     let no=s.no, tipe=s.tipe;
-    let pemb = (s.pembahasan||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    let pemb = formatTeksArabHTML(s.pembahasan||'');
     let poinBar = `<div class="poin-bar">Poin soal ini: ${s.poin}</div>`;
     if (tipe === 'esai') {
       let teks=jawEsai[no]||'', diisi=teks.trim().length>0;
       let rubrik=(s.kunci||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       html+=`<div class="ana-item">
   <div class="ana-head esai-p"><span class="ana-no">No.${no} <span style="font-size:10px;background:var(--orange-light);color:var(--orange);padding:1px 7px;border-radius:8px;border:1px solid #F5C6A0;margin-left:6px;">ESAI</span></span><span class="ana-badge esai-p">${diisi?'Diisi':'Kosong'}</span></div>
-  ${s.pertanyaan?`<div class="ana-teks">${s.pertanyaan.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
+  ${s.pertanyaan?`<div class="ana-teks">${formatTeksArabHTML(s.pertanyaan)}</div>`:''}
   ${s.url_gambar?`<div class="ana-img"><img src="${gdrive(s.url_gambar)}" loading="lazy"></div>`:''}
   <div class="esai-ans"><strong>Jawaban Anda:</strong><div class="teks">${diisi?teks.replace(/</g,'&lt;').replace(/>/g,'&gt;'):'<span style="color:var(--gray-soft);font-style:italic;">Tidak diisi</span>'}</div></div>
   ${rubrik?`<div class="rubrik-bar"><strong>Rubrik/Kunci:</strong> ${rubrik}</div>`:''}
@@ -2317,7 +2323,7 @@ function buatHtmlAnalisis() {
   <div class="ana-head ${status}"><span class="ana-no">No.${no} <span style="font-size:10px;background:var(--blue-light);color:var(--blue-main);padding:1px 7px;border-radius:8px;border:1px solid #BDD4F5;margin-left:6px;">${tipe==='pg_teks'?'PG TEKS':'PG GAMBAR'}</span></span>
     <div style="display:flex;gap:6px;align-items:center;">${jwb?`<span style="font-size:12px;color:var(--gray-mid);">Jawaban: <b>${jwb}</b></span>`:''}
     <span class="ana-badge ${status}">${label}</span></div></div>
-  ${s.pertanyaan?`<div class="ana-teks">${s.pertanyaan.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
+  ${s.pertanyaan?`<div class="ana-teks">${formatTeksArabHTML(s.pertanyaan)}</div>`:''}
   ${s.url_gambar?`<div class="ana-img"><img src="${gdrive(s.url_gambar)}" loading="lazy"></div>`:''}
   ${opsiH}
   <div class="kunci-bar">Kunci: ${kunci||'Belum tersedia'}</div>
