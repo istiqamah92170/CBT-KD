@@ -145,6 +145,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 
 .box-teks{background:var(--blue-pale);border:1.5px solid var(--blue-light);border-radius:var(--r-md);padding:18px 20px;margin-bottom:14px;font-size:15px;font-weight:500;line-height:1.75;white-space:pre-wrap;word-break:break-word;width:100%;box-sizing:border-box;min-height:80px;}
 .arab-txt{font-size:var(--font-arab);line-height:1.8;font-family:'Scheherazade New','Traditional Arabic','Amiri',serif;}
+/* FITUR BARU (2026-07): baris yang MURNI teks Arab (tanpa huruf latin sama
+   sekali), dipisah oleh Enter di sheet, dirender sebagai blok tersendiri
+   rata kanan (RTL). Sengaja memakai variable/font Arab yang SUDAH ADA
+   (--font-arab, font sama seperti .arab-txt) supaya konsisten -- bukan
+   font/ukuran baru terpisah. Baris yang bercampur dengan huruf latin TIDAK
+   kena aturan ini, tetap seperti sebelumnya (lihat renderTeksQ()). */
+.arab-line{direction:rtl;text-align:right;font-size:var(--font-arab);line-height:1.8;font-family:'Scheherazade New','Traditional Arabic','Amiri',serif;margin:8px 0;}
 .teks-ilustrasi{max-width:100%;border-radius:var(--r-sm);border:1px solid var(--gray-line);display:block;margin:10px 0;}
 
 .options-grid{display:grid;gap:10px;margin-bottom:24px;}
@@ -1189,13 +1196,33 @@ document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible' && ujianAktif) aktifkanWakeLock();
 });
 
-// Render teks pertanyaan: teks Arab dibungkus span khusus
+// Render teks pertanyaan: teks Arab dibungkus span khusus (perilaku LAMA,
+// dipertahankan apa adanya untuk baris campuran latin+arab atau latin murni).
+// FITUR BARU (2026-07): baris yang MURNI Arab (tanpa huruf latin, dipisah
+// Enter di sheet) dirender sebagai blok tersendiri rata kanan (RTL) --
+// permintaan khusus, logika diadaptasi dari referensi yang diberikan.
 function renderTeksQ(el, teks) {
   if (!teks) { el.textContent = ''; return; }
-  let arabRe = new RegExp('[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]+', 'g');
-  let safe = teks.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-                 .replace(arabRe, '<span class="arab-txt">$&</span>');
-  el.innerHTML = safe;
+  let arabRe       = new RegExp('[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+', 'g');
+  let adaArabRe    = new RegExp('[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]');
+  let adaLatinRe   = /[a-zA-Z]/;
+  let escHtml      = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  let baris = teks.split('\n');
+  let html  = baris.map((line, i) => {
+    let bersih = line.trim();
+    // SYARAT rata kanan: baris ada teks Arab-nya, DAN sama sekali tidak
+    // bercampur huruf latin -- persis syarat yang diminta.
+    if (bersih && adaArabRe.test(bersih) && !adaLatinRe.test(bersih)) {
+      return `<div class="arab-line" dir="rtl">${escHtml(bersih)}</div>`;
+    }
+    // Baris latin murni, atau Arab yang menyatu di tengah kalimat latin ->
+    // TIDAK diubah perataannya, cuma teks Arab-nya dibungkus span (perilaku lama).
+    let processed = escHtml(line).replace(arabRe, '<span class="arab-txt">$&</span>');
+    return (i === baris.length - 1) ? processed : processed + '\n'; // pertahankan baris baru lewat white-space:pre-wrap seperti sebelumnya
+  }).join('');
+
+  el.innerHTML = html;
 }
 let BOBOT_ESAI = 30;       // bobot Esai (dari konfigurasi)
 let resetToken = "";   // token khusus reset perangkat (dari sheet Konfigurasi: reset_token)
