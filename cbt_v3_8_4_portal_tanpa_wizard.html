@@ -205,6 +205,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 
 /* ── HASIL ── */
 .hasil-card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-lg);overflow:hidden;}
+/* BUG-FIX (2026-07): peringatan permanen kalau hasil ujian gagal terkirim
+   ke server -- sengaja mencolok (merah) & tidak otomatis hilang, supaya
+   peserta/guru sadar dan tidak menutup halaman sebelum data aman. */
+.hasil-warn-gagal{background:var(--red-light);border:1.5px solid #F5B7B1;color:var(--red);
+  border-radius:var(--r-md);padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;font-weight:600;}
+.btn-coba-kirim-ulang{display:block;margin-top:10px;background:var(--red);color:white;border:none;
+  border-radius:var(--r-sm);padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 .hasil-head{background:linear-gradient(135deg,#064E3B,#10B981);padding:32px;text-align:center;color:white;}
 .hasil-head h2{font-size:22px;font-weight:800;margin-bottom:6px;}
 .hasil-head p{font-size:14px;opacity:.85;}
@@ -1021,6 +1028,7 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
       <div id="h-pesan-jujur" style="display:none;margin-top:10px;background:rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.6;"></div>
     </div>
     <div class="hasil-body">
+      <div id="hasil-warn-gagal" class="hasil-warn-gagal" style="display:none;"></div>
       <div class="skor-box">
         <div class="skor-angka" id="h-nilai">--</div>
         <div class="skor-sub" id="h-nilai-sub">Nilai Sementara (PG)</div>
@@ -1856,27 +1864,88 @@ function renderOpsiRow(soal, no) {
 //  JAWABAN — SIMPAN DRAFT KE LOCALSTORAGE
 //  (dikirim sekaligus ke Sheet saat selesai)
 // ═══════════════════════════════════════════════
-async function kirimKeSheet(payload) {
-  try {
-    await fetch(_urlGasAktif, {
-      method: 'POST', mode: 'no-cors', redirect: 'follow',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {
-    console.warn('kirimKeSheet error:', e);
+// BUG-FIX (2026-07): sebelumnya kirimKeSheet/kirimBatch cuma dicoba SEKALI,
+// dan kalau gagal (internet putus sesaat, server sibuk, dst) errornya cuma
+// masuk console.warn -- tidak pernah terlihat siapa pun, dan tampilHasilAkhir()
+// tetap dipanggil seolah semuanya berhasil (lihat catatan di selesaiFinal()).
+// Ini penyebab laporan "nilai tampil di HP tapi nama tidak ada di sheet".
+// Sekarang dicoba ulang beberapa kali dan hasilnya (berhasil/gagal)
+// dikembalikan supaya pemanggilnya tahu pasti, bukan menebak.
+//
+// REVISI (2026-07, kombinasi solusi 1+2): sebelumnya SELALU pakai
+// mode:'no-cors', yang membuat balasan server selalu "opaque" (tidak bisa
+// dibaca sama sekali) -- "berhasil" cuma berarti "request sampai ke
+// jaringan", bukan "GAS-nya sukses proses". Endpoint GET di app ini
+// (getDataSoal, getHasilSiswa) sudah terbukti jalan TANPA no-cors dan bisa
+// baca JSON balasannya -- artinya server memang mendukung dibaca lintas-
+// origin (Content-Type tetap 'text/plain' spy tidak memicu preflight CORS
+// yang tidak didukung Apps Script). Jadi no-cors dilepas di sini juga,
+// supaya bisa membaca balasan {status:'ok'} yang sebenarnya. Kalau ternyata
+// CORS diblokir (fetch gagal total), percobaan TERAKHIR jatuh ke no-cors
+// (fire-and-forget) sebagai jaring pengaman -- tapi kepastian akhir tetap
+// ditentukan lewat verifikasi getHasilSiswa di _kirimSemuaHasilUjian(),
+// bukan cuma dari sini.
+async function _kirimKeGAS(url, payload, maxRetry) {
+  let percobaan = 0;
+  while (percobaan <= maxRetry) {
+    try {
+      let resp = await fetchDenganTimeout(url, {
+        method: 'POST', redirect: 'follow',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify(payload)
+      }, TIMEOUT_MS);
+      let data = null;
+      try { data = await resp.json(); } catch(eParse) {}
+      if (data && data.status === 'ok') return true;
+      throw new Error('Respons server tidak sesuai: ' + (data ? JSON.stringify(data) : '(gagal dibaca)'));
+    } catch(e) {
+      percobaan++;
+      console.warn('Percobaan kirim ke-' + percobaan + ' gagal:', e);
+      if (percobaan > maxRetry) {
+        // Jaring pengaman terakhir: kirim mode no-cors (fire-and-forget)
+        // supaya data tetap punya peluang sampai walau balasannya tidak
+        // bisa dibaca dari sini -- verifikasi sungguhan tetap dilakukan
+        // lewat getHasilSiswa di _kirimSemuaHasilUjian().
+        try {
+          await fetchDenganTimeout(url, {
+            method: 'POST', mode: 'no-cors', redirect: 'follow',
+            headers: {'Content-Type': 'text/plain'},
+            body: JSON.stringify(payload)
+          }, TIMEOUT_MS);
+        } catch(e2) {}
+        return false;
+      }
+      await new Promise(r => setTimeout(r, 1500));
+    }
   }
+  return false;
+}
+
+async function kirimKeSheet(payload) {
+  return await _kirimKeGAS(_urlGasAktif, payload, MAX_RETRY);
 }
 
 async function kirimBatch(payloads) {
+  return await _kirimKeGAS(_urlGasAktif, { action:'simpanJawabanBatch', items: payloads }, MAX_RETRY);
+}
+
+// Verifikasi SUNGGUHAN ke server: cek apakah baris Rekap_Akhir untuk
+// siswa+sekolah ini memang sudah ada. `predikat` di endpoint getHasilSiswa
+// (sudah ada, tidak diubah di GAS) HANYA terisi kalau baris rekap-nya
+// ditemukan -- kalau kosong berarti belum tersimpan sama sekali, terlepas
+// dari status fetch pengiriman tadi. Ini bukti paling kuat, bukan tebakan.
+async function _verifikasiTersimpan() {
+  if (!_urlGasAktif || !namaSiswa) return false;
   try {
-    await fetch(_urlGasAktif, {
-      method: 'POST', mode: 'no-cors', redirect: 'follow',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify({ action:'simpanJawabanBatch', items: payloads })
-    });
+    let url = _urlGasAktif + '?action=getHasilSiswa'
+      + '&nama='    + encodeURIComponent(namaSiswa)
+      + '&sekolah=' + encodeURIComponent(namaSekolah);
+    let resp = await fetchDenganTimeout(url, {}, TIMEOUT_MS);
+    let d = await resp.json();
+    return !!(d && d.status === 'ok' && d.predikat && d.predikat.toString().trim());
   } catch(e) {
-    console.warn('kirimBatch error:', e);
+    console.warn('Verifikasi getHasilSiswa gagal:', e);
+    return false;
   }
 }
 
@@ -2057,39 +2126,92 @@ function selesaiFinal() {
 
   portalSimpanRiwayat(); // ← hook Portal: simpan snapshot riwayat
 
-  tampilHasilAkhir();
+  // BUG-FIX (2026-07): dulu tampilHasilAkhir() dipanggil DI SINI, SEBELUM
+  // jawaban & rekap benar-benar terkirim ke server -- pengiriman jalan di
+  // belakang layar tanpa ditunggu, dan kalau gagal (internet putus sesaat,
+  // dst) errornya cuma masuk console.warn yang tidak pernah dilihat siapa
+  // pun. Akibatnya peserta melihat "Ujian Selesai!" dengan nilai lengkap,
+  // padahal namanya belum tentu masuk ke sheet Jawaban/Rekap_Akhir -- ini
+  // penyebab laporan "nilai tampil di HP tapi nama tidak ada di sheet".
+  // Sekarang: tampilkan status "menyimpan..." dulu, KIRIM DENGAN PERCOBAAN
+  // ULANG OTOMATIS, baru tampilkan hasil akhir SETELAH itu selesai dicoba --
+  // dan kalau tetap gagal setelah semua percobaan, tampilkan peringatan
+  // yang jelas + tombol coba kirim ulang, bukan diam-diam dianggap sukses.
+  setOverlay('Menyimpan hasil ujian ke server...<br><small style="font-weight:400;color:var(--gray-soft);">Mohon jangan tutup halaman ini</small>');
+  document.getElementById('load-overlay').classList.remove('hide');
 
-  // Kumpulkan semua jawaban lalu kirim dalam 1 batch request ke GAS
   (async () => {
-    let items = [];
-    soalData.forEach(s => {
-      let no = s.no, tipe = s.tipe;
-      if (tipe === 'esai') {
-        items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
-          no_soal:no, tipe:'esai', jawaban:jawEsai[no]||'', kunci:s.kunci, poin_soal:s.poin, benar:false });
-      } else {
-        let jwb = jawPG[no]||'';
-        items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
-          no_soal:no, tipe:tipe, jawaban:jwb||'', kunci:s.kunci, poin_soal:s.poin, benar:jwb===s.kunci });
-      }
-    });
-
-    // Kirim semua jawaban dalam 1 request batch
-    await kirimBatch(items);
-
-    // Rekap dikirim setelah batch selesai
-    let hitung = hitungNilai();
-    await kirimKeSheet({
-      action:'rekapAkhir', sekolah:namaSekolah, siswa:namaSiswa,
-      nilai: hitung.poinM > 0 ? Math.round(hitung.poinD / hitung.poinM * 1000) / 10 : 0,
-      poin_dapat: hitung.poinD, poin_max: hitung.poinM,
-      benar: hitung.benar, salah: hitung.salah, esai: hitung.esaiC,
-      pelanggaran: pelanggar,
-      paksa_selesai: (pelanggar >= MAKS_P),
-      waktu_mulai:(tMulai||new Date()).toISOString(), waktu_selesai:(tSelesai||new Date()).toISOString()
-    });
-    console.log('Batch jawaban dan rekap berhasil dikirim.');
+    let sukses = await _kirimSemuaHasilUjian();
+    document.getElementById('load-overlay').classList.add('hide');
+    tampilHasilAkhir();
+    _tampilStatusKirimHasil(sukses);
   })();
+}
+
+// Kumpulkan jawaban + rekap lalu kirim ke GAS (dengan percobaan ulang di
+// kirimBatch/kirimKeSheet), lalu diverifikasi sungguhan ke server lewat
+// getHasilSiswa (lihat _verifikasiTersimpan()) -- itu yang jadi penentu
+// akhir berhasil/tidaknya, bukan sekadar status fetch pengiriman.
+async function _kirimSemuaHasilUjian() {
+  let items = [];
+  soalData.forEach(s => {
+    let no = s.no, tipe = s.tipe;
+    if (tipe === 'esai') {
+      items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
+        no_soal:no, tipe:'esai', jawaban:jawEsai[no]||'', kunci:s.kunci, poin_soal:s.poin, benar:false });
+    } else {
+      let jwb = jawPG[no]||'';
+      items.push({ action:'simpanJawaban', sekolah:namaSekolah, siswa:namaSiswa,
+        no_soal:no, tipe:tipe, jawaban:jwb||'', kunci:s.kunci, poin_soal:s.poin, benar:jwb===s.kunci });
+    }
+  });
+
+  let okBatch = await kirimBatch(items);
+
+  let hitung = hitungNilai();
+  let okRekap = await kirimKeSheet({
+    action:'rekapAkhir', sekolah:namaSekolah, siswa:namaSiswa,
+    nilai: hitung.poinM > 0 ? Math.round(hitung.poinD / hitung.poinM * 1000) / 10 : 0,
+    poin_dapat: hitung.poinD, poin_max: hitung.poinM,
+    benar: hitung.benar, salah: hitung.salah, esai: hitung.esaiC,
+    pelanggaran: pelanggar,
+    paksa_selesai: (pelanggar >= MAKS_P),
+    waktu_mulai:(tMulai||new Date()).toISOString(), waktu_selesai:(tSelesai||new Date()).toISOString()
+  });
+
+  // REVISI (2026-07, solusi 2): status fetch tadi (okBatch/okRekap) itu
+  // masih "kata pengirim", bukan bukti nyata. Verifikasi ke server (baca
+  // langsung apakah baris Rekap_Akhir untuk siswa ini memang ada) adalah
+  // bukti paling kuat -- dijadikan penentu utama. Kalau verifikasi ini
+  // sendiri gagal dijangkau (server lambat merespons saat itu) tapi
+  // pengiriman tadi sempat dapat balasan {status:'ok'} yang sah, tetap
+  // dianggap berhasil -- supaya tidak salah anggap gagal gara-gara
+  // masalah membaca verifikasi, bukan masalah menyimpan datanya.
+  let terkonfirmasi = await _verifikasiTersimpan();
+  let sukses = terkonfirmasi || (okBatch && okRekap);
+  console.log(sukses
+    ? ('Hasil ujian ' + (terkonfirmasi ? 'terkonfirmasi tersimpan di server.' : 'terkirim (belum sempat diverifikasi ulang).'))
+    : 'Hasil ujian GAGAL terkonfirmasi tersimpan setelah percobaan ulang.');
+  return sukses;
+}
+
+// Tampilkan (atau sembunyikan) peringatan permanen di layar hasil kalau
+// pengiriman ke server gagal, lengkap dengan tombol coba kirim ulang.
+function _tampilStatusKirimHasil(sukses) {
+  let el = document.getElementById('hasil-warn-gagal');
+  if (!el) return;
+  if (sukses) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = '⚠️ <b>Hasil ujian belum terkonfirmasi tersimpan ke server.</b> ' +
+    'Jangan tutup halaman ini dulu, coba tekan tombol di bawah, atau segera lapor ke guru/pengawas.' +
+    '<button type="button" class="btn-coba-kirim-ulang" onclick="_cobaKirimUlangHasil()">🔄 Coba Kirim Ulang</button>';
+}
+
+async function _cobaKirimUlangHasil() {
+  let el = document.getElementById('hasil-warn-gagal');
+  if (el) el.innerHTML = 'Mengirim ulang...';
+  let sukses = await _kirimSemuaHasilUjian();
+  _tampilStatusKirimHasil(sukses);
 }
 
 function hitungNilai() {
