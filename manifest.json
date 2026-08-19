@@ -1,12 +1,12 @@
 {
   "name": "CBT Kabut Digital",
   "short_name": "CBT KD",
-  "description": "Engine ujian CBT online — soal dari Google Sheet, hasil otomatis, anti-kecurangan.",
+  "description": "CBT Kabut Digital: buat ujian online untuk sekolah, kampus, atau perusahaan lewat wizard 5 langkah — tanpa server, pakai Google Sheets sendiri.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0c7ff2",
+  "theme_color": "#daa520",
   "orientation": "any",
   "lang": "id",
   "categories": [
