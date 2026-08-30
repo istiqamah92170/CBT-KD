@@ -3515,9 +3515,15 @@ function pBukaDetail(id) {
 // [C] Ambil nilai terbaru dari GAS dan perbarui cache lokal jika ada perubahan
 function _pSyncNilaiDariServer(r) {
   if (!r.gas_url) return;
+  // BUG-FIX (2026-08): setelah nama pasti diketahui dari server
+  // (nama_tersimpan, lihat bawah), sync ULANG untuk entry ini wajib pakai
+  // exact=1 -- tanpa ini, entry riwayat percobaan LAMA (mis. "Anggy") bisa
+  // salah sync ke data percobaan BARU yang lebih baru (mis. "Anggy(2)")
+  // karena keduanya sama-sama prefix-match di server.
   let url = r.gas_url + '?action=getHasilSiswa'
     + '&nama='    + encodeURIComponent(r.siswa)
-    + '&sekolah=' + encodeURIComponent(r.sekolah);
+    + '&sekolah=' + encodeURIComponent(r.sekolah)
+    + (r._namaPasti ? '&exact=1' : '');
 
   // Gunakan AbortSignal.timeout jika tersedia (Chrome ≥ 111), fallback manual
   let fetchOpts = {};
@@ -3568,8 +3574,14 @@ function _pSyncNilaiDariServer(r) {
       // BUG-FIX (2026-08): tampilkan nama PERSIS dari server -- bisa ada
       // suffix "(2)", dst kalau ini pengerjaan ulang -- supaya riwayat jelas
       // membedakan tiap percobaan alih-alih menampilkan nama asli yang
-      // diketik peserta (tanpa suffix) untuk semua percobaan.
-      if (d.nama_tersimpan && d.nama_tersimpan !== r.siswa) { r.siswa = d.nama_tersimpan; berubah = true; }
+      // diketik peserta (tanpa suffix) untuk semua percobaan. Begitu nama
+      // pasti ini diterima, tandai entry (_namaPasti) supaya sync
+      // BERIKUTNYA untuk entry yang sama otomatis pakai exact=1 (lihat atas)
+      // -- mencegah entry percobaan lama ikut "ketiban" data percobaan baru.
+      if (d.nama_tersimpan) {
+        if (d.nama_tersimpan !== r.siswa) { r.siswa = d.nama_tersimpan; berubah = true; }
+        if (!r._namaPasti) { r._namaPasti = true; berubah = true; }
+      }
 
       // [D] Sinkronisasi status pembahasan dari server
       // GAS mengirim: buka_pembahasan (boolean) atau review_locked (boolean)
