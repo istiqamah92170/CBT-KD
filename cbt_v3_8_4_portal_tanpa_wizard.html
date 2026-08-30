@@ -92,7 +92,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ── LOADING OVERLAY ── */
-.load-overlay{position:absolute;inset:0;background:rgba(243,246,250,.85);border-radius:var(--r-lg);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+/* BUG-FIX (2026-08): dulu position:absolute (hanya menutupi .login-card,
+   dan CUMA TAMPIL selama login-screen tidak disembunyikan). Begitu
+   login-screen di-display:none (yaitu persis saat ujian berjalan/selesai --
+   momen paling penting untuk overlay "jangan tutup halaman"), overlay ini
+   ikut tidak pernah tampil sama sekali walau class 'hide' sudah dilepas --
+   penyebab layar terlihat kosong/putih tanpa peringatan apa pun saat
+   menyimpan/memuat nilai. Sekarang position:fixed & dipindah ke luar
+   login-screen (jadi anak langsung <body>) supaya selalu bisa tampil di
+   layar mana pun. */
+.load-overlay{position:fixed;inset:0;background:rgba(243,246,250,.85);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
 .load-overlay.hide{display:none;}
 .spin{width:36px;height:36px;border:3px solid var(--blue-light);border-top-color:var(--blue-mid);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -634,6 +643,15 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
   <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
 </button>
 
+<!-- Overlay kunci layar selama fetch -- BUG-FIX (2026-08): dipindah jadi
+     anak langsung body (position:fixed) supaya tetap bisa tampil di layar
+     mana pun (login, exam, maupun hasil), bukan cuma saat login-screen
+     aktif. Lihat catatan BUG-FIX di CSS .load-overlay. -->
+<div class="load-overlay" id="load-overlay">
+  <div class="spin"></div>
+  <p id="overlay-txt">Memuat soal dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Harap tunggu, ini mungkin memakan waktu 5&#8211;15 detik</small></p>
+</div>
+
 <!-- ═══════════════════════════════════════════════════════════
      PORTAL SISWA — HTML
      ═══════════════════════════════════════════════════════════ -->
@@ -917,12 +935,6 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
         <button class="btn-login" id="btn-login" onclick="mulaiUjian()" disabled>&#9654; Mulai Ujian</button>
         <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--gray-soft);letter-spacing:0.5px;">v7.1.0</div>
       </div>
-    </div>
-
-    <!-- Overlay kunci form selama fetch -->
-    <div class="load-overlay" id="load-overlay">
-      <div class="spin"></div>
-      <p id="overlay-txt">Memuat soal dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Harap tunggu, ini mungkin memakan waktu 5&#8211;15 detik</small></p>
     </div>
   </div>
 </div>
@@ -2167,7 +2179,15 @@ function selesaiFinal() {
 
   (async () => {
     let sukses = await _kirimSemuaHasilUjian();
-    document.getElementById('load-overlay').classList.add('hide');
+    // BUG-FIX (2026-08): overlay dulu ditutup DI SINI, sebelum nilai akhir
+    // resmi selesai dimuat (_muatHasilDariServer() di dalam
+    // tampilHasilAkhir() bisa mencoba ulang sampai beberapa detik kalau
+    // jaringan lambat) -- akibatnya selama jeda itu peserta cuma melihat
+    // layar hasil dengan angka "..." tanpa overlay/peringatan apa pun.
+    // Sekarang overlay TETAP tampil (dengan pesan baru) sampai
+    // _muatHasilDariServer() sendiri yang menutupnya setelah selesai
+    // (berhasil ataupun gagal total, lihat di dalam fungsi itu).
+    setOverlay('Memuat nilai akhir dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Mohon jangan tutup halaman ini</small>');
     tampilHasilAkhir();
     _tampilStatusKirimHasil(sukses);
     // BUG-FIX KEAMANAN (2026-07): begitu submit terkonfirmasi, patch entry
@@ -2314,6 +2334,10 @@ async function _muatHasilDariServer(esaiC, percobaan) {
     document.getElementById('h-poin-max').textContent   = (d.poin_max||0) + poinMEsaiLokal;
     let subEl = document.getElementById('h-nilai-sub');
     if (subEl) subEl.textContent = subLabel;
+    // BUG-FIX (2026-08): nilai akhir sudah berhasil dimuat -- overlay
+    // "Mohon jangan tutup halaman ini" (dipasang di selesaiFinal()) boleh
+    // ditutup sekarang.
+    document.getElementById('load-overlay').classList.add('hide');
   } catch(e) {
     console.warn('Gagal memuat hasil dari server:', e);
     if (percobaan < 2) {
@@ -2333,6 +2357,10 @@ function _tampilHasilGagalDimuat() {
   document.getElementById('h-poin-max').textContent   = '--';
   let subEl = document.getElementById('h-nilai-sub');
   if (subEl) subEl.textContent = 'Nilai belum bisa dimuat dari server';
+  // BUG-FIX (2026-08): gagal total setelah semua percobaan -- overlay
+  // "Mohon jangan tutup halaman ini" harus ditutup juga di sini, kalau
+  // tidak akan tetap terkunci menutupi layar padahal sudah menyerah mencoba.
+  document.getElementById('load-overlay').classList.add('hide');
   // Pakai lagi banner + tombol "Coba Kirim Ulang" yang sudah ada -- kalau
   // datanya memang sudah tersimpan, percobaan ulang ini juga akan berhasil
   // memuat nilainya (bukan mengirim dobel, lihat _kirimSemuaHasilUjian()).
@@ -2585,7 +2613,7 @@ async function printAnalisis() {
   .hdr{background:#064E3B;color:white;padding:18px 22px;border-radius:8px;margin-bottom:20px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .hdr h1{font-size:17px;margin:0 0 5px;}
   .hdr p{font-size:13px;margin:3px 0 0;opacity:.9;}
-  .ana-item{border:1.5px solid #DDE3EC;border-radius:10px;overflow:hidden;margin-bottom:16px;break-inside:avoid;page-break-inside:avoid;}
+  .ana-item{border:1.5px solid #DDE3EC;border-radius:10px;overflow:hidden;margin-bottom:16px;}
   .ana-head{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .ana-head.benar{background:#E6F7EE;} .ana-head.salah{background:#FDECEA;} .ana-head.kosong{background:#F3F6FA;} .ana-head.esai-p{background:#FFF3E8;}
   .ana-no{font-size:14px;font-weight:800;}
@@ -2616,7 +2644,10 @@ async function printAnalisis() {
   @media print{
     body{padding:10px;}
     .btn-print-now{display:none;}
-    .ana-item{break-inside:avoid;page-break-inside:avoid;}
+    /* BUG-FIX (2026-08): dulu ada break-inside:avoid di sini -- memaksa
+       setiap kartu soal pindah UTUH ke halaman berikutnya kalau tidak muat
+       di sisa halaman saat ini, jadi sumber ruang kosong yang boros kertas.
+       Sekarang konten boleh terpotong & lanjut ke halaman berikutnya. */
     .hdr,.ana-head,.ana-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   }
 </style>
@@ -3406,11 +3437,15 @@ function portalSimpanRiwayat() {
       _peserta_label    : SERVER_BRAND.participant_field_label,   // label dinamis saat ujian
       _institusi_label  : SERVER_BRAND.institution_field_label    // label dinamis saat ujian
     };
-    // Dedup: judul + profilId + hari yang sama → timpa
-    let tgl = entry.tanggal.slice(0, 10);
-    list = list.filter(r => !(r.judul === entry.judul
-                             && r.profilId === entry.profilId
-                             && r.tanggal.slice(0, 10) === tgl));
+    // BUG-FIX (2026-08): dulu di-dedup berdasarkan judul+profilId+hari yang
+    // sama (entry lama ditimpa) -- ini menyembunyikan pengerjaan ulang yang
+    // memang sengaja diberi guru pada hari yang sama, padahal di server
+    // sudah dibedakan dengan suffix "(2)", dst (lihat _simpanRekap() di
+    // Library). Sekarang setiap ujian yang benar-benar selesai (submit)
+    // selalu jadi entry riwayat baru; nama akan disesuaikan pakai
+    // nama_tersimpan dari server begitu dikonfirmasi (lihat
+    // _pSyncNilaiDariServer()), supaya percobaan kedua tampil sebagai
+    // "Nama(2)" di daftar riwayat -- bukan menghilang/menimpa yang pertama.
     list.unshift(entry);
     if (list.length > 100) list = list.slice(0, 100); // naikkan limit dari 50
     pRiwayatSimpanList(list);
@@ -3519,6 +3554,12 @@ function _pSyncNilaiDariServer(r) {
       if (typeof d.salah !== 'undefined' && d.salah !== r.salah) { r.salah = d.salah; berubah = true; }
       if (typeof d.poin_dapat !== 'undefined' && d.poin_dapat !== r.poinD) { r.poinD = d.poin_dapat; berubah = true; }
       if (typeof d.poin_max   !== 'undefined' && d.poin_max   !== r.poinM) { r.poinM = d.poin_max;   berubah = true; }
+
+      // BUG-FIX (2026-08): tampilkan nama PERSIS dari server -- bisa ada
+      // suffix "(2)", dst kalau ini pengerjaan ulang -- supaya riwayat jelas
+      // membedakan tiap percobaan alih-alih menampilkan nama asli yang
+      // diketik peserta (tanpa suffix) untuk semua percobaan.
+      if (d.nama_tersimpan && d.nama_tersimpan !== r.siswa) { r.siswa = d.nama_tersimpan; berubah = true; }
 
       // [D] Sinkronisasi status pembahasan dari server
       // GAS mengirim: buka_pembahasan (boolean) atau review_locked (boolean)
