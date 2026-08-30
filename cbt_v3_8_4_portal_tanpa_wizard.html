@@ -646,8 +646,18 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
 <!-- Overlay kunci layar selama fetch -- BUG-FIX (2026-08): dipindah jadi
      anak langsung body (position:fixed) supaya tetap bisa tampil di layar
      mana pun (login, exam, maupun hasil), bukan cuma saat login-screen
-     aktif. Lihat catatan BUG-FIX di CSS .load-overlay. -->
-<div class="load-overlay" id="load-overlay">
+     aktif. Lihat catatan BUG-FIX di CSS .load-overlay.
+     BUG-FIX REGRESI (2026-08, batch kedua): dulu (saat masih di dalam
+     login-screen) elemen ini TIDAK punya class "hide" secara default, tapi
+     tetap tak kelihatan karena ikut tersembunyi bersama ancestor-nya
+     (login-screen) begitu portalInit() pindah ke layar beranda. Setelah
+     dipindah jadi overlay global, ketiadaan class "hide" bawaan itu jadi
+     benar-benar tampil di LAYAR MANA PUN saat halaman pertama kali dibuka
+     -- termasuk beranda, sebelum peserta sempat mengisi link ujian sama
+     sekali. Semua alur yang memang butuh overlay ini (muatSoal(),
+     selesaiFinal(), dst) sudah memanggil classList.remove('hide') sendiri
+     saat mulai fetch, jadi aman dijadikan hide by default di sini. -->
+<div class="load-overlay hide" id="load-overlay">
   <div class="spin"></div>
   <p id="overlay-txt">Memuat soal dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Harap tunggu, ini mungkin memakan waktu 5&#8211;15 detik</small></p>
 </div>
