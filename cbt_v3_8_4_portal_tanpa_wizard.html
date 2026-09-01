@@ -123,6 +123,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
 .kg-sep{width:1px;align-self:stretch;background:var(--gray-line);margin:2px 2px;}
 .kg-sep-grow{flex:1;background:transparent;min-width:6px;}
 .kg-tebal{display:flex;gap:4px;background:var(--gray-bg);border:1px solid var(--gray-line);border-radius:var(--r-sm);padding:3px;}
+.kg-mode{display:flex;gap:4px;background:var(--gray-bg);border:1px solid var(--gray-line);border-radius:var(--r-sm);padding:3px;}
+.kg-btn-mode{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:5px;cursor:pointer;font-size:14px;color:var(--gray-mid);}
+.kg-btn-mode.aktif{background:var(--blue-light);color:var(--blue-deep);}
+.kg-offset{display:flex;align-items:center;gap:2px;}
+.kg-offset-lbl{font-size:11px;font-weight:700;color:var(--gray-soft);min-width:44px;text-align:center;}
 .kg-btn-tebal{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;border-radius:5px;cursor:pointer;}
 .kg-btn-tebal.aktif{background:var(--blue-light);}
 .kg-btn-tebal .kg-dot{border-radius:50%;background:var(--gray-dark);display:block;}
@@ -711,10 +716,21 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
     <button class="kg-btn kg-btn-icon" onclick="_kgUndo()" type="button" title="Batalkan goresan terakhir">&#8617;</button>
     <button class="kg-btn kg-btn-icon" onclick="_kgHapusSemua()" type="button" title="Hapus semua">&#128465;</button>
     <div class="kg-sep"></div>
+    <div class="kg-mode" id="kg-mode">
+      <button class="kg-btn-mode aktif" data-m="gambar" onclick="_kgSetMode('gambar')" type="button" title="Mode gambar">&#9998;</button>
+      <button class="kg-btn-mode" data-m="hapus" onclick="_kgSetMode('hapus')" type="button" title="Mode penghapus -- sentuh/seret goresan yang mau dihapus">&#9003;</button>
+    </div>
+    <div class="kg-sep"></div>
     <div class="kg-tebal" id="kg-tebal">
       <button class="kg-btn-tebal" data-t="1" onclick="_kgSetTebal(1)" type="button" title="Tipis"><span class="kg-dot" style="width:4px;height:4px;"></span></button>
       <button class="kg-btn-tebal aktif" data-t="2" onclick="_kgSetTebal(2)" type="button" title="Sedang"><span class="kg-dot" style="width:7px;height:7px;"></span></button>
       <button class="kg-btn-tebal" data-t="4" onclick="_kgSetTebal(4)" type="button" title="Tebal"><span class="kg-dot" style="width:11px;height:11px;"></span></button>
+    </div>
+    <div class="kg-sep"></div>
+    <div class="kg-offset" title="Jarak pointer dari sentuhan jari">
+      <button class="kg-btn kg-btn-icon" onclick="_kgAturOffset(-10)" type="button" title="Perdekat pointer">&#8722;</button>
+      <span class="kg-offset-lbl" id="kg-offset-lbl">&#128204; 30</span>
+      <button class="kg-btn kg-btn-icon" onclick="_kgAturOffset(10)" type="button" title="Perjauh pointer">&#43;</button>
     </div>
     <div class="kg-sep"></div>
     <button class="kg-btn kg-btn-icon" onclick="_kgZoom(-1)" type="button" title="Perkecil">&#8722;</button>
@@ -2211,6 +2227,28 @@ let _kgZoomVal = 1, _kgPanX = 0, _kgPanY = 0;
 let _kgTebalAktif = 2;
 let _kgStrokeAktif = null; // stroke yang sedang digambar (belum di-commit)
 let _kgPointers = new Map(); // pointerId -> {x,y} layar, dipakai utk pinch/pan 2 jari
+// BUG-FIX: baseline pinch HARUS direset ke null setiap gesture 2-jari
+// berakhir (lihat _kgPointerUp/_kgPointerDown) -- dulu tidak pernah
+// direset, jadi pinch/pan KEDUA dan seterusnya membandingkan jarak jari
+// yang baru dengan baseline gesture yang PERTAMA (sudah basi), bikin
+// tampilan melompat ke posisi salah lalu balik lagi begitu jari bergerak.
+let _kgPinchAwal = null;
+// FITUR BARU: mode gambar vs mode hapus (toggle di toolbar)
+let _kgMode = 'gambar';
+// FITUR BARU: jarak "pointer" (satuan virtual) dari titik sentuh jari yang
+// sebenarnya -- supaya titik gambar/hapus tidak tertutup jari. Bisa diatur
+// user lewat tombol +/- di toolbar (_kgAturOffset).
+let _kgOffsetJarak = 30;
+// FITUR BARU: posisi pointer (pen-tip) TERAKHIR, satuan virtual -- tetap
+// digambar sebagai indikator walau jari sudah lepas dari layar, supaya
+// siswa bisa lihat & lanjutkan dengan presisi dari titik itu.
+let _kgPenTipTerakhir = null;
+// FITUR BARU: posisi sentuh MENTAH (virtual, sebelum di-offset) -- cuma
+// terisi SELAMA jari masih menyentuh layar, dipakai untuk gambar garis
+// penghubung tipis ke pointer supaya hubungannya kelihatan jelas saat
+// menggambar.
+let _kgSentuhAktif = null;
+const KG_ERASER_RADIUS = 26; // satuan virtual -- radius sentuh mode hapus
 
 function bukaKanvasGambar() {
   let s = getSoal();
@@ -2218,6 +2256,9 @@ function bukaKanvasGambar() {
   _kgNo = s.no;
   if (!jawGbr[_kgNo]) jawGbr[_kgNo] = { strokes: [] };
   _kgZoomVal = 1; _kgPanX = 0; _kgPanY = 0;
+  _kgPinchAwal = null;
+  _kgPenTipTerakhir = null; // FITUR BARU: reset penunjuk tiap buka soal baru (posisi soal sebelumnya tidak relevan)
+  _kgSentuhAktif = null;
   document.getElementById('kg-screen').classList.remove('hide');
   document.getElementById('kg-soal-panel').classList.add('hide');
   _kgSetupCanvas();
@@ -2275,13 +2316,37 @@ function _kgLayarKeVirtual(cv, xLayar, yLayar) {
   return [ (xLayar - offX) / skala, (yLayar - offY) / skala ];
 }
 
+// FITUR BARU: batasi koordinat ke dalam area kertas/kanvas (0..KG_VW,
+// 0..KG_VH) -- mencegah goresan/hapus "keluar kertas" saat digambar di
+// area kosong sekitar kanvas (terutama saat sedang di-zoom).
+function _kgClamp(x, y) {
+  return [ Math.min(KG_VW, Math.max(0, x)), Math.min(KG_VH, Math.max(0, y)) ];
+}
+
+// FITUR BARU: posisi "pen-tip" sesungguhnya = titik sentuh jari digeser ke
+// ATAS sejauh _kgOffsetJarak (satuan virtual), supaya tidak tertutup jari
+// saat menggambar/menghapus. offset=0 berarti pen-tip = titik sentuh asli.
+function _kgHitungPenTip(vxSentuh, vySentuh) {
+  return _kgClamp(vxSentuh, vySentuh - _kgOffsetJarak);
+}
+
 function _kgPointerDown(e) {
   let cv = e.currentTarget;
   _kgPointers.set(e.pointerId, { x: e.offsetX, y: e.offsetY });
-  if (_kgPointers.size >= 2) { _kgStrokeAktif = null; return; } // 2 jari = pan/zoom, bukan gambar
+  if (_kgPointers.size >= 2) {
+    _kgStrokeAktif = null;
+    _kgSentuhAktif = null;
+    _kgPinchAwal = null; // BUG-FIX: selalu mulai baseline pinch baru, jangan warisi dari gesture sebelumnya
+    return;
+  }
   cv.setPointerCapture(e.pointerId);
-  let [vx, vy] = _kgLayarKeVirtual(cv, e.offsetX, e.offsetY);
+  let [vxS, vyS] = _kgLayarKeVirtual(cv, e.offsetX, e.offsetY);
+  _kgSentuhAktif = _kgClamp(vxS, vyS); // FITUR BARU: titik sentuh mentah, untuk garis penghubung ke pointer
+  let [vx, vy] = _kgHitungPenTip(vxS, vyS);
+  _kgPenTipTerakhir = [vx, vy];
+  if (_kgMode === 'hapus') { _kgHapusDiTitik(vx, vy); _kgRedraw(); return; }
   _kgStrokeAktif = { t: _kgTebalAktif, p: [[Math.round(vx), Math.round(vy)]] };
+  _kgRedraw();
 }
 
 function _kgPointerMove(e) {
@@ -2290,11 +2355,20 @@ function _kgPointerMove(e) {
 
   if (_kgPointers.size >= 2) { _kgTanganiPinchPan(cv); return; }
 
+  let [vxS, vyS] = _kgLayarKeVirtual(cv, e.offsetX, e.offsetY);
+  _kgSentuhAktif = _kgClamp(vxS, vyS);
+  let [vx, vy] = _kgHitungPenTip(vxS, vyS);
+  _kgPenTipTerakhir = [vx, vy];
+
+  if (_kgMode === 'hapus') {
+    if (_kgPointers.size === 1) _kgHapusDiTitik(vx, vy);
+    _kgRedraw();
+    return;
+  }
   if (!_kgStrokeAktif) return;
-  let [vx, vy] = _kgLayarKeVirtual(cv, e.offsetX, e.offsetY);
   let pts = _kgStrokeAktif.p, last = pts[pts.length - 1];
   let dx = vx - last[0], dy = vy - last[1];
-  if ((dx*dx + dy*dy) < (KG_TITIK_MIN_JARAK * KG_TITIK_MIN_JARAK)) return; // FITUR BARU: sederhanakan titik saat menggambar
+  if ((dx*dx + dy*dy) < (KG_TITIK_MIN_JARAK * KG_TITIK_MIN_JARAK)) { _kgRedraw(); return; } // FITUR BARU: sederhanakan titik saat menggambar
   pts.push([Math.round(vx), Math.round(vy)]);
   _kgRedraw();
 }
@@ -2302,15 +2376,31 @@ function _kgPointerMove(e) {
 function _kgPointerUp(e) {
   let cv = e.currentTarget;
   _kgPointers.delete(e.pointerId);
+  if (_kgPointers.size < 2) _kgPinchAwal = null; // BUG-FIX: gesture pinch selesai -- baseline harus dilupakan
   if (_kgStrokeAktif && _kgStrokeAktif.p.length > 1) {
     jawGbr[_kgNo].strokes.push(_kgStrokeAktif);
     _kgSimpanDraftDebounced();
   }
   _kgStrokeAktif = null;
+  _kgSentuhAktif = null; // FITUR BARU: garis penghubung hilang, tapi _kgPenTipTerakhir TETAP digambar (lihat _kgGambarPenunjuk)
   _kgRedraw();
 }
 
-let _kgPinchAwal = null;
+// FITUR BARU: hapus goresan (stroke UTUH) yang melewati titik (vx,vy)
+// dalam radius KG_ERASER_RADIUS -- dipanggil dari mode "Hapus" (sentuh
+// atau seret jari di atas goresan yang ingin dibuang).
+function _kgHapusDiTitik(vx, vy) {
+  if (!jawGbr[_kgNo] || !jawGbr[_kgNo].strokes.length) return;
+  let sebelum = jawGbr[_kgNo].strokes.length;
+  jawGbr[_kgNo].strokes = jawGbr[_kgNo].strokes.filter(function(st) {
+    return !st.p.some(function(pt) {
+      let dx = pt[0] - vx, dy = pt[1] - vy;
+      return (dx*dx + dy*dy) < (KG_ERASER_RADIUS * KG_ERASER_RADIUS);
+    });
+  });
+  if (jawGbr[_kgNo].strokes.length !== sebelum) _kgSimpanDraftDebounced();
+}
+
 function _kgTanganiPinchPan(cv) {
   let pts = Array.from(_kgPointers.values());
   if (pts.length < 2) return;
@@ -2347,6 +2437,35 @@ function _kgRedraw() {
   let strokes = (jawGbr[_kgNo] && jawGbr[_kgNo].strokes) || [];
   if (_kgStrokeAktif) strokes = strokes.concat([_kgStrokeAktif]);
   _kgGambarStrokes(ctx, strokes, skala);
+  _kgGambarPenunjuk(ctx, skala); // FITUR BARU: indikator pointer (offset dari jari)
+}
+
+// FITUR BARU: indikator posisi "pen-tip" -- lingkaran kecil (mode gambar)
+// atau lingkaran radius hapus (mode hapus), digeser dari titik sentuh jari
+// yang sebenarnya sejauh _kgOffsetJarak supaya kelihatan (tidak tertutup
+// jari). Tetap digambar di posisi TERAKHIR walau jari sudah lepas dari
+// layar, supaya siswa bisa incar & lanjutkan dari situ dengan presisi.
+// Selama jari masih menyentuh, ditambah garis tipis penghubung ke titik
+// sentuh asli supaya hubungan offset-nya kelihatan jelas.
+function _kgGambarPenunjuk(ctx, skala) {
+  if (!_kgPenTipTerakhir) return;
+  let [px, py] = _kgPenTipTerakhir;
+  ctx.save();
+  if (_kgSentuhAktif) {
+    ctx.strokeStyle = 'rgba(136,150,165,.7)'; ctx.lineWidth = 1 / skala;
+    ctx.setLineDash([4/skala, 4/skala]);
+    ctx.beginPath(); ctx.moveTo(_kgSentuhAktif[0], _kgSentuhAktif[1]); ctx.lineTo(px, py); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  if (_kgMode === 'hapus') {
+    ctx.strokeStyle = '#C0392B'; ctx.lineWidth = 2 / skala;
+    ctx.beginPath(); ctx.arc(px, py, KG_ERASER_RADIUS, 0, Math.PI * 2); ctx.stroke();
+  } else {
+    ctx.fillStyle = 'rgba(5,150,105,.9)';
+    ctx.beginPath(); ctx.arc(px, py, 6 / skala, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.5 / skala; ctx.stroke();
+  }
+  ctx.restore();
 }
 
 // Dipakai baik oleh kanvas hidup (di atas) maupun renderer statis di layar
@@ -2380,6 +2499,18 @@ function _kgHapusSemua() {
 function _kgSetTebal(t) {
   _kgTebalAktif = t;
   document.querySelectorAll('#kg-tebal .kg-btn-tebal').forEach(b => b.classList.toggle('aktif', Number(b.dataset.t) === t));
+}
+// FITUR BARU: toggle mode gambar/hapus dari toolbar
+function _kgSetMode(m) {
+  _kgMode = m;
+  document.querySelectorAll('#kg-mode .kg-btn-mode').forEach(b => b.classList.toggle('aktif', b.dataset.m === m));
+  _kgRedraw();
+}
+// FITUR BARU: atur jarak pointer (offset) dari titik sentuh jari, 0-80 satuan virtual
+function _kgAturOffset(delta) {
+  _kgOffsetJarak = Math.min(80, Math.max(0, _kgOffsetJarak + delta));
+  let el = document.getElementById('kg-offset-lbl');
+  if (el) el.textContent = '\u{1F4CC} ' + _kgOffsetJarak;
 }
 function _kgZoom(arah) {
   _kgZoomVal = Math.min(4, Math.max(0.5, _kgZoomVal + arah * 0.25));
