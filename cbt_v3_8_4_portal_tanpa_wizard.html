@@ -714,7 +714,6 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
     <button class="kg-btn" id="kg-btn-lihat-soal" onclick="_kgToggleLihatSoal()" type="button" title="Lihat soal">&#128065; Lihat Soal</button>
     <div class="kg-sep"></div>
     <button class="kg-btn kg-btn-icon" onclick="_kgUndo()" type="button" title="Batalkan goresan terakhir">&#8617;</button>
-    <button class="kg-btn kg-btn-icon" onclick="_kgHapusSemua()" type="button" title="Hapus semua">&#128465;</button>
     <div class="kg-sep"></div>
     <div class="kg-mode" id="kg-mode">
       <button class="kg-btn-mode aktif" data-m="gambar" onclick="_kgSetMode('gambar')" type="button" title="Mode gambar">&#9998;</button>
@@ -2452,10 +2451,16 @@ function _kgGambarPenunjuk(ctx, skala) {
   let [px, py] = _kgPenTipTerakhir;
   ctx.save();
   if (_kgSentuhAktif) {
+    // Garis putus-putus penghubung dari posisi jari ke pointer
     ctx.strokeStyle = 'rgba(136,150,165,.7)'; ctx.lineWidth = 1 / skala;
     ctx.setLineDash([4/skala, 4/skala]);
     ctx.beginPath(); ctx.moveTo(_kgSentuhAktif[0], _kgSentuhAktif[1]); ctx.lineTo(px, py); ctx.stroke();
     ctx.setLineDash([]);
+    // FITUR BARU: marker di posisi sentuh jari sesungguhnya -- lingkaran
+    // berlubang (bukan titik padat, biar beda jelas dari titik pointer)
+    // supaya siswa tahu persis posisi layar yang sedang disentuh.
+    ctx.strokeStyle = 'rgba(136,150,165,.9)'; ctx.lineWidth = 1.5 / skala;
+    ctx.beginPath(); ctx.arc(_kgSentuhAktif[0], _kgSentuhAktif[1], 9 / skala, 0, Math.PI * 2); ctx.stroke();
   }
   if (_kgMode === 'hapus') {
     ctx.strokeStyle = '#C0392B'; ctx.lineWidth = 2 / skala;
@@ -2486,13 +2491,6 @@ function _kgGambarStrokes(ctx, strokes, skala) {
 function _kgUndo() {
   if (!jawGbr[_kgNo] || !jawGbr[_kgNo].strokes.length) return;
   jawGbr[_kgNo].strokes.pop();
-  _kgRedraw();
-  _kgSimpanDraftDebounced();
-}
-function _kgHapusSemua() {
-  if (!jawGbr[_kgNo] || !jawGbr[_kgNo].strokes.length) return;
-  if (!confirm('Hapus semua gambar di soal ini? Tidak bisa dibatalkan.')) return;
-  jawGbr[_kgNo].strokes = [];
   _kgRedraw();
   _kgSimpanDraftDebounced();
 }
