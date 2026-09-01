@@ -716,7 +716,7 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
     <button class="kg-btn kg-btn-icon" onclick="_kgUndo()" type="button" title="Batalkan goresan terakhir">&#8617;</button>
     <div class="kg-sep"></div>
     <div class="kg-mode" id="kg-mode">
-      <button class="kg-btn-mode aktif" data-m="gambar" onclick="_kgSetMode('gambar')" type="button" title="Mode gambar">&#9998;</button>
+      <button class="kg-btn-mode aktif" data-m="gambar" onclick="_kgSetMode('gambar')" type="button" title="Mode gambar (klik lagi untuk tampil/sembunyikan pointer)">&#9998;</button>
       <button class="kg-btn-mode" data-m="hapus" onclick="_kgSetMode('hapus')" type="button" title="Mode penghapus -- sentuh/seret goresan yang mau dihapus">&#9003;</button>
     </div>
     <div class="kg-sep"></div>
@@ -2242,11 +2242,14 @@ let _kgOffsetJarak = 30;
 // digambar sebagai indikator walau jari sudah lepas dari layar, supaya
 // siswa bisa lihat & lanjutkan dengan presisi dari titik itu.
 let _kgPenTipTerakhir = null;
-// FITUR BARU: posisi sentuh MENTAH (virtual, sebelum di-offset) -- cuma
-// terisi SELAMA jari masih menyentuh layar, dipakai untuk gambar garis
-// penghubung tipis ke pointer supaya hubungannya kelihatan jelas saat
-// menggambar.
+// FITUR BARU: posisi sentuh jari TERAKHIR (virtual, sebelum di-offset) --
+// sekarang PERMANEN sama seperti _kgPenTipTerakhir (tidak direset saat
+// jari lepas), digambar bersamaan dengan titik pointer + garis penghubung
+// putus-putus, supaya siswa selalu tahu posisi layar yang akan disentuh.
 let _kgSentuhAktif = null;
+// FITUR BARU: tampil/sembunyikan seluruh indikator pointer -- diatur lewat
+// klik ulang tombol mode Gambar saat sudah aktif di mode itu (lihat _kgSetMode).
+let _kgTampilPenunjuk = true;
 const KG_ERASER_RADIUS = 26; // satuan virtual -- radius sentuh mode hapus
 
 function bukaKanvasGambar() {
@@ -2381,7 +2384,9 @@ function _kgPointerUp(e) {
     _kgSimpanDraftDebounced();
   }
   _kgStrokeAktif = null;
-  _kgSentuhAktif = null; // FITUR BARU: garis penghubung hilang, tapi _kgPenTipTerakhir TETAP digambar (lihat _kgGambarPenunjuk)
+  // FITUR: _kgSentuhAktif TIDAK lagi direset di sini -- sekarang tampil
+  // permanen bersamaan dengan _kgPenTipTerakhir (lihat _kgGambarPenunjuk),
+  // bisa disembunyikan lewat klik ulang tombol mode Gambar (_kgSetMode).
   _kgRedraw();
 }
 
@@ -2436,37 +2441,48 @@ function _kgRedraw() {
   let strokes = (jawGbr[_kgNo] && jawGbr[_kgNo].strokes) || [];
   if (_kgStrokeAktif) strokes = strokes.concat([_kgStrokeAktif]);
   _kgGambarStrokes(ctx, strokes, skala);
-  _kgGambarPenunjuk(ctx, skala); // FITUR BARU: indikator pointer (offset dari jari)
+  _kgGambarPenunjuk(ctx, skala, skalaDasar * _kgZoomVal); // FITUR BARU: indikator pointer (offset dari jari)
 }
 
 // FITUR BARU: indikator posisi "pen-tip" -- lingkaran kecil (mode gambar)
 // atau lingkaran radius hapus (mode hapus), digeser dari titik sentuh jari
 // yang sebenarnya sejauh _kgOffsetJarak supaya kelihatan (tidak tertutup
-// jari). Tetap digambar di posisi TERAKHIR walau jari sudah lepas dari
-// layar, supaya siswa bisa incar & lanjutkan dari situ dengan presisi.
-// Selama jari masih menyentuh, ditambah garis tipis penghubung ke titik
-// sentuh asli supaya hubungan offset-nya kelihatan jelas.
-function _kgGambarPenunjuk(ctx, skala) {
-  if (!_kgPenTipTerakhir) return;
+// jari). Sekarang PERMANEN -- tetap digambar bersamaan dengan marker
+// posisi jari + garis penghubung putus-putus, walau jari sudah lepas dari
+// layar, supaya siswa selalu tahu posisi layar yang akan disentuh dan bisa
+// lanjut menggambar dari situ dengan presisi. Bisa disembunyikan lewat
+// klik ulang tombol mode Gambar di toolbar (_kgSetMode).
+function _kgGambarPenunjuk(ctx, skala, skalaCss) {
+  if (!_kgTampilPenunjuk || !_kgPenTipTerakhir) return;
   let [px, py] = _kgPenTipTerakhir;
+  // FITUR BARU: lingkaran posisi jari di-ukur dalam CSS px (bukan satuan
+  // virtual/device px) supaya ukurannya selalu ~sebesar diameter jari
+  // sesungguhnya di layar, konsisten di zoom & kerapatan piksel berapa pun.
+  // ~18px CSS radius (~36px diameter) mendekati ukuran rata-rata bantalan jari.
+  let rJariVirtual = 18 / skalaCss;
   ctx.save();
   if (_kgSentuhAktif) {
     // Garis putus-putus penghubung dari posisi jari ke pointer
-    ctx.strokeStyle = 'rgba(136,150,165,.7)'; ctx.lineWidth = 1 / skala;
-    ctx.setLineDash([4/skala, 4/skala]);
+    ctx.strokeStyle = '#F59E0B'; ctx.lineWidth = 1.5 / skala;
+    ctx.setLineDash([5/skala, 5/skala]);
     ctx.beginPath(); ctx.moveTo(_kgSentuhAktif[0], _kgSentuhAktif[1]); ctx.lineTo(px, py); ctx.stroke();
     ctx.setLineDash([]);
-    // FITUR BARU: marker di posisi sentuh jari sesungguhnya -- lingkaran
-    // berlubang (bukan titik padat, biar beda jelas dari titik pointer)
-    // supaya siswa tahu persis posisi layar yang sedang disentuh.
-    ctx.strokeStyle = 'rgba(136,150,165,.9)'; ctx.lineWidth = 1.5 / skala;
-    ctx.beginPath(); ctx.arc(_kgSentuhAktif[0], _kgSentuhAktif[1], 9 / skala, 0, Math.PI * 2); ctx.stroke();
+    // FITUR: marker di posisi sentuh jari sesungguhnya -- lingkaran
+    // berlubang seukuran diameter jari. Warna oranye + garis putih tipis
+    // di luarnya supaya tetap kontras baik di kertas putih maupun kalau
+    // kebetulan menimpa goresan gelap -- terlihat di kedua tema.
+    ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 4 / skala;
+    ctx.beginPath(); ctx.arc(_kgSentuhAktif[0], _kgSentuhAktif[1], rJariVirtual, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = '#F59E0B'; ctx.lineWidth = 2.5 / skala;
+    ctx.beginPath(); ctx.arc(_kgSentuhAktif[0], _kgSentuhAktif[1], rJariVirtual, 0, Math.PI * 2); ctx.stroke();
   }
   if (_kgMode === 'hapus') {
+    ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 3.5 / skala;
+    ctx.beginPath(); ctx.arc(px, py, KG_ERASER_RADIUS, 0, Math.PI * 2); ctx.stroke();
     ctx.strokeStyle = '#C0392B'; ctx.lineWidth = 2 / skala;
     ctx.beginPath(); ctx.arc(px, py, KG_ERASER_RADIUS, 0, Math.PI * 2); ctx.stroke();
   } else {
-    ctx.fillStyle = 'rgba(5,150,105,.9)';
+    ctx.fillStyle = '#059669';
     ctx.beginPath(); ctx.arc(px, py, 6 / skala, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.5 / skala; ctx.stroke();
   }
@@ -2498,10 +2514,18 @@ function _kgSetTebal(t) {
   _kgTebalAktif = t;
   document.querySelectorAll('#kg-tebal .kg-btn-tebal').forEach(b => b.classList.toggle('aktif', Number(b.dataset.t) === t));
 }
-// FITUR BARU: toggle mode gambar/hapus dari toolbar
+// FITUR BARU: toggle mode gambar/hapus dari toolbar -- klik ulang tombol
+// Gambar SAAT SUDAH aktif di mode itu jadi toggle tampil/sembunyikan
+// seluruh indikator pointer (bukan ganti mode, karena mode-nya memang
+// sudah gambar).
 function _kgSetMode(m) {
-  _kgMode = m;
-  document.querySelectorAll('#kg-mode .kg-btn-mode').forEach(b => b.classList.toggle('aktif', b.dataset.m === m));
+  if (m === 'gambar' && _kgMode === 'gambar') {
+    _kgTampilPenunjuk = !_kgTampilPenunjuk;
+  } else {
+    _kgMode = m;
+    if (m === 'gambar') _kgTampilPenunjuk = true; // FITUR: nyalakan lagi kalau balik dari mode hapus
+  }
+  document.querySelectorAll('#kg-mode .kg-btn-mode').forEach(b => b.classList.toggle('aktif', b.dataset.m === _kgMode));
   _kgRedraw();
 }
 // FITUR BARU: atur jarak pointer (offset) dari titik sentuh jari, 0-80 satuan virtual
