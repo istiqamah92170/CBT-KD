@@ -2451,7 +2451,12 @@ function _kgPointerUp(e) {
   let cv = e.currentTarget;
   _kgPointers.delete(e.pointerId);
   if (_kgPointers.size < 2) _kgPinchAwal = null; // BUG-FIX: gesture pinch selesai -- baseline harus dilupakan
-  if (_kgStrokeAktif && _kgStrokeAktif.p.length > 1) {
+  // BUG-FIX (2026-09): dulu syaratnya "p.length > 1" -- tap sekali tanpa
+  // menggeser jari cuma menghasilkan 1 titik, jadi SELALU dibuang, tidak
+  // pernah tersimpan. Akibatnya mustahil bikin titik (mis. titik desimal,
+  // tanda baca) tanpa menggores. Sekarang goresan 1 titik pun disimpan --
+  // dirender sebagai titik bulat kecil (lihat _kgGambarStrokes).
+  if (_kgStrokeAktif && _kgStrokeAktif.p.length >= 1) {
     // FITUR BARU: haluskan titik-titik goresan (kalau mode Halus aktif)
     // SEBELUM disimpan -- supaya hasilnya konsisten halus di mana pun
     // dirender ulang nanti (bukan cuma efek visual sesaat di kanvas ini).
@@ -2715,9 +2720,24 @@ function _kgGambarStrokes(ctx, strokes, skala, skalaCss) {
   if (!skalaCss) skalaCss = skala; // jaga-jaga kalau ada pemanggil lama yang belum kasih parameter ini
   ctx.strokeStyle = '#1E2B3A';
   strokes.forEach(function(st) {
-    if (!st.p || st.p.length < 2) return;
-    if (st.k === 'kaligrafi') { _kgGambarKaligrafi(ctx, st.p, st.t || 2, skalaCss); return; }
+    if (!st.p || st.p.length < 1) return;
     let kuas = KG_KUAS[st.k] || KG_KUAS.pena; // FITUR BARU: goresan lama tanpa field "k" (sebelum fitur kuas ada) dianggap "pena"
+    // BUG-FIX (2026-09): goresan 1 titik (hasil tap tanpa menggeser jari)
+    // sekarang dirender sebagai TITIK BULAT kecil, bukan di-skip total --
+    // dulu goresan begini selalu diabaikan (syarat lama "length<2"),
+    // sehingga mustahil membuat titik sama sekali tanpa menggores.
+    if (st.p.length === 1) {
+      ctx.save();
+      ctx.globalAlpha = kuas.alpha;
+      ctx.fillStyle = '#1E2B3A';
+      let radius = ((st.t || 2) * (st.k === 'kaligrafi' ? 1.3 : kuas.kali)) / 2 / skalaCss;
+      ctx.beginPath();
+      ctx.arc(st.p[0][0], st.p[0][1], radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      return;
+    }
+    if (st.k === 'kaligrafi') { _kgGambarKaligrafi(ctx, st.p, st.t || 2, skalaCss); return; }
     ctx.save();
     ctx.globalAlpha = kuas.alpha;
     ctx.lineCap = kuas.cap;
