@@ -2310,6 +2310,13 @@ let _kgGridJumlah = 0;
 // KG_ERASER_RADIUS yang tetap (mode "Hapus" biasa, hapus goresan utuh).
 // Bisa diatur dari toolbar (_kgAturRadiusHapus).
 let _kgRadiusHapusSebagian = 40;
+// FITUR BARU: mekanisme titik sentuh-dan-tahan -- _kgTitikTimer menunda
+// keputusan "ini mau jadi titik atau bukan" sampai jari terbukti diam
+// (tidak digeser) selama beberapa saat; _kgTitikSiap jadi true setelah
+// jeda itu terlewati, itulah yang menentukan apakah tap ini disimpan
+// sebagai titik (lihat _kgPointerDown/_kgPointerMove/_kgPointerUp).
+let _kgTitikTimer = null;
+let _kgTitikSiap = false;
 
 function bukaKanvasGambar() {
   let s = getSoal();
@@ -2330,6 +2337,7 @@ function bukaKanvasGambar() {
 
 function tutupKanvasGambar() {
   document.getElementById('kg-screen').classList.add('hide');
+  clearTimeout(_kgTitikTimer); _kgTitikSiap = false; // FITUR BARU: jaga-jaga kalau ada timer titik-tahan yang masih menunggu
   _kgStrokeAktif = null;
   _kgPointers.clear();
   if (_kgNo != null) {
@@ -2417,6 +2425,19 @@ function _kgPointerDown(e) {
   // disentuh (radius bisa diatur), bukan menghapus goresan utuh.
   if (_kgMode === 'hapus_sebagian') { _kgHapusSebagianDiTitik(vx, vy); _kgRedraw(); return; }
   _kgStrokeAktif = { t: _kgTebalAktif, k: _kgKuasAktif, p: [[Math.round(vx), Math.round(vy)]] };
+  // FITUR BARU: titik cuma "sah" kalau disentuh DAN DITAHAN (long-press)
+  // sejenak tanpa bergerak -- tap sekilas TIDAK langsung jadi titik lagi
+  // (lihat _kgPointerUp). Timer dibatalkan otomatis begitu ada gerakan
+  // (lihat _kgPointerMove), jadi tidak akan salah kena kalau ternyata jari
+  // memang mau menggores, bukan menahan.
+  _kgTitikSiap = false;
+  clearTimeout(_kgTitikTimer);
+  _kgTitikTimer = setTimeout(() => {
+    if (_kgStrokeAktif && _kgStrokeAktif.p.length === 1) {
+      _kgTitikSiap = true;
+      _kgRedraw(); // FITUR: indikator pointer berubah sedikit begitu titik "siap" ditempatkan
+    }
+  }, 450);
   _kgRedraw();
 }
 
@@ -2443,6 +2464,7 @@ function _kgPointerMove(e) {
   let pts = _kgStrokeAktif.p, last = pts[pts.length - 1];
   let dx = vx - last[0], dy = vy - last[1];
   if ((dx*dx + dy*dy) < (KG_TITIK_MIN_JARAK * KG_TITIK_MIN_JARAK)) { _kgRedraw(); return; } // FITUR BARU: sederhanakan titik saat menggambar
+  clearTimeout(_kgTitikTimer); // FITUR BARU: ada gerakan nyata -- batalkan timer titik-tahan, ini goresan biasa
   pts.push([Math.round(vx), Math.round(vy)]);
   _kgRedraw();
 }
@@ -2451,12 +2473,15 @@ function _kgPointerUp(e) {
   let cv = e.currentTarget;
   _kgPointers.delete(e.pointerId);
   if (_kgPointers.size < 2) _kgPinchAwal = null; // BUG-FIX: gesture pinch selesai -- baseline harus dilupakan
+  clearTimeout(_kgTitikTimer);
   // BUG-FIX (2026-09): dulu syaratnya "p.length > 1" -- tap sekali tanpa
   // menggeser jari cuma menghasilkan 1 titik, jadi SELALU dibuang, tidak
-  // pernah tersimpan. Akibatnya mustahil bikin titik (mis. titik desimal,
-  // tanda baca) tanpa menggores. Sekarang goresan 1 titik pun disimpan --
-  // dirender sebagai titik bulat kecil (lihat _kgGambarStrokes).
-  if (_kgStrokeAktif && _kgStrokeAktif.p.length >= 1) {
+  // pernah tersimpan. Sempat diperbaiki jadi "selalu simpan walau 1
+  // titik", tapi itu bikin tap SEKILAS (tanpa maksud bikin titik) malah
+  // ikut jadi titik tak diinginkan. Sekarang titik 1-titik cuma disimpan
+  // kalau memang sudah "siap" (ditahan sejenak tanpa bergerak -- lihat
+  // _kgTitikSiap di _kgPointerDown) -- tap sekilas dibatalkan begitu saja.
+  if (_kgStrokeAktif && (_kgStrokeAktif.p.length > 1 || _kgTitikSiap)) {
     // FITUR BARU: haluskan titik-titik goresan (kalau mode Halus aktif)
     // SEBELUM disimpan -- supaya hasilnya konsisten halus di mana pun
     // dirender ulang nanti (bukan cuma efek visual sesaat di kanvas ini).
@@ -2464,6 +2489,7 @@ function _kgPointerUp(e) {
     jawGbr[_kgNo].strokes.push(_kgStrokeAktif);
   }
   _kgStrokeAktif = null;
+  _kgTitikSiap = false;
   // BUG-FIX (2026-09): catat SATU langkah histori Undo untuk SELURUH
   // gestur ini (baik gambar SATU goresan, maupun hapus/hapus-sebagian yang
   // mungkin menyentuh BEBERAPA goresan selama satu seretan jari) -- bukan
@@ -2677,9 +2703,21 @@ function _kgGambarPenunjuk(ctx, skala, skalaCss) {
     ctx.strokeStyle = '#7C3AED'; ctx.lineWidth = 2 / skala;
     ctx.beginPath(); ctx.arc(px, py, _kgRadiusHapusSebagian, 0, Math.PI * 2); ctx.stroke();
   } else {
-    ctx.fillStyle = '#059669';
-    ctx.beginPath(); ctx.arc(px, py, 6 / skala, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.5 / skala; ctx.stroke();
+    // FITUR BARU: kalau titik sudah "siap" (jari ditahan cukup lama tanpa
+    // bergerak), tampilkan sebagai lingkaran lebih besar + cincin luar --
+    // sinyal ke siswa bahwa titik akan tersimpan begitu jari dilepas.
+    // Sebelum siap (baru mulai menahan), tetap titik pointer biasa.
+    if (_kgTitikSiap) {
+      ctx.fillStyle = '#059669';
+      ctx.beginPath(); ctx.arc(px, py, 9 / skalaCss, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 2 / skala; ctx.stroke();
+      ctx.strokeStyle = '#059669'; ctx.lineWidth = 1.5 / skala;
+      ctx.beginPath(); ctx.arc(px, py, 14 / skalaCss, 0, Math.PI * 2); ctx.stroke();
+    } else {
+      ctx.fillStyle = '#059669';
+      ctx.beginPath(); ctx.arc(px, py, 6 / skala, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.5 / skala; ctx.stroke();
+    }
   }
   ctx.restore();
 }
