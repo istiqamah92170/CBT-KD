@@ -1,26 +1,9 @@
-
-<!-- ================================================
-  WATERMARK DIGITAL
-  Pemilik  : Rapian Hasanuddin
-  Kontak   : rapian0279@gmail.com
-  ID Unik  : WM-MTWRSNMXYMI1N
-  Tanggal  : 2026-09-11
-  Hak Cipta: © 2026 Rapian Hasanuddin
-  PERINGATAN: Dilarang menyalin, mendistribusikan ulang,
-  atau menghapus atribusi ini tanpa izin tertulis dari pemilik.
-  Pelanggaran dapat dikenai sanksi hukum sesuai UU Hak Cipta.
-================================================ -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta name="author" content="Rapian Hasanuddin">
-<meta name="copyright" content="© 2026 Rapian Hasanuddin">
-<meta name="protection-id" content="WM-MTWRSNMXYMI1N">
-<meta name="_wm" content="WM-MTWRSNMXYMI1N"><meta name="_bh" content="64b625f0">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<title>C​‌​BT Kabut Digital</title>
+<title>CBT Kabut Digital</title>
 <script>
 // Terapkan preferensi tema secepat mungkin (sebelum CSS di-paint) supaya
 // tidak sempat "kedip" mode terang dulu baru pindah ke mode malam.
@@ -33,7 +16,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>/* __WM:WM-MTWRSNMXYMI1N:0a1841ef */
+<style>
 :root {
   --font-arab:20px;
   --blue-deep:#064E3B; --blue-main:#059669; --blue-mid:#10B981;
@@ -116,9 +99,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
    ikut tidak pernah tampil sama sekali walau class 'hide' sudah dilepas --
    penyebab layar terlihat kosong/putih tanpa peringatan apa pun saat
    menyimpan/memuat nilai. Sekarang position:fixed & dipindah ke luar
-   login-screen (jadi anak langsung <body data-wm="WM-MTWRSNMXYMI1N" data-owner="UmFwaWFuIEhhc2FudWRkaW4=">
-<!-- OWNER:WM-MTWRSNMXYMI1N:Rapian%20Hasanuddin:2026-09-11 --><span style="display:none!important;position:absolute;left:-9999px" data-wm="WM-MTWRSNMXYMI1N">WM-MTWRSNMXYMI1N</span>
-) supaya selalu bisa tampil di
+   login-screen (jadi anak langsung <body>) supaya selalu bisa tampil di
    layar mana pun. */
 .load-overlay{position:fixed;inset:0;background:rgba(243,246,250,.85);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
 .load-overlay.hide{display:none;}
@@ -702,8 +683,8 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb{background:#2A2A2A;border-radi
 html[data-theme="dark"] .theme-toggle-btn .ico-sun{display:none;}
 html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
 @media(max-width:480px){ .theme-toggle-btn{top:10px;right:10px;width:36px;height:36px;} .theme-toggle-btn svg{width:17px;height:17px;} }
-/* _b:0a1841 */</style>
-<script data-wm-rt="1">(function(){var _id="WM-MTWRSNMXYMI1N";var _bh="64b625f0";var _on="Rapian Hasanuddin";var _id8="WM-MTWRS";function _h(s){var h=0;for(var i=0;i<s.length;i++){h=(Math.imul(31,h)+s.charCodeAt(i))|0;}return Math.abs(h).toString(16).padStart(8,"0");}function _warn(r){if(document.getElementById("_wm_warn"))return;var ov=document.createElement("div");ov.id="_wm_warn";ov.style.cssText="position:fixed;top:0;left:0;width:100%;background:rgba(220,38,38,.96);color:#fff;padding:13px 18px;z-index:999999;font-family:sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.3)";ov.textContent="⚠ Aplikasi ini telah dimodifikasi secara tidak sah — Rapian Hasanuddin";if(document.body)document.body.appendChild(ov);}function _chk(){var _m=document.querySelector("meta[name='_wm']");if(!_m||_m.getAttribute("content")!==_id){_warn("meta-wm");return;}var _bwm=document.body&&document.body.getAttribute("data-wm");if(_bwm&&_bwm!==_id){_warn("body-wm");return;}var _cv=getComputedStyle(document.documentElement).getPropertyValue("--_wm-id").trim();if(_cv&&_cv.replace(/["'"]/g,"").indexOf(_id8)===-1){_warn("css-wm");return;}}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){setTimeout(_chk,500);});}else{setTimeout(_chk,500);}setInterval(_chk,5000);})();</script></head>
+</style>
+</head>
 <body>
 
 <!-- ── TOGGLE MODE MALAM — mengambang, tampil di semua layar ── -->
@@ -3890,7 +3871,22 @@ function _pInitDaftarUjianDariLink() {
   try {
     let param = new URLSearchParams(location.search).get('d');
     if (!param) return;
-    let list = JSON.parse(_b64urlDecode(param));
+    let parsed = JSON.parse(_b64urlDecode(param));
+    let list;
+    // FITUR (2026-09): Guru Hub sekarang memadatkan link -- kalau beberapa
+    // URL berbagi awalan yang sama (umum di mode offline), awalan itu
+    // dikirim SEKALI di field "p", tiap entri cuma bawa sisanya di "e"
+    // (key pendek l/u). Format LAMA (array langsung {label,url}) tetap
+    // didukung di sini untuk jaga-jaga (link lama yang mungkin masih
+    // beredar dari percobaan Fase 2 sebelumnya).
+    if (Array.isArray(parsed)) {
+      list = parsed; // format lama
+    } else if (parsed && Array.isArray(parsed.e)) {
+      let awalan = typeof parsed.p === 'string' ? parsed.p : '';
+      list = parsed.e.map(x => ({ label: x.l, url: awalan + (x.u || '') }));
+    } else {
+      return;
+    }
     if (!Array.isArray(list) || list.length === 0) return;
     // Validasi ringan tiap entri -- entri yang cacat dilewati begitu saja,
     // satu entri salah tidak boleh membatalkan seluruh daftar.
@@ -4989,18 +4985,6 @@ function _predikatKls(p) {
   return ['A','B','C','D','E'].includes(c) ? c : 'D';
 }
 
-</script>
-
-<!-- PROTECTED:WM-MTWRSNMXYMI1N | Rapian Hasanuddin | 2026-09-11 -->
-<script data-pid="WM-MTWRSNMXYMI1N" data-feature="devtools-keys">
-(function(){var _a=5779,_b=4947,_c=3993,_d=7975;
-document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&e.key==='U')){e.preventDefault();}});
-})();
-</script>
-<script data-pid="WM-MTWRSNMXYMI1N" data-feature="consolewarn">
-(function(){var _a=6116,_b=3682,_c=1913,_d=7905;
-console.log('%c\u26a0 HAK CIPTA\n%c\u00a9 2026 Rapian Hasanuddin | rapian0279@gmail.com\nID: WM-MTWRSNMXYMI1N\nDilarang menyalin atau mendistribusikan tanpa izin tertulis pemilik.','color:#f26b6b;font-size:15px;font-weight:bold','color:#888;font-size:12px');
-})();
 </script>
 </body>
 </html>
