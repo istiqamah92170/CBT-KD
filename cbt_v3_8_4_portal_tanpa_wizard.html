@@ -1,9 +1,26 @@
+
+<!-- ================================================
+  WATERMARK DIGITAL
+  Pemilik  : Rapian Hasanuddin
+  Kontak   : rapian0279@gmail.com
+  ID Unik  : WM-MTWRSNMXYMI1N
+  Tanggal  : 2026-09-11
+  Hak Cipta: © 2026 Rapian Hasanuddin
+  PERINGATAN: Dilarang menyalin, mendistribusikan ulang,
+  atau menghapus atribusi ini tanpa izin tertulis dari pemilik.
+  Pelanggaran dapat dikenai sanksi hukum sesuai UU Hak Cipta.
+================================================ -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<meta name="author" content="Rapian Hasanuddin">
+<meta name="copyright" content="© 2026 Rapian Hasanuddin">
+<meta name="protection-id" content="WM-MTWRSNMXYMI1N">
+<meta name="_wm" content="WM-MTWRSNMXYMI1N"><meta name="_bh" content="64b625f0">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<title>CBT Kabut Digital</title>
+<title>C​‌​BT Kabut Digital</title>
 <script>
 // Terapkan preferensi tema secepat mungkin (sebelum CSS di-paint) supaya
 // tidak sempat "kedip" mode terang dulu baru pindah ke mode malam.
@@ -16,7 +33,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
+<style>/* __WM:WM-MTWRSNMXYMI1N:0a1841ef */
 :root {
   --font-arab:20px;
   --blue-deep:#064E3B; --blue-main:#059669; --blue-mid:#10B981;
@@ -99,7 +116,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-bg);color:
    ikut tidak pernah tampil sama sekali walau class 'hide' sudah dilepas --
    penyebab layar terlihat kosong/putih tanpa peringatan apa pun saat
    menyimpan/memuat nilai. Sekarang position:fixed & dipindah ke luar
-   login-screen (jadi anak langsung <body>) supaya selalu bisa tampil di
+   login-screen (jadi anak langsung <body data-wm="WM-MTWRSNMXYMI1N" data-owner="UmFwaWFuIEhhc2FudWRkaW4=">
+<!-- OWNER:WM-MTWRSNMXYMI1N:Rapian%20Hasanuddin:2026-09-11 --><span style="display:none!important;position:absolute;left:-9999px" data-wm="WM-MTWRSNMXYMI1N">WM-MTWRSNMXYMI1N</span>
+) supaya selalu bisa tampil di
    layar mana pun. */
 .load-overlay{position:fixed;inset:0;background:rgba(243,246,250,.85);z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
 .load-overlay.hide{display:none;}
@@ -683,8 +702,8 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb{background:#2A2A2A;border-radi
 html[data-theme="dark"] .theme-toggle-btn .ico-sun{display:none;}
 html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
 @media(max-width:480px){ .theme-toggle-btn{top:10px;right:10px;width:36px;height:36px;} .theme-toggle-btn svg{width:17px;height:17px;} }
-</style>
-</head>
+/* _b:0a1841 */</style>
+<script data-wm-rt="1">(function(){var _id="WM-MTWRSNMXYMI1N";var _bh="64b625f0";var _on="Rapian Hasanuddin";var _id8="WM-MTWRS";function _h(s){var h=0;for(var i=0;i<s.length;i++){h=(Math.imul(31,h)+s.charCodeAt(i))|0;}return Math.abs(h).toString(16).padStart(8,"0");}function _warn(r){if(document.getElementById("_wm_warn"))return;var ov=document.createElement("div");ov.id="_wm_warn";ov.style.cssText="position:fixed;top:0;left:0;width:100%;background:rgba(220,38,38,.96);color:#fff;padding:13px 18px;z-index:999999;font-family:sans-serif;font-size:13px;font-weight:600;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.3)";ov.textContent="⚠ Aplikasi ini telah dimodifikasi secara tidak sah — Rapian Hasanuddin";if(document.body)document.body.appendChild(ov);}function _chk(){var _m=document.querySelector("meta[name='_wm']");if(!_m||_m.getAttribute("content")!==_id){_warn("meta-wm");return;}var _bwm=document.body&&document.body.getAttribute("data-wm");if(_bwm&&_bwm!==_id){_warn("body-wm");return;}var _cv=getComputedStyle(document.documentElement).getPropertyValue("--_wm-id").trim();if(_cv&&_cv.replace(/["'"]/g,"").indexOf(_id8)===-1){_warn("css-wm");return;}}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){setTimeout(_chk,500);});}else{setTimeout(_chk,500);}setInterval(_chk,5000);})();</script></head>
 <body>
 
 <!-- ── TOGGLE MODE MALAM — mengambang, tampil di semua layar ── -->
@@ -869,6 +888,19 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
             <div class="sub">Profil aktif yang akan digunakan</div>
           </div>
         </div>
+
+        <!-- FITUR (2026-09): daftar ujian dari link gabungan Guru Hub (?d=...) --
+             cuma tampil kalau Portal dibuka lewat link yang membawa daftar ini;
+             kalau tidak ada, elemen ini tetap tersembunyi dan tidak mengubah
+             apa pun dari perilaku lama. -->
+        <div class="p-fg" id="p-daftar-ujian-wrap" style="display:none;">
+          <label>Pilih Ujian</label>
+          <select id="p-sel-daftar-ujian" onchange="_pPilihDariDaftarUjian(this.value)">
+            <option value="">-- Pilih dari daftar --</option>
+          </select>
+          <div class="p-kode-hint">Daftar ini disiapkan oleh guru. Kalau ujian yang dicari tidak ada di sini, isi manual di bawah.</div>
+        </div>
+        <div id="p-daftar-ujian-divider" style="display:none;text-align:center;color:var(--gray-soft);font-size:12px;margin:14px 0;">— atau isi manual —</div>
 
         <div class="p-fg">
           <label>Kode CBT / URL Google Apps Script</label>
@@ -1842,9 +1874,26 @@ function setBar(t, m) {
 }
 function isEsai(no)  { return soalData.find(s => s.no === no)?.tipe === 'esai'; }
 function getSoal()   { return soalData[idx]; }
-function isUrl(s)    { return s && (s.startsWith('http://') || s.startsWith('https://')); }
+function isUrl(s)    {
+  // BUG-FIX (2026-09): opsi PG yang gambarnya diunduh jadi data URI (mode
+  // offline) TIDAK LAGI diawali "http" -- kalau fungsi ini cuma cek awalan
+  // http/https, opsi seperti itu jadi tidak dianggap gambar sama sekali
+  // (fallback ke teks biasa, tampil kosong/aneh karena isinya base64 raksasa).
+  // Data URI harus tetap dianggap gambar di sini.
+  return s && (s.startsWith('http://') || s.startsWith('https://') || s.startsWith('data:'));
+}
 function gdrive(u)   {
   if (!u) return u;
+  // BUG-FIX (2026-09): data URI (base64, dipakai mode offline supaya gambar
+  // tetap tampil tanpa internet) TIDAK BOLEH diproses lagi di sini -- base64
+  // memakai karakter '/' sebagai bagian alfabetnya, jadi untuk gambar
+  // berukuran wajar ada peluang besar (bisa >30%) pola "/d/" muncul secara
+  // KEBETULAN di tengah data base64-nya. Kalau kebetulan cocok, regex di
+  // bawah salah mengira itu link Drive, membuang data URI yang valid dan
+  // menggantinya dengan URL thumbnail Drive palsu (ID-nya cuma pecahan
+  // base64 acak) -- gambar jadi tidak pernah bisa dimuat. Ini akar penyebab
+  // "sebagian gambar offline tidak muncul" yang dilaporkan.
+  if (u.startsWith('data:')) return u;
   let id = u.match(/[?&]id=([a-zA-Z0-9_-]+)/)?.[1]
            || u.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/)?.[1]
            || u.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
@@ -3815,6 +3864,98 @@ function pUUID() {
 
 // ── [3] Registry kode CBT Free tier ───────────────────────────
 // Tambah mapping kode pendek di sini. Format: 'KODE': { url, label }
+// ═══════════════════════════════════════════════
+//  DAFTAR UJIAN DARI LINK GABUNGAN (?d=...)
+// ═══════════════════════════════════════════════
+// FITUR (2026-09): guru bisa membuat SATU link berisi beberapa ujian
+// sekaligus lewat Guru Hub -- link itu menambahkan parameter
+// ?d=<base64url JSON [{label,url}, ...]> di alamat Portal. Siswa yang
+// buka link ini otomatis melihat dropdown pilihan ujian di layar "Masuk
+// Ujian", tidak perlu ketik/tempel apa pun. Kolom manual di bawahnya
+// tetap ada sebagai cadangan -- link LAMA tanpa ?d= sama sekali tidak
+// terpengaruh (perilaku persis seperti sebelumnya, elemen dropdown
+// tetap tersembunyi).
+let _daftarUjianDariLink = null;
+
+function _b64urlDecode(str) {
+  let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (b64.length % 4) b64 += '=';
+  let bin = atob(b64);
+  let bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function _pInitDaftarUjianDariLink() {
+  try {
+    let param = new URLSearchParams(location.search).get('d');
+    if (!param) return;
+    let list = JSON.parse(_b64urlDecode(param));
+    if (!Array.isArray(list) || list.length === 0) return;
+    // Validasi ringan tiap entri -- entri yang cacat dilewati begitu saja,
+    // satu entri salah tidak boleh membatalkan seluruh daftar.
+    list = list.filter(x => x && typeof x.url === 'string' && x.url.trim());
+    if (list.length === 0) return;
+    _daftarUjianDariLink = list;
+  } catch (e) {
+    console.warn('Gagal membaca daftar ujian dari link (?d=):', e);
+    _daftarUjianDariLink = null;
+  }
+}
+
+function _pRenderDaftarUjianDariLink() {
+  if (!_daftarUjianDariLink) return;
+  let wrap = document.getElementById('p-daftar-ujian-wrap');
+  let sel  = document.getElementById('p-sel-daftar-ujian');
+  let div  = document.getElementById('p-daftar-ujian-divider');
+  if (!wrap || !sel) return;
+  sel.innerHTML = '<option value="">-- Pilih dari daftar --</option>' +
+    _daftarUjianDariLink.map((x, i) => '<option value="' + i + '">'
+      + String(x.label || ('Ujian ' + (i + 1))).replace(/</g, '&lt;') + '</option>').join('');
+  wrap.style.display = 'block';
+  if (div) div.style.display = 'block';
+}
+
+function _pPilihDariDaftarUjian(idx) {
+  if (idx === '' || idx === null || idx === undefined) return;
+  let entri = _daftarUjianDariLink && _daftarUjianDariLink[parseInt(idx)];
+  if (!entri || !entri.url) return;
+  let profil = pProfilAktif();
+  if (!profil) { alert('Buat profil terlebih dahulu di menu Kelola Profil.'); return; }
+  pMasukCBT(entri.url);
+}
+
+// FITUR (2026-09): kalau Portal ini SENDIRI sedang dibuka dari alamat
+// server offline (bukan online/GitHub Pages) -- deteksi lewat _isUrlLokal
+// yang sama dipakai untuk kolom kode manual -- server.js sudah tahu semua
+// ujian yang tersimpan, jadi coba tanya LANGSUNG lewat endpoint
+// ?action=daftarUjian. Ini membuat dropdown pilihan ujian terisi otomatis
+// TANPA guru perlu bikin link gabungan (?d=) sama sekali untuk kasus
+// offline. Kalau Portal dibuka dari online/GitHub Pages, _isUrlLokal
+// gagal duluan dan tidak ada request keluar sama sekali.
+function _pInitDaftarUjianOffline() {
+  if (_daftarUjianDariLink) return; // ?d= sudah ada isinya, jangan ditimpa
+  if (!_isUrlLokal(location.href)) return;
+
+  fetch(location.origin + '/?action=daftarUjian')
+    .then(r => r.json())
+    .then(data => {
+      if (_daftarUjianDariLink) return; // ?d= sempat selesai lebih dulu (race) -- jangan ditimpa
+      if (!data || data.status !== 'ok' || !Array.isArray(data.ujian) || data.ujian.length === 0) return;
+      _daftarUjianDariLink = data.ujian.map(x => ({
+        label: x.judul || x.id,
+        // BUG-FIX (2026-09): JANGAN tambah "/exec" di sini -- itu kebiasaan
+        // lama dari zaman satu-ujian (kebetulan selalu "lolos" karena ada
+        // aturan cadangan "kalau cuma 1 ujian, ID di path diabaikan"). Untuk
+        // multi-ujian, path HARUS persis "/<id-ujian>" saja -- kalau ditambah
+        // "/exec" jadi 2 segmen, tidak cocok dengan id asli, hasilnya 404.
+        url: location.origin + '/' + x.id
+      }));
+      _pRenderDaftarUjianDariLink();
+    })
+    .catch(() => {}); // percobaan opsional -- gagal diam-diam, kolom manual tetap tersedia seperti biasa
+}
+
 const P_KODE_MAP = {
   // Contoh:
   // 'IPA-2026': { url: 'https://script.google.com/...', label: 'IPA 2026' },
@@ -3913,6 +4054,16 @@ function pTampil(id) {
 function portalInit() {
   // Jalankan migrasi skema data jika perlu
   _pMigrasi();
+
+  // FITUR (2026-09): baca & tampilkan daftar ujian dari link gabungan
+  // Guru Hub (?d=...), kalau ada -- lihat catatan lengkap di definisi
+  // fungsinya masing-masing.
+  _pInitDaftarUjianDariLink();
+  _pRenderDaftarUjianDariLink();
+  // FITUR (2026-09): kalau ?d= tidak ada TAPI Portal ini dibuka dari
+  // server offline, coba ambil daftarnya langsung dari server itu --
+  // lihat catatan di definisi fungsinya.
+  _pInitDaftarUjianOffline();
 
   let exam  = document.getElementById('exam-screen');
   let hasil = document.getElementById('hasil-screen');
@@ -4838,6 +4989,18 @@ function _predikatKls(p) {
   return ['A','B','C','D','E'].includes(c) ? c : 'D';
 }
 
+</script>
+
+<!-- PROTECTED:WM-MTWRSNMXYMI1N | Rapian Hasanuddin | 2026-09-11 -->
+<script data-pid="WM-MTWRSNMXYMI1N" data-feature="devtools-keys">
+(function(){var _a=5779,_b=4947,_c=3993,_d=7975;
+document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key))||(e.ctrlKey&&e.key==='U')){e.preventDefault();}});
+})();
+</script>
+<script data-pid="WM-MTWRSNMXYMI1N" data-feature="consolewarn">
+(function(){var _a=6116,_b=3682,_c=1913,_d=7905;
+console.log('%c\u26a0 HAK CIPTA\n%c\u00a9 2026 Rapian Hasanuddin | rapian0279@gmail.com\nID: WM-MTWRSNMXYMI1N\nDilarang menyalin atau mendistribusikan tanpa izin tertulis pemilik.','color:#f26b6b;font-size:15px;font-weight:bold','color:#888;font-size:12px');
+})();
 </script>
 </body>
 </html>
