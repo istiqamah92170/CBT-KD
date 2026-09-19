@@ -4986,9 +4986,20 @@ function _esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 function _predikatKls(p) {
+  // BUG-FIX (2026-09): dulu cuma ambil HURUF PERTAMA teks predikat dan
+  // berharap itu 'A'/'B'/'C'/'D'/'E' -- padahal predikat yang dipakai
+  // server Bahasa Indonesia ('Sangat Baik','Baik','Cukup','Terus
+  // Semangat'), jadi 'Sangat Baik' (predikat TERBAIK, huruf depan 'S')
+  // ikut jatuh ke fallback 'D' (merah) sama seperti 'Terus Semangat'
+  // (predikat TERBURUK, huruf depan 'T') -- keduanya kebetulan sama-sama
+  // tidak dikenali, bukan karena memang seharusnya sama warnanya. Sekarang
+  // dicocokkan ke teks predikat yang sebenarnya.
   if (!p) return 'D';
-  let c = p.charAt(0).toUpperCase();
-  return ['A','B','C','D','E'].includes(c) ? c : 'D';
+  let t = p.toString().trim().toLowerCase();
+  if (t === 'sangat baik') return 'A';
+  if (t === 'baik')        return 'B';
+  if (t === 'cukup')       return 'C';
+  return 'D'; // 'Terus Semangat' dan predikat tak dikenal lainnya
 }
 
 </script>
