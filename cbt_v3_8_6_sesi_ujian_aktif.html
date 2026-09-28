@@ -836,7 +836,7 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
         <div class="lbl">Backup &amp; Pemulihan</div>
         <div class="sub">Ekspor &amp; impor data</div>
       </div>
-      <a id="menu-wizard" class="p-menu-item wizard" href="https://cbtkabutdigital.com/index.html" target="_blank" rel="noopener">
+      <a id="menu-wizard" class="p-menu-item wizard" href="__CBTKD_WIZARD_URL__" target="_blank" rel="noopener">
         <div class="ico-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9Z"/></svg></div>
         <div class="txt">
           <div class="lbl">Buat CBT Baru</div>
@@ -1551,6 +1551,13 @@ let ujianAktif   = false;  // flag: ujian sedang berjalan (untuk wake lock)
 // server yang diukur saat request), jadi mengubah jam HP tidak bisa
 // memperpanjang waktu ujian.
 let SESI_SELESAI_MS = null;
+// BATAS MUTLAK percobaan ujian yang sedang berjalan (epoch ms, jam server) --
+// ditetapkan SEKALI saat ujian dimulai (min(durasi, sisa sesi)) lalu ikut
+// tersimpan di draft. Alasannya: dulu batas waktu dihitung ulang dari
+// konfigurasi SAAT INI tiap kali siswa masuk lagi, jadi siswa yang masuk
+// ulang lewat link manual (token bawaan, durasi 20 menit) mendapat waktu
+// baru padahal percobaan sesinya (10 menit) sudah lewat.
+let BATAS_UJIAN_MS = null;
 let _serverOffsetMs = 0;
 function nowServerMs() { return Date.now() + _serverOffsetMs; }
 function _terapkanInfoSesi(d, t0, t1) {
@@ -1820,8 +1827,10 @@ function muatSoal() {
           raguMap     = sudah.raguMap || {};
           tMulai      = sudah.tMulai   ? new Date(sudah.tMulai)   : null;
           tSelesai    = sudah.tSelesai ? new Date(sudah.tSelesai) : null;
+          if (Number.isFinite(sudah.pelanggar)) pelanggar = sudah.pelanggar;
           document.getElementById('login-screen').style.display = 'none';
-          tampilHasilAkhir();
+          if (sudah.terkirim === false) _kirimUlangHasilTertunda();
+          else tampilHasilAkhir();
         } else {
           setBar('ok', '✅ <span class="load-judul">' + _esc(JUDUL) + '</span> — ' + soalData.length + ' soal berhasil dimuat. Cek dulu judulnya sebelum lanjut, lalu login.');
           document.getElementById('btn-login').disabled = false;
@@ -1997,8 +2006,19 @@ async function mulaiUjian() {
   // draft tersimpan (lihat muatDraft()) kalau ada sesi sebelumnya yang belum
   // selesai; kalau tidak ada draft sama sekali, pelanggar tetap 0 (sesi baru).
   tMulai = new Date(nowServerMs()); detik = DURASI * 60;
+  BATAS_UJIAN_MS = null;
   // Muat draft jika ada (siswa yang tiba-tiba keluar bisa lanjut)
   let adaDraft = muatDraft();
+  // Percobaan sebelumnya SUDAH melewati batas mutlaknya (mis. sesi 10 menit
+  // habis saat HP siswa mati/tab tertutup, lalu ia masuk lagi lewat link
+  // manual dengan token bawaan): JANGAN dilanjutkan dengan waktu baru --
+  // kirim jawaban yang ada & selesaikan.
+  let draftKedaluwarsa = !!(adaDraft && BATAS_UJIAN_MS && nowServerMs() >= BATAS_UJIAN_MS);
+  if (draftKedaluwarsa) {
+    alert('Waktu ujian Anda sebelumnya sudah habis. Jawaban terakhir Anda dikirim otomatis.');
+    selesaiFinal();
+    return;
+  }
   if (sesiBerakhir) {
     // Sesi sudah berakhir: TIDAK ada yang boleh masuk lagi. Kalau ada draft
     // dari sebelum sesi berakhir, kirim otomatis (jawaban tidak hilang) TANPA
@@ -2021,9 +2041,12 @@ async function mulaiUjian() {
     detik = hitungSisaWaktu();
   }
   detik = hitungSisaWaktu(); // sudah memperhitungkan batas akhir sesi (peserta terlambat)
-  if (SESI_SELESAI_MS && !adaDraft && detik < (DURASI * 60) - 60) { // pesan hanya kalau telat >= 1 menit
-    alert('Anda masuk setelah sesi dimulai.\nSisa waktu ujian Anda: ' + Math.ceil(detik / 60) + ' menit (mengikuti jadwal sesi, berakhir bersamaan dengan peserta lain).');
-  }
+  // Batas mutlak percobaan ini: ditetapkan sekali di sini (kecuali draft lama
+  // sudah membawa batasnya sendiri).
+  if (!BATAS_UJIAN_MS) BATAS_UJIAN_MS = nowServerMs() + detik * 1000;
+  let _pesanTelat = (SESI_SELESAI_MS && !adaDraft && detik < (DURASI * 60) - 60)
+    ? ('Anda masuk setelah sesi dimulai. Sisa waktu Anda <b>' + Math.ceil(detik / 60) + ' menit</b> — berakhir bersamaan dengan peserta lain.')
+    : null;
   document.getElementById('exam-ttl').textContent = JUDUL;
   // Sembunyikan semua layar portal dan login
   P_SCREENS.forEach(s => { let el=document.getElementById(s); if(el) el.style.display='none'; });
@@ -2032,8 +2055,27 @@ async function mulaiUjian() {
   buatGrid();
   tampil();
   mulaiTimer();
+  simpanDraft(); // batas mutlak langsung tersimpan, walau siswa belum menjawab apa pun
   fullscreen();
   antiCheat();
+  // PERBAIKAN (2026-09): pemberitahuan telat SEBELUMNYA memakai alert() --
+  // dialog itu mencuri fokus halaman tepat saat fullscreen & anti-curang
+  // (document.hasFocus) dinyalakan, sehingga terhitung 1 pelanggaran padahal
+  // siswa tidak keluar layar. Sekarang banner di dalam halaman (tanpa
+  // dialog, tidak mengubah fokus).
+  if (_pesanTelat) _tampilNoticeInline(_pesanTelat);
+}
+
+function _tampilNoticeInline(html) {
+  let el = document.getElementById('notice-inline');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'notice-inline';
+    el.style.cssText = 'position:fixed;left:12px;right:12px;top:12px;z-index:99999;background:#fff8e1;border:1.5px solid #f0c36d;color:#7a5200;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:0 6px 24px rgba(0,0,0,.18);display:flex;gap:10px;align-items:flex-start;';
+    document.body.appendChild(el);
+  }
+  el.innerHTML = '<div style="flex:1;line-height:1.45;">⏱️ ' + html + '</div><button type="button" style="border:none;background:#f0c36d;color:#5a3d00;border-radius:8px;padding:6px 12px;font-weight:800;cursor:pointer;" onclick="this.parentNode.style.display=\'none\'">OK</button>';
+  el.style.display = 'flex';
+  clearTimeout(el._t); el._t = setTimeout(() => { el.style.display = 'none'; }, 20000);
 }
 
 // ═══════════════════════════════════════════════
@@ -2292,6 +2334,10 @@ function hitungSisaWaktu() {
     let sisaSesi = Math.floor((SESI_SELESAI_MS - nowServerMs()) / 1000);
     if (sisaSesi < sisa) sisa = sisaSesi;
   }
+  if (BATAS_UJIAN_MS) {
+    let sisaBatas = Math.floor((BATAS_UJIAN_MS - nowServerMs()) / 1000);
+    if (sisaBatas < sisa) sisa = sisaBatas;
+  }
   return sisa > 0 ? sisa : 0;
 }
 
@@ -2301,6 +2347,7 @@ function simpanDraft() {
       nama: namaSiswa, sekolah: namaSekolah,
       jawPG: jawPG, jawEsai: jawEsai, jawGbr: jawGbr, raguMap: raguMap, // FITUR BARU (2026-08): jawGbr ikut disimpan
       tMulai: tMulai?.toISOString(),
+      batas: BATAS_UJIAN_MS, // batas mutlak percobaan ini (lihat BATAS_UJIAN_MS)
       pelanggar: pelanggar // BUG-FIX (2026-07): ikut disimpan, lihat catatan di mulaiUjian()
     }));
   } catch(e) {}
@@ -2317,6 +2364,7 @@ function muatDraft() {
     jawGbr   = d.jawGbr   || {}; // FITUR BARU (2026-08)
     raguMap  = d.raguMap  || {};
     if (d.tMulai) tMulai = new Date(d.tMulai);
+    BATAS_UJIAN_MS = Number.isFinite(d.batas) ? d.batas : null;
     pelanggar = Number.isFinite(d.pelanggar) ? d.pelanggar : pelanggar; // BUG-FIX (2026-07)
     return true;
   } catch(e) { return false; }
@@ -3221,12 +3269,21 @@ function toggleYakin() { document.getElementById('btn-yakin').disabled = !docume
 //  SELESAI
 // ═══════════════════════════════════════════════
 function selesaiFinal() {
-  clearInterval(timerID); tSelesai = new Date();
+  clearInterval(timerID);
+  clearTimeout(dbEsai); // jangan sampai debounce simpanDraft menulis ulang draft setelah selesai
+  // Waktu selesai tidak boleh melewati batas mutlak percobaan (mis. dikirim
+  // otomatis belakangan saat siswa masuk lagi setelah waktunya habis).
+  let _fin = nowServerMs();
+  if (BATAS_UJIAN_MS && _fin > BATAS_UJIAN_MS) _fin = BATAS_UJIAN_MS;
+  tSelesai = new Date(_fin);
   ujianSelesai = true;
   ujianAktif   = false;
   matikanWakeLock();
   _hentikanAntiCheat(); // hentikan polling fokus & split screen
-  hapusDraft();         // hapus draft localStorage
+  // PERBAIKAN (2026-09): draft TIDAK lagi dihapus di sini -- baru dihapus
+  // setelah server mengonfirmasi hasil tersimpan (lihat di bawah). Dulu
+  // langsung dihapus, jadi kalau pengiriman putus di tengah jalan (HP mati,
+  // tab ditutup, sinyal hilang) jawaban lenyap tanpa bisa dikirim ulang.
 
   document.getElementById('modal-konfirmasi').classList.remove('aktif');
   document.getElementById('exam-screen').style.display = 'none';
@@ -3236,7 +3293,12 @@ function selesaiFinal() {
     nama: namaSiswa, sekolah: namaSekolah,
     jawPG: jawPG, jawEsai: jawEsai, raguMap: raguMap,
     tMulai: tMulai?.toISOString(), tSelesai: tSelesai?.toISOString(),
-    paksa_selesai: (pelanggar >= MAKS_P)
+    paksa_selesai: (pelanggar >= MAKS_P),
+    pelanggar: pelanggar,
+    // false sampai server MENGONFIRMASI hasil tersimpan. Kalau HP mati / tab
+    // ditutup / sinyal putus sebelum itu, saat halaman dibuka lagi hasilnya
+    // dikirim ulang otomatis (lihat _kirimUlangHasilTertunda).
+    terkirim: false
   });
 
   let _riwayatEntry = portalSimpanRiwayat(); // ← hook Portal: simpan snapshot riwayat (placeholder dulu)
@@ -3268,6 +3330,7 @@ function selesaiFinal() {
     setOverlay('Memuat nilai akhir dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Mohon jangan tutup halaman ini</small>');
     tampilHasilAkhir();
     _tampilStatusKirimHasil(sukses);
+    if (sukses) { hapusDraft(); _tandaiTerkirim(); }
     // BUG-FIX KEAMANAN (2026-07): begitu submit terkonfirmasi, patch entry
     // riwayat lokal (yang tadi disimpan dengan placeholder) pakai nilai
     // resmi dari server -- pakai fungsi sync yang sudah ada (dipakai juga
@@ -3340,11 +3403,32 @@ function _tampilStatusKirimHasil(sukses) {
     '<button type="button" class="btn-coba-kirim-ulang" onclick="_cobaKirimUlangHasil()">🔄 Coba Kirim Ulang</button>';
 }
 
+function _tandaiTerkirim() {
+  try {
+    let d = cekSudahMengerjakan();
+    if (d) { d.terkirim = true; simpanStatusSelesai(d); }
+  } catch (e) {}
+}
+
+// Dipanggil saat halaman dimuat & perangkat ini tercatat sudah selesai TAPI
+// pengiriman hasilnya dulu belum terkonfirmasi server (terkirim === false).
+async function _kirimUlangHasilTertunda() {
+  ujianSelesai = true;
+  setOverlay('Mengirim ulang hasil ujian Anda ke server...<br><small style="font-weight:400;color:var(--gray-soft);">Mohon jangan tutup halaman ini</small>');
+  document.getElementById('load-overlay').classList.remove('hide');
+  let sukses = await _kirimSemuaHasilUjian();
+  if (sukses) { hapusDraft(); _tandaiTerkirim(); }
+  setOverlay('Memuat nilai akhir dari server...<br><small style="font-weight:400;color:var(--gray-soft);">Mohon jangan tutup halaman ini</small>');
+  tampilHasilAkhir();
+  _tampilStatusKirimHasil(sukses);
+}
+
 async function _cobaKirimUlangHasil() {
   let el = document.getElementById('hasil-warn-gagal');
   if (el) el.innerHTML = 'Mengirim ulang...';
   let sukses = await _kirimSemuaHasilUjian();
   _tampilStatusKirimHasil(sukses);
+  if (sukses) { hapusDraft(); _tandaiTerkirim(); }
 }
 
 // BUG-FIX KEAMANAN (2026-07): hitungNilai() DIHAPUS -- fungsi itu menghitung
@@ -3832,6 +3916,7 @@ function _pesanWarning(n,sisa) {
 // ═══════════════════════════════════════════════
 
 let _fokusHilang    = false;   // state: apakah saat ini fokus sedang hilang
+let _acMulaiMs      = 0;       // kapan anti-curang dinyalakan (untuk masa tenggang awal)
 let _splitLocked    = false;   // state: apakah sesi sedang dikunci karena split screen
 let _acIntervalId   = null;    // ID interval polling fokus
 let _lastInnerW     = window.innerWidth;
@@ -3897,6 +3982,10 @@ function _pollingFokus() {
   }
   // Jangan proses pelanggaran saat sesi dikunci karena split screen
   if (_splitLocked) return;
+  // Masa tenggang 2 detik sejak ujian dimulai: transisi fullscreen / dialog
+  // yang baru ditutup bisa membuat hasFocus() false sesaat di beberapa HP.
+  // Kalau fokus tetap hilang setelah masa ini, pelanggaran TETAP tercatat.
+  if (Date.now() - _acMulaiMs < 2000) return;
 
   let punya = document.hasFocus();
   if (!punya && !_fokusHilang) {
@@ -3926,6 +4015,7 @@ function _pollingFokus() {
 }
 
 function antiCheat() {
+  _acMulaiMs = Date.now();
   // Simpan dimensi awal window sebagai acuan split screen
   _lastInnerW = window.innerWidth;
   _lastInnerH = window.innerHeight;
