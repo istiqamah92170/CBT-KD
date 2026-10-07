@@ -1793,6 +1793,14 @@ function muatSoal() {
           opsi_b          : (s.opsi_b||"").trim(),
           opsi_c          : (s.opsi_c||"").trim(),
           opsi_d          : (s.opsi_d||"").trim(),
+          // FITUR BARU (2026-09): opsional -- kosong berarti soal ini tetap
+          // 4 opsi seperti biasa. BUG-FIX: field ini sempat KETINGGALAN di
+          // sini padahal server (getDataSoal) sudah benar mengirimnya --
+          // akibatnya soalData di klien tidak pernah punya opsi_e sama
+          // sekali, jadi renderOpsi/renderOpsiRow/layar pembahasan (semua
+          // baca dari soalData, bukan langsung dari respons server) selalu
+          // menganggap soal cuma 4 opsi, terlepas dari cache ataupun deploy.
+          opsi_e          : (s.opsi_e||"").trim(),
           // FITUR BARU (2026-08): true kalau guru mengizinkan kanvas gambar
           // tangan untuk soal esai ini -- server LAMA yang belum kirim
           // field ini otomatis dianggap false (aman, fitur baru mati total).
