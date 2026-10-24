@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lensa Empati & Agen Perdamaian - Pembelajaran Mendalam Kelas 8 MTs</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Amiri for Arabic aesthetics -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0f766e 100%);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(4, 120, 87, 0.3);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+        .pulse-soft {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(0.98); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-md border border-white/20">
+                    <i class="fa-solid fa-hands-holding-child text-2xl text-emerald-300"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Madrasah Damai MTs</h1>
+                    <p class="text-xs text-emerald-200">Modul Interaktif Moderasi Beragama & Cinta Sesama (Kelas 8)</p>
+                </div>
+            </div>
+
+            <!-- MENU TABS -->
+            <nav class="flex space-x-1 mt-3 sm:mt-0 bg-black/20 p-1 rounded-xl text-xs sm:text-sm font-medium">
+                <button onclick="switchTab('p18')" id="tab-p18" class="px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center space-x-1.5 bg-white text-emerald-900 shadow">
+                    <i class="fa-solid fa-heart text-rose-500"></i>
+                    <span>Pertemuan 18: Cinta Sesama</span>
+                </button>
+                <button onclick="switchTab('p19')" id="tab-p19" class="px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center space-x-1.5 text-white hover:bg-white/10">
+                    <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                    <span>Pertemuan 19: Agen Perdamaian</span>
+                </button>
+                <button onclick="switchTab('proyek')" id="tab-proyek" class="px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center space-x-1.5 text-white hover:bg-white/10">
+                    <i class="fa-solid fa-tree text-emerald-300"></i>
+                    <span>Pohon Perdamaian</span>
+                </button>
+                <button onclick="switchTab('ai')" id="tab-ai" class="px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center space-x-1.5 text-amber-300 hover:bg-white/10">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Asisten AI Gemini</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ========================================================================= -->
+        <!-- TAB 1: PERTEMUAN 18 - MODERASI BERAGAMA & DEKLARASI CINTA SESAMA -->
+        <!-- ========================================================================= -->
+        <section id="content-p18" class="space-y-6">
+            
+            <!-- Banner Utama -->
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-700 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-block bg-emerald-500/30 text-emerald-200 text-xs px-3 py-1 rounded-full font-semibold border border-emerald-400/30 mb-2">
+                        Pertemuan 18 • 2 JP (2 x 40 Menit)
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-2">Menanamkan Cinta Sesama melalui Moderasi Beragama</h2>
+                    <p class="text-emerald-100 text-sm leading-relaxed">
+                        Internalisasi nilai toleransi (Tasamuh), empati, dan aksi nyata untuk menjaga keharmonisan di lingkungan madrasah tanpa membedakan suku, ormas, atau status sosial.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interaktif 1: Virtual Web of Us (Jaring Hubungan) -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">1</span>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Aktivitas Pemantik: "The Web of Us" (Simulasi Jaring Hubungan)</h3>
+                            <p class="text-xs text-slate-500">Klik tombol untuk menghubungkan antar siswa dengan benang kebaikan!</p>
+                        </div>
+                    </div>
+                    <button onclick="playTTS('web-of-us-desc')" class="text-slate-400 hover:text-emerald-600 transition p-2" title="Dengarkan Penjelasan">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+                </div>
+
+                <div id="web-of-us-desc" class="hidden">
+                    Aktivitas jaring hubungan menggambarkan bahwa setiap siswa di madrasah saling terhubung oleh benang-benang kebaikan. Jika satu benang diputus oleh prasangka atau perundungan, maka seluruh jaring keharmonisan kelas akan rusak.
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <!-- Area Canvas/Grafik Jaring -->
+                    <div class="md:col-span-2 bg-slate-900 rounded-xl p-4 relative h-64 flex items-center justify-center overflow-hidden border border-slate-700">
+                        <canvas id="webCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                        <div id="canvasOverlay" class="relative z-10 text-center text-slate-400 text-xs pointer-events-none">
+                            <i class="fa-solid fa-circle-nodes text-3xl text-emerald-400 mb-2 block"></i>
+                            <p>Klik "Lempar Benang Kebaikan" untuk membangun keterhubungan kelas.</p>
+                        </div>
+                    </div>
+
+                    <!-- Kontrol Simulasi -->
+                    <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-semibold text-xs text-slate-500 uppercase tracking-wider">Aksi Interaktif</h4>
+                        <button onclick="addWebNode()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg shadow transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-[#000]"></i>
+                            <i class="fa-solid fa-dharmachakra"></i>
+                            <span>Lempar Benang Kebaikan (+1 Siswa)</span>
+                        </button>
+                        <button onclick="cutWebEdge()" class="w-full bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-scissors"></i>
+                            <span>Simulasi Gunting Benang (Konflik)</span>
+                        </button>
+                        <button onclick="resetWeb()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold py-1.5 px-4 rounded-lg transition">
+                            Reset Jaring
+                        </button>
+
+                        <div id="webStats" class="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-600 space-y-1">
+                            <p>Siswa Terhubung: <span id="nodeCount" class="font-bold text-emerald-700">0</span></p>
+                            <p>Ikatan Kebaikan: <span id="edgeCount" class="font-bold text-emerald-700">0</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pertanyaan Pemantik Reflektif -->
+                <div class="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                    <p class="text-xs font-semibold text-emerald-900 mb-1"><i class="fa-solid fa-circle-question mr-1"></i> Pertanyaan Pemantik Refleksi:</p>
+                    <p class="text-sm text-emerald-800 italic">
+                        "Lihat jaring yang terbentuk. Jika satu benang ditarik atau digunting, apa yang terjadi pada jaring lainnya? Mengapa perbedaan latar belakang ormas/suku tidak boleh merusak ikatan cinta sesama di madrasah kita?"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interaktif 2: Lab Nilai & Lensa Empati (Studi Skenario) -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex items-center space-x-3 mb-4">
+                    <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">2</span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Lensa Empati: Analisis Skenario Gesekan Minor</h3>
+                        <p class="text-xs text-slate-500">Diskusikan skenario perbedaan tata cara ibadah/berwudhu antar siswa di madrasah.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Kartu Skenario -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-amber-300">
+                            Studi Kasus Kelas 8
+                        </span>
+                        <h4 class="font-bold text-slate-800 text-base mt-2 mb-2">Perbedaan Amaliah & Cara Berwudhu</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            "Ahmad melihat Rizky mengusap seluruh kepala saat berwudhu dan membaca doa qunut saat Subuh, berbeda dengan tradisi keluarga Ahmad. Beberapa teman mulai berbisik-bisik dan menjauhi Rizky saat shalat berjamaah di musholla madrasah."
+                        </p>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">1. Bagaimana perasaan siswa (Rizky) yang dijauhi? (Aspek Empati)</label>
+                                <textarea id="ansEmpati" rows="2" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Tuliskan analisis empati kelompokmu di sini..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">2. Tindakan Konkret Moderasi (Tawasuth & Tasamuh):</label>
+                                <textarea id="ansSolusi" rows="2" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Tuliskan solusi konkret kalian..."></textarea>
+                            </div>
+                            <button onclick="saveScenarioAnalysis()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold py-2 rounded-lg transition">
+                                <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Catatan Diskusi
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Output: Form Deklarasi Kelas Cinta Sesama -->
+                    <div class="bg-amber-50/60 p-5 rounded-xl border border-amber-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-amber-900 text-base flex items-center space-x-2">
+                                    <i class="fa-solid fa-file-signature text-amber-600"></i>
+                                    <span>Deklarasi Kelas Cinta Sesama</span>
+                                </h4>
+                                <span class="text-xs text-amber-700 bg-amber-200/60 px-2 py-0.5 rounded font-mono">Anti-Bullying</span>
+                            </div>
+                            <p class="text-xs text-amber-800 mb-3">Rumuskan 3 komitmen bersama kelompokmu untuk ditempel di mading kelas:</p>
+
+                            <div class="space-y-2">
+                                <input type="text" id="deklarasi1" class="w-full text-xs p-2 rounded border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none bg-white" placeholder="Komitmen 1: Misal, Saling menghormati perbedaan mazhab/ormas.">
+                                <input type="text" id="deklarasi2" class="w-full text-xs p-2 rounded border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none bg-white" placeholder="Komitmen 2: Tidak melakukan perundungan (anti-bullying) baik lisan maupun medsos.">
+                                <input type="text" id="deklarasi3" class="w-full text-xs p-2 rounded border border-amber-300 focus:ring-2 focus:ring-amber-500 outline-none bg-white" placeholder="Komitmen 3: Mengedepankan tabayyun dan prasangka baik (husnuzzan).">
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-amber-200/80 flex items-center space-x-2">
+                            <button onclick="addDeklarasiCard()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold py-2 rounded-lg transition shadow">
+                                <i class="fa-solid fa-plus mr-1"></i> Terbitkan Kartu Deklarasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Kartu Mading Deklarasi -->
+                <div class="mt-6">
+                    <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-clipboard-list text-emerald-600"></i>
+                        <span>Mading Gallery Walk: Kartu Deklarasi Kelompok</span>
+                    </h4>
+                    <div id="deklarasiGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- Kartu bawaan contoh -->
+                        <div class="bg-gradient-to-br from-amber-100 to-amber-50 p-4 rounded-xl border border-amber-300 shadow-sm relative">
+                            <span class="absolute top-2 right-2 text-amber-400 text-xs"><i class="fa-solid fa-thumbtack"></i></span>
+                            <p class="font-bold text-xs text-amber-900 mb-1">Kelompok 1 - Abu Bakar</p>
+                            <ul class="text-xs text-amber-800 space-y-1 list-disc list-inside">
+                                <li>Menghargai keragaman amaliah ibadah.</li>
+                                <li>Menolak segala bentuk perundungan fisik/lisan.</li>
+                                <li>Saling membantu saat teman kesulitan.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 2: PERTEMUAN 19 - AGEN PERDAMAIAN & ANALISIS KASUS -->
+        <!-- ========================================================================= -->
+        <section id="content-p19" class="hidden space-y-6">
+            
+            <!-- Banner Utama -->
+            <div class="bg-gradient-to-r from-teal-800 to-cyan-800 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-block bg-cyan-500/30 text-cyan-200 text-xs px-3 py-1 rounded-full font-semibold border border-cyan-400/30 mb-2">
+                        Pertemuan 19 • 2 JP (2 x 40 Menit)
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-2">Menjadi Agen Perdamaian melalui Studi Kasus</h2>
+                    <p class="text-cyan-100 text-sm leading-relaxed">
+                        Keterampilan analisis akar konflik, resolusi masalah melalui Tabayyun, dan pembinaan kerukunan hidup beragama di Indonesia.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pemantik Konseptual: Kabar Burung vs Kabar Nyata -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center font-bold text-sm">1</span>
+                        <h3 class="font-bold text-slate-800 text-lg">Pemantik: "Kabar Burung vs Kabar Nyata" (Anti-Hoaks)</h3>
+                    </div>
+                    <button onclick="playTTS('kabar-burung-text')" class="text-slate-400 hover:text-cyan-600 transition p-2">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+                </div>
+
+                <div id="kabar-burung-text" class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed mb-4">
+                    <p class="font-semibold text-slate-900 mb-1"><i class="fa-solid fa-book-open text-cyan-600 mr-1"></i> Analogi Singkat:</p>
+                    "Di sebuah desa, warga hampir terlibat bentrok hanya karena mendengar kabar burung dari balik dinding bahwa kelompok sebelah akan menyerang. Setelah diverifikasi (Tabayyun), ternyata suara tersebut hanyalah latihan tabuh rebana untuk menyambut pesta rakyat. Di era medsos saat ini, provokasi hoaks menyebar sangat cepat."
+                </div>
+
+                <div class="p-4 bg-cyan-50 rounded-xl border border-cyan-200 text-xs sm:text-sm text-cyan-900 font-medium">
+                    <i class="fa-solid fa-comment-dots text-cyan-700 mr-1"></i> Pertanyaan Diskusi:
+                    <p class="italic mt-1 font-normal">"Bagaimana pelajar madrasah memastikan agar tidak menjadi 'bahan bakar' yang memperbesar konflik di media sosial?"</p>
+                </div>
+            </div>
+
+            <!-- Interaktif: Investigasi Kasus Perdamaian (Fishbone Diagram / Diagram Tulang Ikan) -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center font-bold text-sm">2</span>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Investigasi Kasus: Diagram Tulang Ikan (Fishbone)</h3>
+                            <p class="text-xs text-slate-500">Pilih kasus kerukunan, lalu bedah pemicu, pihak terdampak, dan solusinya.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selector Kasus -->
+                <div class="mb-5">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pilih Skenario Studi Kasus:</label>
+                    <select id="caseSelector" onchange="loadSelectedCase()" class="w-full text-xs sm:text-sm p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 outline-none bg-slate-50">
+                        <option value="kasus1">Kasus Positif: Desa Toleransi (Bali/Maluku) - Kerukunan Hari Raya</option>
+                        <option value="kasus2">Kasus Tantangan: Provokasi Hoaks Berbau SARA di Grup Chat Medsos</option>
+                    </select>
+                </div>
+
+                <!-- Tampilan Kasus -->
+                <div id="caseDetailBox" class="p-4 bg-slate-100 rounded-xl border border-slate-200 text-xs text-slate-700 mb-6">
+                    <!-- Dynamic Text -->
+                </div>
+
+                <!-- Visual Interactive Fishbone Diagram -->
+                <div class="bg-slate-900 text-white p-5 rounded-xl border border-slate-700 overflow-x-auto">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-4 text-center">
+                        <i class="fa-solid fa-fish mr-1"></i> Visualisasi Analisis Konflik (Fishbone Structure)
+                    </h4>
+
+                    <div class="min-w-[600px] flex items-center justify-between relative py-6">
+                        <!-- Tulang Atas (Pemicu) -->
+                        <div class="flex-1 space-y-4 pr-4 border-r-2 border-cyan-500 relative">
+                            <div class="bg-slate-800 p-3 rounded-lg border border-cyan-500/40">
+                                <span class="text-[10px] font-bold text-cyan-400 block uppercase">Dua Akar Pemicu Utama</span>
+                                <input type="text" id="fbPemicu1" class="w-full text-xs bg-slate-900 text-white border border-slate-700 rounded p-1.5 mt-1 focus:border-cyan-400 outline-none" placeholder="Pemicu 1: Misal, Kurang komunikasi / Berita palsu">
+                                <input type="text" id="fbPemicu2" class="w-full text-xs bg-slate-900 text-white border border-slate-700 rounded p-1.5 mt-1 focus:border-cyan-400 outline-none" placeholder="Pemicu 2: Misal, Prasangka SARA">
+                            </div>
+                        </div>
+
+                        <!-- Tulang Bawah (Pihak Terdampak) -->
+                        <div class="flex-1 space-y-4 px-4 border-r-2 border-cyan-500 relative">
+                            <div class="bg-slate-800 p-3 rounded-lg border border-amber-500/40">
+                                <span class="text-[10px] font-bold text-amber-400 block uppercase">Pihak yang Dirugikan</span>
+                                <input type="text" id="fbDampak" class="w-full text-xs bg-slate-900 text-white border border-slate-700 rounded p-1.5 mt-1 focus:border-amber-400 outline-none" placeholder="Siapa yang dirugikan? Misal: Seluruh masyarakat & siswa">
+                            </div>
+                        </div>
+
+                        <!-- Kepala Ikan (Solusi / Akibat Positif) -->
+                        <div class="w-48 pl-4">
+                            <div class="bg-emerald-900/80 border-2 border-emerald-400 p-3 rounded-xl text-center shadow-lg">
+                                <i class="fa-solid fa-handshake text-2xl text-emerald-300 mb-1"></i>
+                                <span class="text-xs font-bold text-emerald-200 block">Solusi Tabayyun & Kedamaian</span>
+                                <input type="text" id="fbSolusi" class="w-full text-xs bg-slate-900 text-white border border-emerald-500 rounded p-1.5 mt-2 focus:border-emerald-300 outline-none text-center" placeholder="Langkah Tabayyun">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Play Planning -->
+                <div class="mt-6 bg-cyan-50/50 p-4 rounded-xl border border-cyan-200">
+                    <h4 class="font-bold text-xs text-cyan-900 uppercase tracking-wide mb-2 flex items-center space-x-2">
+                        <i class="fa-solid fa-masks-theater text-cyan-600"></i>
+                        <span>Persiapan Role Play (Simulasi Mediasi 3 Menit)</span>
+                    </h4>
+                    <p class="text-xs text-slate-600 mb-3">Rencanakan skenario singkat role play kelompok kalian (Peran: Mediator, Pihak Pro, Pihak Kontra/Penyebar Hoaks, Pelajar Madrasah Bijak):</p>
+                    <textarea id="roleplayScript" rows="3" class="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-cyan-500 outline-none bg-white" placeholder="Skenario singkat: Siswa A menerima hoaks -> Siswa B mengusulkan Tabayyun -> Guru/Tokoh menengahi -> Kesepakatan damai..."></textarea>
+                    <button onclick="saveRoleplay()" class="mt-2 bg-cyan-700 hover:bg-cyan-800 text-white text-xs font-semibold py-2 px-4 rounded-lg transition">
+                        <i class="fa-solid fa-check mr-1"></i> Simpan Skenario Role Play
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 3: PROYEK POHON PERDAMAIAN (MADING VISUAL & ASESMEN) -->
+        <!-- ========================================================================= -->
+        <section id="content-proyek" class="hidden space-y-6">
+            
+            <div class="bg-gradient-to-r from-emerald-900 via-teal-800 to-green-800 rounded-2xl p-6 text-white shadow-md">
+                <span class="bg-emerald-500/30 text-emerald-200 text-xs px-3 py-1 rounded-full font-semibold border border-emerald-400/30 mb-2 inline-block">
+                    Tugas Proyek Kolaboratif • Asesmen Sumatif Performa
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Visualisasi "Pohon Perdamaian" (Peace Tree)</h2>
+                <p class="text-emerald-100 text-sm leading-relaxed">
+                    Integrasi Pertemuan 18 & 19: Akar berisi nilai moderasi (Toleransi, Empati), Batang adalah Komunikasi/Tabayyun, dan Daun berisi Buah Solusi Pencegahan Konflik.
+                </p>
+            </div>
+
+            <!-- Canvas/Visual Pohon Perdamaian -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Form Input Komponen Pohon -->
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="font-bold text-slate-800 text-sm border-b pb-2">Tambah Komponen Pohon:</h3>
+                        
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Akar (Nilai Moderasi):</label>
+                            <input type="text" id="treeAkar" class="w-full text-xs p-2 rounded border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Misal: Tasamuh, Empati, Tawasuth">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Batang (Media Komunikasi):</label>
+                            <input type="text" id="treeBatang" class="w-full text-xs p-2 rounded border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Misal: Tabayyun, Dialog Santun">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Daun/Buah (Solusi Aksi Nyata):</label>
+                            <input type="text" id="treeDaun" class="w-full text-xs p-2 rounded border border-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Misal: Kampanye Anti-Bullying, Literasi Medsos">
+                        </div>
+
+                        <button onclick="growTree()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold py-2.5 rounded-lg transition shadow">
+                            <i class="fa-solid fa-seedling mr-1"></i> Tumbuhkan Pohon Perdamaian
+                        </button>
+                    </div>
+
+                    <!-- Visual Interactive Tree Display -->
+                    <div class="md:col-span-2 bg-gradient-to-b from-sky-100 to-emerald-50 rounded-xl p-6 border border-slate-200 flex flex-col items-center justify-between min-h-[350px] relative overflow-hidden">
+                        
+                        <!-- Daun & Buah (Atas) -->
+                        <div class="w-full max-w-md bg-emerald-500/20 backdrop-blur border-2 border-dashed border-emerald-500 p-4 rounded-3xl text-center relative z-10">
+                            <span class="text-xs font-bold uppercase text-emerald-800 bg-white/80 px-3 py-1 rounded-full shadow-sm mb-2 inline-block">
+                                <i class="fa-solid fa-leaf text-emerald-600 mr-1"></i> Daun & Buah Solusi
+                            </span>
+                            <div id="treeDaunList" class="flex flex-wrap gap-2 justify-center mt-2">
+                                <span class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-full shadow-sm">Anti Bullying</span>
+                                <span class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-full shadow-sm">Literasi Digital</span>
+                            </div>
+                        </div>
+
+                        <!-- Batang (Tengah) -->
+                        <div class="w-24 bg-amber-800 text-white p-3 text-center my-2 rounded-lg shadow-inner z-10 relative">
+                            <span class="text-[10px] font-bold uppercase text-amber-200 block border-b border-amber-700 pb-1">Batang</span>
+                            <div id="treeBatangList" class="text-xs text-amber-100 mt-1 space-y-1 font-mono">
+                                <div>Tabayyun</div>
+                            </div>
+                        </div>
+
+                        <!-- Akar (Bawah) -->
+                        <div class="w-full max-w-lg bg-amber-900/10 border-t-2 border-amber-800 p-3 rounded-b-2xl text-center z-10">
+                            <span class="text-xs font-bold uppercase text-amber-900 bg-amber-100 px-3 py-0.5 rounded-full mb-1 inline-block">
+                                <i class="fa-solid fa-disease text-amber-800 mr-1"></i> Akar Nilai Moderasi
+                            </span>
+                            <div id="treeAkarList" class="flex flex-wrap gap-2 justify-center mt-2">
+                                <span class="bg-amber-800 text-amber-50 text-xs px-2.5 py-1 rounded-full">Empati</span>
+                                <span class="bg-amber-800 text-amber-50 text-xs px-2.5 py-1 rounded-full">Toleransi</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Asesmen Diri & Teman (Sikap Afektif) -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-slate-800 text-lg mb-3 flex items-center space-x-2">
+                    <i class="fa-solid fa-user-check text-emerald-600"></i>
+                    <span>Rubrik Penilaian Diri & Peer-Assessment (Ranah Afektif)</span>
+                </h3>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left text-slate-600 border border-slate-200">
+                        <thead class="bg-slate-100 text-slate-700 uppercase font-semibold">
+                            <tr>
+                                <th class="p-3 border-b">Indikator Sikap Moderasi</th>
+                                <th class="p-3 border-b text-center w-24">Selalu</th>
+                                <th class="p-3 border-b text-center w-24">Sering</th>
+                                <th class="p-3 border-b text-center w-24">Jarang</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3">Mendengarkan pendapat teman yang berbeda tradisi/ormas dengan tenang dan santun.</td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik1" class="text-emerald-600"></td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik1" class="text-emerald-600"></td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik1" class="text-emerald-600"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Tidak membuat / menyebarkan konten lelucon yang merendahkan suku atau cara ibadah orang lain.</td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik2" class="text-emerald-600"></td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik2" class="text-emerald-600"></td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik2" class="text-emerald-600"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Aktif melakukan Klarifikasi (Tabayyun) saat menerima kabar miring atau berita SARA.</td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik3" class="text-emerald-600"></td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik3" class="text-emerald-600"></td>
+                                <td class="p-3 text-center"><input type="radio" name="rubrik3" class="text-emerald-600"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- TAB 4: ASISTEN AI GEMINI (GENERASI TEKS & INFOGRAFIS) -->
+        <!-- ========================================================================= -->
+        <section id="content-ai" class="hidden space-y-6">
+            
+            <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-6 text-white shadow-md">
+                <span class="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-semibold border border-white/20 mb-2 inline-block">
+                    Powered by Gemini 3.1 Flash & Image API
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Asisten AI Pembelajaran Moderasi Beragama</h2>
+                <p class="text-amber-100 text-sm leading-relaxed">
+                    Gunakan fitur AI ini untuk membuat poster/infografis otomatis atau bertanya seputar studi kasus kerukunan di Indonesia!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Generasi Teks LLM Gemini Flash -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-comments text-amber-500"></i>
+                            <span>Tanya Asisten AI (Penjelasan & Solusi Kasus)</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-4">Pertanyakan cara menghadapi situasi khusus perundungan atau dalil-dalil Tasamuh.</p>
+
+                        <div class="space-y-3 mb-4">
+                            <textarea id="aiTextPrompt" rows="3" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 outline-none" placeholder="Misal: Berikan argumen Islami yang santun untuk menasihati teman yang suka mengejek cara shalat mazhab lain..."></textarea>
+                            <button onclick="generateAIText()" id="btnTextAI" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                <span>Kirim Pertanyaan ke Gemini AI</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Box Hasil Teks -->
+                    <div id="aiTextResultBox" class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 min-h-[120px] max-h-[220px] overflow-y-auto leading-relaxed">
+                        <span class="text-slate-400 italic">Jawaban AI akan muncul di sini...</span>
+                    </div>
+                </div>
+
+                <!-- Generasi Infografis / Gambar dengan Gemini Image API -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center space-x-2">
+                            <i class="fa-solid fa-image text-amber-500"></i>
+                            <span>Pembuat Poster/Infografis Toleransi AI</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-4">Buat ilustrasi visual atau poster digital untuk proyek Pohon Perdamaian kelompokmu.</p>
+
+                        <div class="space-y-3 mb-4">
+                            <input type="text" id="aiImagePrompt" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 outline-none" placeholder="Misal: Poster edukasi toleransi siswa madrasah saling bersalaman dengan latar pohon damai...">
+                            <button onclick="generateAIImage()" id="btnImageAI" class="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>Generasi Poster Digital (Gemini Image API)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Box Display Gambar -->
+                    <div id="aiImageResultBox" class="bg-slate-100 rounded-xl border border-slate-200 h-[200px] flex items-center justify-center relative overflow-hidden">
+                        <span id="imgPlaceholder" class="text-xs text-slate-400 italic">Poster digital hasil AI akan ditampilkan di sini.</span>
+                        <img id="generatedImg" src="" alt="AI Output" class="hidden w-full h-full object-cover rounded-xl">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>© 2026 Modul Deep Learning MTs - Kurikulum Berbasis Cinta & KMA No. 1503/2025.</p>
+            <p class="text-slate-500">Dikembangkan untuk Pembelajaran Interaktif Kelas 8 MTs</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT SIMULASI & LOGIKA INTERAKTIF -->
+    <script>
+        // ==========================================
+        // 1. TABS SWITCHING LOGIC
+        // ==========================================
+        function switchTab(tabId) {
+            const tabs = ['p18', 'p19', 'proyek', 'ai'];
+            tabs.forEach(t => {
+                const content = document.getElementById(`content-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabId) {
+                    content.classList.remove('hidden');
+                    btn.classList.add('bg-white', 'text-emerald-900', 'shadow');
+                    btn.classList.remove('text-white', 'hover:bg-white/10');
+                } else {
+                    content.classList.add('hidden');
+                    btn.classList.remove('bg-white', 'text-emerald-900', 'shadow');
+                    btn.classList.add('text-white', 'hover:bg-white/10');
+                }
+            });
+            if (tabId === 'p18') drawWeb();
+        }
+
+        // ==========================================
+        // 2. SIMULASI "WEB OF US" (CANVAS ANIMATION)
+        // ==========================================
+        let nodes = [];
+        let edges = [];
+        const canvas = document.getElementById('webCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+
+        function initCanvas() {
+            if (!canvas) return;
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+
+        function addWebNode() {
+            document.getElementById('canvasOverlay').style.display = 'none';
+            const x = Math.random() * (canvas.width - 60) + 30;
+            const y = Math.random() * (canvas.height - 60) + 30;
+            const newNode = { id: nodes.length + 1, x, y };
+            nodes.push(newNode);
+
+            // Hubungkan dengan node acak sebelumnya
+            if (nodes.length > 1) {
+                const targetNode = nodes[Math.floor(Math.random() * (nodes.length - 1))];
+                edges.push({ from: newNode, to: targetNode });
+            }
+            updateWebStats();
+            drawWeb();
+        }
+
+        function cutWebEdge() {
+            if (edges.length > 0) {
+                edges.pop(); // Hapus ikatan terakhir
+                updateWebStats();
+                drawWeb();
+            }
+        }
+
+        function resetWeb() {
+            nodes = [];
+            edges = [];
+            document.getElementById('canvasOverlay').style.display = 'block';
+            updateWebStats();
+            drawWeb();
+        }
+
+        function updateWebStats() {
+            document.getElementById('nodeCount').innerText = nodes.length;
+            document.getElementById('edgeCount').innerText = edges.length;
+        }
+
+        function drawWeb() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Lines/Edges
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            edges.forEach(e => {
+                ctx.beginPath();
+                ctx.moveTo(e.from.x, e.from.y);
+                ctx.lineTo(e.to.x, e.to.y);
+                ctx.stroke();
+            });
+
+            // Draw Nodes
+            nodes.forEach(n => {
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, 10, 0, Math.PI * 2);
+                ctx.fillStyle = '#059669';
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Number
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '10px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(n.id, n.x, n.y);
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            initCanvas();
+            drawWeb();
+        });
+
+        // ==========================================
+        // 3. DEKLARASI CINTA SESAMA (MADING KARTU)
+        // ==========================================
+        function addDeklarasiCard() {
+            const d1 = document.getElementById('deklarasi1').value.trim();
+            const d2 = document.getElementById('deklarasi2').value.trim();
+            const d3 = document.getElementById('deklarasi3').value.trim();
+
+            if (!d1 && !d2 && !d3) {
+                alert('Harap isi minimal satu poin komitmen deklarasi!');
+                return;
+            }
+
+            const grid = document.getElementById('deklarasiGrid');
+            const cardCount = grid.children.length + 1;
+
+            const cardHtml = `
+                <div class="bg-gradient-to-br from-emerald-100 to-teal-50 p-4 rounded-xl border border-emerald-300 shadow-sm relative animate-fade-in">
+                    <span class="absolute top-2 right-2 text-emerald-500 text-xs"><i class="fa-solid fa-thumbtack"></i></span>
+                    <p class="font-bold text-xs text-emerald-900 mb-1">Kelompok ${cardCount} - Hasil Diskusi</p>
+                    <ul class="text-xs text-emerald-800 space-y-1 list-disc list-inside">
+                        ${d1 ? `<li>${d1}</li>` : ''}
+                        ${d2 ? `<li>${d2}</li>` : ''}
+                        ${d3 ? `<li>${d3}</li>` : ''}
+                    </ul>
+                </div>
+            `;
+
+            grid.insertAdjacentHTML('beforeend', cardHtml);
+            document.getElementById('deklarasi1').value = '';
+            document.getElementById('deklarasi2').value = '';
+            document.getElementById('deklarasi3').value = '';
+        }
+
+        function saveScenarioAnalysis() {
+            alert('Catatan analisis empati dan solusi kelompok berhasil disimpan!');
+        }
+
+        // ==========================================
+        // 4. CASE SELECTOR (PERTEMUAN 19)
+        // ==========================================
+        const cases = {
+            kasus1: {
+                title: "Desa Toleransi (Bali/Maluku) - Kerukunan Hari Raya",
+                desc: "Di sebuah desa heterogen di Bali dan Maluku, pemuda Muslim dan umat Hindu/Nasrani saling bergantian menjaga keamanan rumah ibadah saat pelaksanaan Shalat Idul Fitri maupun Hari Raya Nyepi/Natal. Komunikasi antar tokoh agama berjalan sangat intensif."
+            },
+            kasus2: {
+                title: "Provokasi Hoaks Berbau SARA di Grup Chat Medsos",
+                desc: "Beredar sebuah potongan video yang sudah dipotong (out of context) di grup WhatsApp kelas 8, memperlihatkan seorang tokoh agama yang seolah-olah menghina tradisi lokal. Siswa mulai terprovokasi dan berdebat panas dengan saling mengejek di media sosial."
+            }
+        };
+
+        function loadSelectedCase() {
+            const key = document.getElementById('caseSelector').value;
+            const c = cases[key];
+            document.getElementById('caseDetailBox').innerHTML = `
+                <p class="font-bold text-slate-900 mb-1"><i class="fa-solid fa-folder-open text-cyan-600 mr-1"></i> ${c.title}</p>
+                <p class="leading-relaxed">${c.desc}</p>
+            `;
+        }
+
+        function saveRoleplay() {
+            alert('Skenario Role Play kelompok telah disimpan dan siap dipraktikkan!');
+        }
+
+        // ==========================================
+        // 5. POHON PERDAMAIAN LOGIC
+        // ==========================================
+        function growTree() {
+            const akar = document.getElementById('treeAkar').value.trim();
+            const batang = document.getElementById('treeBatang').value.trim();
+            const daun = document.getElementById('treeDaun').value.trim();
+
+            if (akar) {
+                const el = `<span class="bg-amber-800 text-amber-50 text-xs px-2.5 py-1 rounded-full animate-bounce">${akar}</span>`;
+                document.getElementById('treeAkarList').insertAdjacentHTML('beforeend', el);
+                document.getElementById('treeAkar').value = '';
+            }
+            if (batang) {
+                const el = `<div>${batang}</div>`;
+                document.getElementById('treeBatangList').insertAdjacentHTML('beforeend', el);
+                document.getElementById('treeBatang').value = '';
+            }
+            if (daun) {
+                const el = `<span class="bg-emerald-600 text-white text-xs px-2.5 py-1 rounded-full shadow-sm animate-bounce">${daun}</span>`;
+                document.getElementById('treeDaunList').insertAdjacentHTML('beforeend', el);
+                document.getElementById('treeDaun').value = '';
+            }
+        }
+
+        // ==========================================
+        // 6. TTS (TEXT TO SPEECH) BROWSER NATIVE
+        // ==========================================
+        function playTTS(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop active speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Browser Anda tidak mendukung fitur pemutaran suara (TTS).');
+            }
+        }
+
+        // ==========================================
+        // 7. GEMINI AI API INTEGRATION (TEXT & IMAGE)
+        // ==========================================
+        const apiKey = ""; // Disi otomatis saat runtime Canvas
+
+        async function generateAIText() {
+            const prompt = document.getElementById('aiTextPrompt').value.trim();
+            if (!prompt) {
+                alert('Tuliskan pertanyaan atau instruksi untuk AI terlebih dahulu!');
+                return;
+            }
+
+            const btn = document.getElementById('btnTextAI');
+            const resultBox = document.getElementById('aiTextResultBox');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memproses...`;
+            resultBox.innerHTML = `<span class="text-amber-600 font-semibold"><i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Gemini AI sedang berpikir...</span>`;
+
+            const systemPrompt = "Anda adalah Asisten Pakar Moderasi Beragama dan Guru PAI MTs Kelas 8. Berikan jawaban yang menyejukkan, berlandaskan nilai Tasamuh (toleransi), Tawasuth (moderat), dan cinta sesama, serta relevan untuk usia remaja madrasah.";
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    resultBox.innerHTML = `<p class="whitespace-pre-line text-slate-800">${text}</p>`;
+                } else {
+                    resultBox.innerHTML = `<span class="text-rose-500">Gagal mendapatkan respons AI. Coba lagi nanti.</span>`;
+                }
+            } catch (err) {
+                resultBox.innerHTML = `<span class="text-rose-500">Terjadi kesalahan koneksi API AI.</span>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-1"></i> Kirim Pertanyaan ke Gemini AI`;
+            }
+        }
+
+        async function generateAIImage() {
+            const prompt = document.getElementById('aiImagePrompt').value.trim();
+            if (!prompt) {
+                alert('Tuliskan deskripsi poster yang ingin dibuat!');
+                return;
+            }
+
+            const btn = document.getElementById('btnImageAI');
+            const placeholder = document.getElementById('imgPlaceholder');
+            const imgEl = document.getElementById('generatedImg');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menggambar Poster...`;
+            placeholder.style.display = 'block';
+            placeholder.innerText = 'Gemini 3.1 Flash Image sedang membuat gambar...';
+            imgEl.classList.add('hidden');
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-image:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: {
+                            responseModalities: ['TEXT', 'IMAGE']
+                        }
+                    })
+                });
+
+                const result = await response.json();
+                const base64Data = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+
+                if (base64Data) {
+                    imgEl.src = `data:image/png;base64,${base64Data}`;
+                    imgEl.classList.remove('hidden');
+                    placeholder.style.display = 'none';
+                } else {
+                    placeholder.innerText = 'Gagal membuat poster. Pastikan deskripsi gambar sudah jelas.';
+                }
+            } catch (err) {
+                placeholder.innerText = 'Terjadi kesalahan saat memanggil AI Image API.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Generasi Poster Digital`;
+            }
+        }
+
+        // ==========================================
+        // INIT ON LOAD
+        // ==========================================
+        window.onload = function() {
+            initCanvas();
+            loadSelectedCase();
+        };
+    </script>
+</body>
+</html>
