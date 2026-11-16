@@ -804,6 +804,33 @@ html[data-theme="dark"] .kz{--kz-p1-bg:#1E2A44;--kz-p1-bd:#7FA0E8;--kz-p2-bg:#17
 .kz-ok-w{color:var(--green);}
 .kz-no-w{color:var(--red);}
 .kz-kunci-w{color:var(--green);border-bottom:2px solid var(--green);}
+/* tebak kata: kuota, papan huruf berwarna, umpan balik */
+.kz-quota{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.kz-dots{display:flex;gap:6px;}
+.kz-dot{width:14px;height:14px;border-radius:50%;background:var(--green);}
+.kz-dot.spent{background:var(--gray-line);}
+.kz-quota-teks{font-size:12.5px;font-weight:600;color:var(--gray-mid);text-align:center;}
+.kz-lslot.terbuka-gagal{color:var(--red);border-color:var(--red);background:var(--red-light);}
+.kz-key.ok{background:var(--green-light);border-color:var(--green);color:var(--green);}
+.kz-key.no{background:var(--red-light);border-color:var(--red);color:var(--red);}
+.kz-key:disabled{cursor:default;}
+.kz-key:disabled:not(.ok):not(.no){opacity:.45;}
+.kz-fb{min-height:20px;text-align:center;font-size:13px;font-weight:700;color:var(--gray-soft);}
+.kz-fb.ok{color:var(--green);} .kz-fb.no{color:var(--red);}
+/* pembahasan berstruktur PG: baris pilihan tanpa huruf */
+.kz-mk{width:26px;height:26px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:var(--gray-bg);color:var(--gray-mid);border:1.5px solid var(--gray-line);}
+.opsi-row.kunci .kz-mk{background:var(--green);color:#fff;border-color:var(--green);}
+.opsi-row.kz-salah{color:var(--red);font-weight:600;}
+.opsi-row.kz-salah .kz-mk{background:var(--red-light);color:var(--red);border-color:var(--red);}
+.opsi-row.kz-sebagian{color:var(--orange);font-weight:700;}
+.opsi-row.kz-sebagian .kz-mk{background:var(--orange-light);color:var(--orange);border-color:var(--orange);}
+.kz-isi{flex:1;min-width:0;word-break:break-word;line-height:1.5;}
+.kz-note{margin:-2px 0 4px 34px;font-size:11.5px;line-height:1.5;color:var(--gray-mid);font-weight:400;word-break:break-word;}
+.kz-chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px;}
+.kz-ch{min-width:30px;height:34px;padding:0 6px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-md);border:1.5px solid;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;font-weight:700;}
+.kz-ch.ok{background:var(--green-light);border-color:var(--green);color:var(--green);}
+.kz-ch.no{background:var(--red-light);border-color:var(--red);color:var(--red);}
+.kz-situasi-rv{margin-bottom:6px;font-size:13px;font-weight:600;line-height:1.5;color:var(--gray-dark);}
 </style>
 </head>
 <body>
@@ -2252,6 +2279,7 @@ const KSN = (function () {
   var TIPE_BARU = ['isian_kata', 'isian_angka', 'pg_kompleks', 'urutkan', 'benar_salah_alasan',
     'pasangkan', 'klasifikasi', 'temukan_kesalahan', 'isian_rumpang', 'kasus_bercabang'];
   var HURUF = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  var KUOTA_KATA = 10; // tebak kata: 10 kuota salah (sama dengan MAX_WORD_QUOTA di Kuis Game)
 
   function str(v) { return (v === undefined || v === null) ? '' : String(v).trim(); }
   // Daftar dalam satu sel dipisah " || " (spasi di sekitarnya dibuang; item kosong dipertahankan)
@@ -2316,8 +2344,9 @@ const KSN = (function () {
   function untukKlien(S) {
     var kv = {};
     switch (S.tipe) {
-      // isian_kata = TEBAK KATA: klien hanya menerima POLA (huruf -> '_', spasi/tanda hubung apa adanya), bukan katanya
-      case 'isian_kata': kv.pola = str(pisah(S.kunciRaw)[0]).replace(/[A-Za-z]/g, '_'); break;
+      // isian_kata = TEBAK KATA (seperti Kuis Game): huruf yang dipilih langsung tampil di kotak, jadi KATA ikut dikirim
+      // ke klien (pengecualian khusus tipe ini). Skor tetap dihitung ulang di server dari URUTAN huruf yang dipilih siswa.
+      case 'isian_kata': kv.kata = str(pisah(S.kunciRaw)[0]).toUpperCase(); kv.kuota = KUOTA_KATA; break;
       case 'isian_angka': kv.satuan = S.satuan; kv.toleransi = S.toleransi; break;
       case 'pasangkan': kv.kanan = urut(S.kartuKanan); break;
       case 'klasifikasi': kv.kategori = S.kategori.slice(); break;
@@ -2336,8 +2365,20 @@ const KSN = (function () {
     // jawaban kosong TIDAK return lebih awal: tiap tipe tetap menghasilkan 'rinci' lengkap (skor 0) supaya pembahasan soal yang tidak dijawab tidak error
     switch (S.tipe) {
       case 'isian_kata': {
-        ok = pisah(K).map(norm).indexOf(norm(J)) >= 0;
-        out.skor = ok ? 1 : 0; out.rinci = { ok: [ok] }; break;
+        // Jawaban = URUTAN huruf yang dipilih siswa ("KONXSTI..."). Diputar ulang di sini persis seperti game:
+        // huruf yang tidak ada di kata mengurangi kuota (maks 10); kata tertebak bila semua hurufnya sudah dipilih
+        // sebelum kuota habis. Poin = sisa kuota / 10; belum tertebak atau kuota habis = 0.
+        var kata = str(pisah(K)[0]).toUpperCase(), W = {}, nW = 0, seen = {}, urutT = [], salahT = 0, benarT = 0, selesai = false, gagal = false;
+        kata.split('').forEach(function (c) { if (/[A-Z]/.test(c) && !W[c]) { W[c] = 1; nW++; } });
+        str(J).toUpperCase().split('').forEach(function (c) {
+          if (!/[A-Z]/.test(c) || seen[c] || selesai || gagal) return;
+          seen[c] = 1;
+          if (W[c]) { benarT++; urutT.push({ c: c, ok: true }); if (benarT >= nW) selesai = true; }
+          else { salahT++; urutT.push({ c: c, ok: false }); if (salahT >= KUOTA_KATA) gagal = true; }
+        });
+        out.skor = (selesai && nW > 0) ? Math.max(0, KUOTA_KATA - salahT) / KUOTA_KATA : 0;
+        out.rinci = { ok: [selesai], selesai: selesai, gagal: gagal, salah: salahT, kuota: Math.max(0, KUOTA_KATA - salahT), urut: urutT, kata: kata };
+        break;
       }
       case 'isian_angka': {
         var kk = angkaKandidat(K)[0];
@@ -2404,7 +2445,7 @@ const KSN = (function () {
 
   function status(skor) { return skor >= 0.9999 ? 'Ya' : (skor > 0 ? 'Sebagian' : 'Tidak'); }
 
-  return { TIPE_BARU: TIPE_BARU, HURUF: HURUF, bangun: bangun, untukKlien: untukKlien, periksa: periksa, status: status,
+  return { TIPE_BARU: TIPE_BARU, HURUF: HURUF, KUOTA_KATA: KUOTA_KATA, bangun: bangun, untukKlien: untukKlien, periksa: periksa, status: status,
     pisah: pisah, hash: hash, norm: norm };
 })();
 // ===== akhir KSN =====
@@ -2421,7 +2462,7 @@ const KZ_LABEL = { isian_kata: 'Tebak Kata', isian_angka: 'Isian Angka', pg_komp
   benar_salah_alasan: 'Benar-Salah + Alasan', pasangkan: 'Pasangkan', klasifikasi: 'Klasifikasi', temukan_kesalahan: 'Temukan Kesalahan',
   isian_rumpang: 'Isian Rumpang', kasus_bercabang: 'Kasus Bercabang' };
 const KZ_PETUNJUK = {
-  isian_kata: 'Tebak kata berdasarkan petunjuk. Ketuk huruf pada papan untuk mengisi kotak; ketuk kotak yang terisi untuk menghapusnya.',
+  isian_kata: 'Tebak kata berdasarkan petunjuk. Pilih huruf pada papan: huruf yang ada langsung tampil di kotak. Setiap huruf yang tidak ada mengurangi kuota dan peluang poin (maksimal 10).',
   isian_angka: 'Tulis jawabanmu berupa angka. Pecahan desimal boleh memakai koma atau titik.',
   pg_kompleks: 'Centang semua pernyataan yang benar. Mencentang pernyataan yang salah mengurangi nilai.',
   urutkan: 'Susun butir berikut dengan tombol \u25B2 \u25BC hingga urutannya benar.',
@@ -2500,51 +2541,68 @@ KZ_RENDER.isian_angka = function (wrap, s) {
   if (kv.toleransi > 0) wrap.appendChild(kzEl('div', 'kz-instr', 'Selisih yang masih diterima: \u00B1 ' + String(kv.toleransi).replace('.', ',') + (kv.satuan ? ' ' + kv.satuan : '') + '.'));
 };
 
-// isian_kata = TEBAK KATA -- kotak huruf + papan A-Z. Jawaban: kata dengan '_' untuk kotak kosong ("KON_TITUSI")
-// (di CBT tidak ada umpan balik huruf benar/salah: kunci tidak ada di klien; kata dinilai di server)
-let kzKataAktif = null; // callback ketikan fisik tebak kata (diisi renderer, dibersihkan saat ganti soal)
+// isian_kata = TEBAK KATA (seperti Kuis Game) -- pilih satu huruf: bila ada, langsung tampil di SEMUA kotak yang sesuai;
+// bila tidak ada, kuota (maks 10) dan peluang poin berkurang. Selesai bila semua kotak terisi (poin = sisa kuota/10)
+// atau kuota habis (0 poin). Jawaban = URUTAN huruf yang dipilih ("KONXSTI"); server memutar ulang untuk menghitung skor.
+// (Khusus tipe ini kata ikut dikirim ke klien agar huruf bisa langsung tampil -- atas persetujuan guru.)
+let kzKataAktif = null; // callback papan ketik fisik (diisi renderer, dibersihkan saat ganti soal)
 KZ_RENDER.isian_kata = function (wrap, s) {
-  const pola = String(s.kv.pola || ''), body = kzEl('div', 'kz'); wrap.appendChild(body);
-  const isi = []; for (let i = 0; i < pola.length; i++) if (pola[i] === '_') isi.push('');
-  const tersimpan = String(kzJaw());
-  let k0 = 0; for (let i = 0; i < pola.length; i++) { if (pola[i] !== '_') continue; const c = tersimpan[i]; if (c && /[A-Za-z]/.test(c)) isi[k0] = c.toUpperCase(); k0++; }
-  let aktif = isi.indexOf('');
-  function simpan() {
-    if (isi.every(function (x) { return x === ''; })) { kzSimpan(''); return; }
-    let k = 0; const out = []; for (let i = 0; i < pola.length; i++) out.push(pola[i] === '_' ? (isi[k++] || '_') : pola[i]);
-    kzSimpan(out.join(''));
+  const kata = String(s.kv.kata || '').toUpperCase(), KUOTA = s.kv.kuota || 10, body = kzEl('div', 'kz'); wrap.appendChild(body);
+  const unik = {}; kata.split('').forEach(function (c) { if (/[A-Z]/.test(c)) unik[c] = 1; });
+  const nUnik = Object.keys(unik).length;
+  let tebak = [];
+  // pulihkan dari jawaban tersimpan: putar ulang, berhenti begitu selesai / gagal (sama seperti server)
+  (function () {
+    let salah = 0, benar = 0, seen = {};
+    String(kzJaw()).toUpperCase().split('').forEach(function (c) {
+      if (!/[A-Z]/.test(c) || seen[c] || benar >= nUnik || salah >= KUOTA) return;
+      seen[c] = 1; tebak.push(c); if (unik[c]) benar++; else salah++;
+    });
+  })();
+  function status() {
+    const salah = tebak.filter(function (c) { return !unik[c]; }).length, benar = tebak.length - salah;
+    return { salah: salah, sisa: Math.max(0, KUOTA - salah), selesai: nUnik > 0 && benar >= nUnik, gagal: salah >= KUOTA };
   }
-  function huruf(L) {
-    let t = aktif; if (t < 0 || isi[t]) t = isi.indexOf(''); if (t < 0) return;
-    isi[t] = L; aktif = isi.indexOf(''); simpan(); gambar();
+  function pilih(L) {
+    const st = status(); if (st.selesai || st.gagal || tebak.indexOf(L) >= 0) return;
+    tebak.push(L); kzSimpan(tebak.join('')); gambar();
   }
-  function hapus() {
-    let t = -1; for (let i = isi.length - 1; i >= 0; i--) if (isi[i]) { t = i; break; }
-    if (t < 0) return; isi[t] = ''; aktif = t; simpan(); gambar();
-  }
-  kzKataAktif = function (key) { if (key === 'BACKSPACE') hapus(); else if (/^[A-Z]$/.test(key)) huruf(key); };
+  kzKataAktif = function (key) { if (/^[A-Z]$/.test(key)) pilih(key); };
   const clue = kzEl('div', 'kz-clue'); clue.appendChild(kzEl('strong', '', 'Petunjuk: ')); clue.appendChild(document.createTextNode(s.pertanyaan)); body.appendChild(clue);
+  const kuota = kzEl('div', 'kz-quota'); body.appendChild(kuota);
   const baris = kzEl('div', 'kz-letters'); body.appendChild(baris);
+  const fb = kzEl('div', 'kz-fb'); body.appendChild(fb);
   const kb = kzEl('div', 'kz-kb'); body.appendChild(kb);
-  const info = kzEl('div', 'kz-kata-info'); body.appendChild(info);
-  [['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'], ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'], ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '\u232B']].forEach(function (r) {
+  const rows = [['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'], ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'], ['Z', 'X', 'C', 'V', 'B', 'N', 'M']];
+  const tombol = {};
+  rows.forEach(function (r) {
     const row = kzEl('div', 'kz-kbrow');
-    r.forEach(function (L) {
-      const b = kzEl('button', 'kz-key' + (L === '\u232B' ? ' kz-key-hapus' : ''), L); b.type = 'button';
-      if (L === '\u232B') b.setAttribute('aria-label', 'Hapus huruf terakhir');
-      b.onclick = function () { if (L === '\u232B') hapus(); else huruf(L); }; row.appendChild(b);
-    }); kb.appendChild(row);
+    r.forEach(function (L) { const b = kzEl('button', 'kz-key', L); b.type = 'button'; b.onclick = function () { pilih(L); }; tombol[L] = b; row.appendChild(b); });
+    kb.appendChild(row);
   });
   function gambar() {
-    baris.innerHTML = ''; let k = 0;
-    for (let i = 0; i < pola.length; i++) {
-      if (pola[i] !== '_') { baris.appendChild(kzEl('div', 'kz-gap', pola[i] === ' ' ? '' : pola[i])); continue; }
-      const idx = k++, sl = kzEl('button', 'kz-lslot' + (isi[idx] ? ' revealed' : '') + (aktif === idx ? ' aktif' : ''), isi[idx]); sl.type = 'button';
-      sl.setAttribute('aria-label', 'Kotak huruf ' + (idx + 1));
-      sl.onclick = function () { if (isi[idx]) { isi[idx] = ''; simpan(); } aktif = idx; gambar(); };
-      baris.appendChild(sl);
+    const st = status(), selesai = st.selesai || st.gagal;
+    // kuota & peluang poin
+    kuota.innerHTML = '';
+    const dots = kzEl('div', 'kz-dots'); for (let i = 0; i < KUOTA; i++) dots.appendChild(kzEl('span', 'kz-dot' + (i >= st.sisa ? ' spent' : '')));
+    kuota.appendChild(dots);
+    kuota.appendChild(kzEl('div', 'kz-quota-teks', 'Sisa kuota: ' + st.sisa + ' dari ' + KUOTA + ' \u00B7 Peluang poin: ' + kzFmt((s.poin || 0) * st.sisa / KUOTA) + ' dari ' + kzFmt(s.poin || 0)));
+    // kotak huruf: semua posisi huruf yang sudah dipilih langsung tampil; bila gagal, sisanya dibuka (merah)
+    baris.innerHTML = '';
+    for (let i = 0; i < kata.length; i++) {
+      const ch = kata[i];
+      if (!/[A-Z]/.test(ch)) { baris.appendChild(kzEl('div', 'kz-gap', ch === ' ' ? '' : ch)); continue; }
+      const buka = tebak.indexOf(ch) >= 0, tampak = buka || st.gagal;
+      baris.appendChild(kzEl('div', 'kz-lslot' + (tampak ? ' revealed' : '') + (!buka && st.gagal ? ' terbuka-gagal' : ''), tampak ? ch : ''));
     }
-    info.textContent = 'Terisi ' + isi.filter(function (x) { return x; }).length + ' dari ' + isi.length + ' huruf';
+    // papan huruf: huruf terpakai dikunci, hijau = ada, merah = tidak ada
+    Object.keys(tombol).forEach(function (L) {
+      const b = tombol[L], dipakai = tebak.indexOf(L) >= 0;
+      b.className = 'kz-key' + (dipakai ? (unik[L] ? ' ok' : ' no') : ''); b.disabled = dipakai || selesai;
+    });
+    fb.className = 'kz-fb' + (st.selesai ? ' ok' : (st.gagal ? ' no' : ''));
+    fb.textContent = st.selesai ? ('\u2713 Kata berhasil ditebak! Poin soal ini: ' + kzFmt((s.poin || 0) * st.sisa / KUOTA))
+      : (st.gagal ? '\u2717 Kuota habis, kata tidak tertebak (0 poin).' : 'Pilih huruf pada papan. Huruf yang tidak ada mengurangi kuota.');
   }
   gambar();
 };
@@ -2556,7 +2614,7 @@ if (typeof document !== 'undefined' && !window.__kzKeyPasang) {
     const a = document.activeElement; if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;
     if (!document.querySelector('#area-kuis .kz-letters')) return;
     const k = (e.key || '').toUpperCase();
-    if (/^[A-Z]$/.test(k) || k === 'BACKSPACE') { kzKataAktif(k); e.preventDefault(); }
+    if (/^[A-Z]$/.test(k)) { kzKataAktif(k); e.preventDefault(); }
   });
 }
 
@@ -2781,7 +2839,9 @@ KZ_RENDER.kasus_bercabang = function (wrap, s) {
 };
 
 // ===== Pembahasan (dipakai layar pembahasan Portal & halaman uji) =====
-// s = butir soal klien; pb = respons getPembahasan untuk soal ini. Tidak memakai label huruf A-E.
+// Mengikuti struktur pembahasan PG yang sudah ada: kepala status -> pertanyaan -> "Pilihan Jawaban" (SEMUA pilihan
+// dengan tanda benar/salah) -> baris Kunci -> Pembahasan -> poin. Tanpa label huruf A-E.
+// s = butir soal klien; pb = respons getPembahasan untuk soal ini.
 function kzBangunS(s, pb) {
   const x = (pb && pb.x) || {};
   return KSN.bangun({ tipe: s.tipe, no: s.no, poin: s.poin, pertanyaan: s.pertanyaan,
@@ -2796,108 +2856,127 @@ function kzReviewHTML(s, pb, jwb) {
   const adaKunci = !!(pb.kunci && String(pb.kunci).trim());
   const status = !jwb ? 'kosong' : (skor >= 0.9999 ? 'benar' : (skor > 0 ? 'sebagian' : 'salah'));
   const label = { benar: 'Benar', sebagian: 'Sebagian', salah: 'Salah', kosong: 'Tidak Dijawab' }[status];
-  const row = function (cls, mark, html, sub) {
-    return '<div class="kz-rv-row ' + cls + '"><span class="kz-mark">' + mark + '</span><span style="flex:1;min-width:0;word-break:break-word;">' + html + '</span></div>' + (sub ? '<div class="kz-rv-sub">' + sub + '</div>' : '');
+  const T = function (v) { return isUrl(v) ? '<img class="opsi-img-sm" src="' + gdrive(v) + '" loading="lazy">' : kzEsc(v); };
+  const polos = function (v) { return isUrl(v) ? '(gambar)' : kzEsc(v); };
+  // satu baris pilihan: cls = '' | 'kunci' | 'kz-salah' | 'kz-sebagian'; mk = tanda bulat (pengganti huruf)
+  const baris = function (cls, mk, html, note) {
+    return '<div class="opsi-row ' + cls + '"><span class="kz-mk">' + mk + '</span><span class="kz-isi">' + html + '</span></div>' + (note ? '<div class="kz-note">' + note + '</div>' : '');
   };
-  const opsiTeks = function (L) { const v = S.opsi[L] || ''; return isUrl(v) ? '<img class="opsi-img-sm" src="' + gdrive(v) + '" loading="lazy">' : kzEsc(v); };
-  const ttl = function (t) { return '<div class="kz-rv-ttl">' + kzEsc(t) + '</div>'; };
-  let body = '';
-  if (!adaKunci) body = '<div class="kz-rv-row miss">Kunci belum tersedia dari server.</div>';
-  else switch (S.tipe) {
-    case 'isian_kata':
-      body = row(r.ok && r.ok[0] ? 'ok' : 'no', r.ok && r.ok[0] ? '\u2713' : '\u2717', 'Tebakan Anda: <b class="kz-mono">' + (jwb ? kzEsc(jwb) : '\u2014') + '</b>') +
-        row('', '', 'Kata yang benar: <b class="kz-mono">' + kzEsc(KSN.pisah(S.kunciRaw).join(' / ').toUpperCase()) + '</b>'); break;
-    case 'isian_angka':
-      body = row(r.ok && r.ok[0] ? 'ok' : 'no', r.ok && r.ok[0] ? '\u2713' : '\u2717', 'Jawaban Anda: <b>' + (jwb ? kzEsc(jwb) : '\u2014') + (S.satuan ? ' ' + kzEsc(S.satuan) : '') + '</b>') +
-        row('', '', 'Kunci: <b>' + kzEsc(S.kunciRaw) + (S.satuan ? ' ' + kzEsc(S.satuan) : '') + '</b>' + (S.toleransi > 0 ? ' (selisih diterima \u00B1 ' + kzEsc(String(S.toleransi).replace('.', ',')) + ')' : '')); break;
+  const blok = function (judul, isi) { return '<div class="ana-opsi"><div class="ana-opsi-ttl">' + kzEsc(judul) + '</div>' + isi + '</div>'; };
+  let opsiH = '', kunciTxt = '', tanyaHTML = '';
+  const tanya = s.pertanyaan ? formatTeksArabHTML(s.pertanyaan) : '';
+  if (S.tipe !== 'isian_rumpang' && tanya) tanyaHTML = '<div class="ana-teks">' + (S.tipe === 'isian_kata' ? '<b>Petunjuk:</b> ' : '') + tanya + '</div>';
+  if (adaKunci) switch (S.tipe) {
+    case 'isian_kata': {
+      const chips = (r.urut || []).map(function (u) { return '<span class="kz-ch ' + (u.ok ? 'ok' : 'no') + '">' + kzEsc(u.c) + '</span>'; }).join('');
+      opsiH = blok('Tebakan Anda (urutan huruf yang dipilih)',
+        (chips ? '<div class="kz-chips">' + chips + '</div>' : baris('', '\u25CB', 'Tidak ada huruf yang dipilih')) +
+        baris(r.selesai ? 'kunci' : 'kz-salah', r.selesai ? '\u2713' : '\u2717', r.selesai ? 'Kata berhasil ditebak' : (r.gagal ? 'Kuota habis, kata tidak tertebak' : 'Kata belum selesai ditebak')) +
+        baris('', '\u25CB', 'Huruf salah: <b>' + r.salah + '</b> \u2192 sisa kuota <b>' + r.kuota + '</b> dari ' + KSN.KUOTA_KATA));
+      kunciTxt = '<b class="kz-mono">' + kzEsc(KSN.pisah(S.kunciRaw).join(' / ').toUpperCase()) + '</b>'; break;
+    }
+    case 'isian_angka': {
+      const ok = r.ok && r.ok[0];
+      opsiH = blok('Jawaban', baris(ok ? 'kunci' : 'kz-salah', ok ? '\u2713' : '\u2717', 'Jawaban Anda: <b>' + (jwb ? kzEsc(jwb) : '\u2014') + (S.satuan ? ' ' + kzEsc(S.satuan) : '') + '</b>'));
+      kunciTxt = kzEsc(S.kunciRaw) + (S.satuan ? ' ' + kzEsc(S.satuan) : '') + (S.toleransi > 0 ? ' (selisih diterima \u00B1 ' + kzEsc(String(S.toleransi).replace('.', ',')) + ')' : ''); break;
+    }
     case 'pg_kompleks':
     case 'temukan_kesalahan': {
-      const urutKunci = kzDaftarHuruf(S.kunciRaw);
+      const tf = S.tipe === 'temukan_kesalahan', urutKunci = kzDaftarHuruf(S.kunciRaw), kunciList = [];
+      let isi = '';
       S.huruf.forEach(function (L) {
-        const st = r.status ? r.status[L] : 'netral';
-        const cls = st === 'benar' ? 'ok' : st === 'salah' ? 'no' : st === 'terlewat' ? 'miss' : '';
-        const mark = st === 'benar' ? '\u2713' : st === 'salah' ? '\u2717' : st === 'terlewat' ? '\u25D0' : '\u25CB';
-        let ket = '';
-        if (S.tipe === 'pg_kompleks') ket = st === 'terlewat' ? 'pernyataan ini benar, tidak Anda centang' : st === 'salah' ? 'pernyataan ini salah, Anda centang' : st === 'benar' ? 'pernyataan benar yang Anda centang' : '';
-        else {
-          const ix = urutKunci.indexOf(L), fix = ix >= 0 ? S.perbaikan[ix] : '';
-          ket = (st === 'salah') ? 'kalimat ini sebenarnya benar' : (st === 'terlewat' ? 'kalimat ini salah, tidak Anda ketuk' : (st === 'benar' ? 'kalimat salah yang Anda temukan' : ''));
-          if (fix) ket += (ket ? ' \u2014 ' : '') + 'Perbaikan: ' + kzEsc(fix);
-        }
-        body += row(cls, mark, opsiTeks(L), ket);
+        const st = r.status ? r.status[L] : 'netral', v = S.opsi[L] || '';
+        const fix = tf ? S.perbaikan[urutKunci.indexOf(L)] : '';
+        const bnr = tf ? 'kalimat salah yang Anda temukan' : 'pilihan Anda \u00B7 benar', slh = tf ? 'kalimat ini sebenarnya benar \u00B7 Anda ketuk' : 'pilihan Anda \u00B7 salah', lwt = tf ? 'kalimat ini salah \u00B7 tidak Anda ketuk' : 'benar \u00B7 tidak Anda pilih';
+        const catatan = function (t) { return t + (fix ? (t ? ' \u2014 ' : '') + 'Perbaikan: ' + kzEsc(fix) : ''); };
+        if (st === 'benar') isi += baris('kunci', '\u2713', T(v), catatan(bnr));
+        else if (st === 'salah') isi += baris('kz-salah', '\u2717', T(v), slh);
+        else if (st === 'terlewat') isi += baris('kz-sebagian', '\u2713', T(v), catatan(lwt));
+        else isi += baris('', '\u25CB', T(v));
+        if (st === 'benar' || st === 'terlewat') kunciList.push(polos(v));
       });
-      break;
+      opsiH = blok(tf ? 'Kalimat (yang Anda ketuk = ditandai salah)' : 'Pilihan Jawaban (yang Anda centang = pilihan Anda)', isi);
+      kunciTxt = kunciList.join(' \u2022 '); break;
     }
     case 'urutkan': {
-      body += ttl('Urutan Anda');
-      (r.kunci || []).forEach(function (_, i) {
-        const L = (r.jawab || [])[i];
-        body += row(r.ok[i] ? 'ok' : 'no', r.ok[i] ? '\u2713' : '\u2717', (i + 1) + '. ' + (L ? opsiTeks(L) : '\u2014'));
-      });
-      body += ttl('Urutan yang benar');
-      (r.kunci || []).forEach(function (L, i) { body += row('', '', (i + 1) + '. ' + opsiTeks(L)); });
-      break;
+      let a = '', b = '';
+      (r.kunci || []).forEach(function (_, i) { const L = (r.jawab || [])[i]; a += baris(r.ok[i] ? 'kunci' : 'kz-salah', r.ok[i] ? '\u2713' : '\u2717', (i + 1) + '. ' + (L ? T(S.opsi[L]) : '\u2014')); });
+      (r.kunci || []).forEach(function (L, i) { b += baris('', String(i + 1), T(S.opsi[L])); });
+      opsiH = blok('Urutan Anda', a) + blok('Urutan yang benar', b);
+      kunciTxt = (r.kunci || []).map(function (L) { return polos(S.opsi[L]); }).join(' \u2192 '); break;
     }
     case 'benar_salah_alasan': {
-      body += row(r.klaimOK ? 'ok' : 'no', r.klaimOK ? '\u2713' : '\u2717', 'Pernyataan: Anda menjawab <b>' + (r.klaim === 'BENAR' ? 'Benar' : r.klaim === 'SALAH' ? 'Salah' : '\u2014') + '</b>' + (r.klaimOK ? '' : ', kunci <b>' + (r.kunciKlaim === 'BENAR' ? 'Benar' : 'Salah') + '</b>'));
-      body += ttl('Alasan');
+      let a = '', b = '';
+      [['BENAR', 'Benar'], ['SALAH', 'Salah']].forEach(function (v) {
+        const isK = r.kunciKlaim === v[0], isJ = r.klaim === v[0];
+        a += baris(isK ? 'kunci' : (isJ ? 'kz-salah' : ''), isK ? '\u2713' : (isJ ? '\u2717' : '\u25CB'), v[1], isJ ? 'pilihan Anda' : '');
+      });
       S.huruf.forEach(function (L) {
         const isK = L === r.kunciAlasan, isJ = L === r.alasan;
-        body += row(isK ? 'ok' : (isJ ? 'no' : ''), isK ? '\u2713' : (isJ ? '\u2717' : '\u25CB'), opsiTeks(L), (isJ && !isK) ? 'pilihan Anda' : (isK && !isJ ? 'alasan yang tepat' : ''));
+        b += baris(isK ? 'kunci' : (isJ ? 'kz-salah' : ''), isK ? '\u2713' : (isJ ? '\u2717' : '\u25CB'), T(S.opsi[L]), isJ ? 'pilihan Anda' : '');
       });
-      break;
+      opsiH = blok('Menurut Anda, pernyataan itu', a) + blok('Alasan yang dipilih', b);
+      kunciTxt = (r.kunciKlaim === 'BENAR' ? 'Benar' : 'Salah') + ' \u2014 alasan: ' + polos(S.opsi[r.kunciAlasan] || ''); break;
     }
     case 'pasangkan': {
+      let a = '', k = [];
       (r.items || []).forEach(function (it) {
-        const kartu = S.kartuKanan.filter(function (k) { return k.id === it.jawabId; })[0];
-        body += row(it.ok ? 'ok' : 'no', it.ok ? '\u2713' : '\u2717', opsiTeks(it.huruf),
-          'Pasangan Anda: ' + (kartu ? kzEsc(kartu.teks) : '\u2014') + (it.ok ? '' : '<br>Kunci: <b>' + kzEsc(it.kunciTeks) + '</b>'));
+        const kartu = S.kartuKanan.filter(function (x) { return x.id === it.jawabId; })[0];
+        a += baris(it.ok ? 'kunci' : 'kz-salah', it.ok ? '\u2713' : '\u2717', T(S.opsi[it.huruf]), 'Pasangan Anda: ' + (kartu ? kzEsc(kartu.teks) : '\u2014') + (it.ok ? '' : ' \u00B7 Kunci: <b>' + kzEsc(it.kunciTeks) + '</b>'));
+        k.push(polos(S.opsi[it.huruf]) + ' \u2194 ' + kzEsc(it.kunciTeks));
       });
-      if (S.pengecoh.length) body += ttl('Kartu pengecoh (tidak punya pasangan)') + S.pengecoh.map(function (t) { return row('', '\u2022', kzEsc(t)); }).join('');
-      break;
+      opsiH = blok('Pasangan (kolom kiri \u2194 kolom kanan)', a) + (S.pengecoh.length ? blok('Kartu pengecoh (tidak punya pasangan)', S.pengecoh.map(function (t) { return baris('', '\u25CB', kzEsc(t)); }).join('')) : '');
+      kunciTxt = k.join('<br>'); break;
     }
     case 'klasifikasi': {
+      let a = '', k = [];
       S.huruf.forEach(function (L, i) {
-        const j = (r.jawab || [])[i], k = (r.kunci || [])[i], ok = r.ok && r.ok[i];
-        body += row(ok ? 'ok' : 'no', ok ? '\u2713' : '\u2717', opsiTeks(L),
-          'Kelompok Anda: ' + (j > 0 ? kzEsc(S.kategori[j - 1] || String(j)) : '\u2014') + (ok ? '' : '<br>Kunci: <b>' + kzEsc(S.kategori[k - 1] || String(k)) + '</b>'));
+        const j = (r.jawab || [])[i], kk = (r.kunci || [])[i], ok = r.ok && r.ok[i];
+        a += baris(ok ? 'kunci' : 'kz-salah', ok ? '\u2713' : '\u2717', T(S.opsi[L]), 'Kelompok Anda: ' + (j > 0 ? kzEsc(S.kategori[j - 1] || String(j)) : '\u2014') + (ok ? '' : ' \u00B7 Kunci: <b>' + kzEsc(S.kategori[kk - 1] || String(kk)) + '</b>'));
+        k.push(polos(S.opsi[L]) + ' \u2192 ' + kzEsc(S.kategori[kk - 1] || String(kk)));
       });
-      break;
+      opsiH = blok('Kartu dan kelompoknya (kelompok: ' + S.kategori.join(', ') + ')', a); kunciTxt = k.join('<br>'); break;
     }
     case 'isian_rumpang': {
-      const teks = String(S.pertanyaan).split(/(\{\d+\})/).map(function (part) {
+      const kalimat = String(S.pertanyaan).split(/(\{\d+\})/).map(function (part) {
         const m = /^\{(\d+)\}$/.exec(part); if (!m) return kzEsc(part);
         const i = parseInt(m[1], 10) - 1; if (i < 0 || i >= r.kunci.length) return kzEsc(part);
         const w = (r.jawab || [])[i] || '';
-        return r.ok[i] ? '<b class="kz-ok-w">' + kzEsc(w) + '</b>'
-          : (w ? '<s class="kz-no-w">' + kzEsc(w) + '</s> ' : '') + '<b class="kz-kunci-w">' + kzEsc(r.kunci[i]) + '</b>';
+        return r.ok[i] ? '<b class="kz-ok-w">' + kzEsc(w) + '</b>' : (w ? '<s class="kz-no-w">' + kzEsc(w) + '</s> ' : '') + '<b class="kz-kunci-w">' + kzEsc(r.kunci[i]) + '</b>';
       }).join('');
-      body = '<div style="white-space:pre-wrap;line-height:1.8;">' + teks + '</div><div class="kz-rv-sub" style="margin-left:0;">Hijau = benar. Coretan merah = jawaban Anda, kata di sampingnya = kunci.</div>';
-      break;
+      tanyaHTML = '<div class="ana-teks">' + kalimat + '<div class="kz-note" style="margin:8px 0 0;">Hijau = benar. Coretan merah = jawaban Anda, kata di sampingnya = kunci.</div></div>';
+      const dipakai = {}; (r.jawab || []).forEach(function (w) { if (w) dipakai[KSN.norm(w)] = 1; });
+      let a = '';
+      S.bank.forEach(function (b) { const isK = r.kunci.some(function (x) { return KSN.norm(x) === KSN.norm(b.teks); }); a += baris(isK ? 'kunci' : '', isK ? '\u2713' : '\u25CB', kzEsc(b.teks), isK ? 'kata yang benar' : 'pengecoh'); });
+      opsiH = blok('Bank kata', a); kunciTxt = kzEsc(r.kunci.join(', ')); break;
     }
     case 'kasus_bercabang': {
-      S.langkah.forEach(function (l, k) {
-        const pos = r.pilih[k], p = pos >= 0 ? l.pilihan[pos] : null;
-        const terbaik = l.pilihan.slice().sort(function (a, b) { return b.nilai - a.nilai; })[0];
-        const mx = terbaik ? terbaik.nilai : 0;
-        body += ttl('Keputusan ' + (k + 1)) + '<div style="margin-bottom:4px;">' + kzEsc(l.situasi) + '</div>';
-        if (p) body += row(p.nilai >= mx ? 'ok' : (p.nilai > 0 ? 'miss' : 'no'), p.nilai >= mx ? '\u2713' : (p.nilai > 0 ? '\u25D0' : '\u2717'),
-          'Pilihan Anda: ' + kzEsc(p.teks) + ' <b>(' + (p.nilai >= mx ? 'pilihan terbaik' : (p.nilai > 0 ? 'cukup tepat' : 'kurang tepat')) + ')</b>', p.akibat ? 'Akibatnya: ' + kzEsc(p.akibat) : '');
-        else body += row('no', '\u2717', 'Tidak dijawab');
-        if (terbaik && (!p || p.nilai < mx)) body += row('', '\u2605', 'Pilihan terbaik: ' + kzEsc(terbaik.teks), terbaik.akibat ? 'Akibatnya: ' + kzEsc(terbaik.akibat) : '');
+      let k = [];
+      S.langkah.forEach(function (l, i) {
+        const pos = r.pilih[i], terbaik = l.pilihan.slice().sort(function (a, b) { return b.nilai - a.nilai; })[0], mx = terbaik ? terbaik.nilai : 0;
+        let a = '<div class="kz-situasi-rv">' + kzEsc(l.situasi) + '</div>';
+        l.pilihan.forEach(function (p, q) {
+          const dipilih = q === pos, best = p.nilai >= mx && mx > 0;
+          const cls = best ? 'kunci' : (dipilih ? (p.nilai > 0 ? 'kz-sebagian' : 'kz-salah') : '');
+          const mk = best ? '\u2713' : (dipilih ? (p.nilai > 0 ? '\u25D0' : '\u2717') : '\u25CB');
+          a += baris(cls, mk, kzEsc(p.teks), (dipilih ? 'pilihan Anda \u00B7 ' : '') + (best ? 'pilihan terbaik' : (p.nilai > 0 ? 'cukup tepat' : 'kurang tepat')) + (p.akibat ? ' \u00B7 Akibatnya: ' + kzEsc(p.akibat) : ''));
+        });
+        if (pos < 0) a += baris('kz-salah', '\u2717', 'Tidak dijawab');
+        opsiH += blok('Keputusan ' + (i + 1) + ' dari ' + S.langkah.length, a);
+        if (terbaik) k.push((i + 1) + '. ' + kzEsc(terbaik.teks));
       });
-      break;
+      kunciTxt = k.join('<br>'); break;
     }
   }
   const dapat = S.poin * skor;
   const pemb = (typeof formatTeksArabHTML === 'function') ? formatTeksArabHTML(pb.pembahasan || '') : kzEsc(pb.pembahasan || '');
-  const tampilTanya = S.tipe !== 'isian_rumpang' && s.pertanyaan;
   return '<div class="ana-item">' +
     '<div class="ana-head ' + status + '"><span class="ana-no">No.' + kzEsc(s.no) + ' <span class="kz-tipe">' + kzEsc(KZ_LABEL[s.tipe] || s.tipe) + '</span></span>' +
     '<span class="ana-badge ' + status + '">' + label + '</span></div>' +
-    (tampilTanya ? '<div class="ana-teks">' + (S.tipe === 'isian_kata' ? '<b>Petunjuk:</b> ' : '') + formatTeksArabHTML(s.pertanyaan) + '</div>' : '') +
+    tanyaHTML +
     (s.url_gambar ? '<div class="ana-img"><img src="' + gdrive(s.url_gambar) + '" loading="lazy"></div>' : '') +
-    '<div class="kz-rv">' + body + '</div>' +
+    opsiH +
+    '<div class="kunci-bar">Kunci: ' + (kunciTxt || 'Belum tersedia') + '</div>' +
     '<div class="kz-skor">Skor soal ini: ' + kzFmt(dapat) + ' dari ' + kzFmt(S.poin) + (status === 'sebagian' ? ' (benar sebagian)' : '') + '</div>' +
     (pemb ? '<div class="pemb-bar"><strong>Pembahasan</strong>' + pemb + '</div>' : '') +
     (pb.url_pemb_gambar ? '<div class="ana-img"><img src="' + gdrive(pb.url_pemb_gambar) + '" loading="lazy"></div>' : '') +
