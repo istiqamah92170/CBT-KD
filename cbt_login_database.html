@@ -377,6 +377,30 @@ html[data-theme="dark"] .kg-btn{background:#262B30;border-color:#33393F;color:va
 .btn-print-analisis:hover{opacity:.88;}
 
 
+/* FITUR (2026-11): panel navigasi soal bisa disembunyikan/ditampilkan.
+   Lanskap/desktop: panel samping, disembunyikan -> soal selebar penuh + tombol melayang.
+   Potret/HP: panel jadi lembar bawah (bottom sheet) yang meluncur naik, ada latar redup. */
+.right-panel{position:sticky;}
+.nav-x{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:none;background:var(--gray-bg);color:var(--gray-mid);font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;}
+.nav-x:hover{background:var(--gray-line);transform:rotate(90deg);}
+.right-panel h3{padding-right:38px;}
+#nav-pill{display:none;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:8000;align-items:center;gap:8px;padding:11px 16px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:linear-gradient(135deg,rgba(26,115,232,.95),rgba(79,142,247,.95));color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(26,115,232,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:navPillMasuk .25s ease;}
+#nav-pill:active{transform:scale(.96);}
+#nav-pill .np-ikon{font-size:16px;line-height:1;}
+#nav-pill .np-hitung{background:rgba(255,255,255,.22);border-radius:999px;padding:2px 9px;font-size:12px;}
+@keyframes navPillMasuk{from{opacity:0;transform:translateY(12px) scale(.9);}to{opacity:1;transform:none;}}
+#exam-screen[data-nav="tutup"] #nav-pill{display:flex;}
+#exam-screen[data-nav="tutup"] .right-panel{display:none;}
+#nav-backdrop{display:none;}
+@media(max-width:768px){
+  .right-panel{position:fixed!important;left:0;right:0;bottom:0;top:auto!important;width:100%!important;max-height:64vh!important;overflow-y:auto;z-index:9000;border-radius:22px 22px 0 0!important;box-shadow:0 -12px 40px rgba(0,0,0,.28)!important;padding-bottom:calc(20px + env(safe-area-inset-bottom))!important;transform:translateY(0);transition:transform .3s cubic-bezier(.2,.8,.2,1);}
+  .right-panel::before{content:'';display:block;width:42px;height:4px;border-radius:4px;background:var(--gray-line);margin:-8px auto 12px;}
+  #exam-screen[data-nav="tutup"] .right-panel{display:block;transform:translateY(108%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility 0s .3s;}
+  #exam-screen[data-nav="buka"] #nav-backdrop{display:block;position:fixed;inset:0;z-index:8900;background:rgba(10,18,40,.45);animation:navPillMasuk .2s ease;}
+  #exam-screen[data-nav="buka"] .grid-nomor{grid-template-columns:repeat(7,1fr);}
+}
+@media(max-width:768px) and (orientation:landscape){ .right-panel{max-height:80vh!important;} }
+
 /* ── RESET GURU TOKEN ── */
 .reset-guru{margin-top:12px;text-align:center;}
 .reset-guru a{font-size:11px;color:var(--gray-soft);cursor:pointer;text-decoration:underline;}
@@ -1238,7 +1262,8 @@ html[data-theme="dark"] .kz{--kz-p1-bg:#1E2A44;--kz-p1-bd:#7FA0E8;--kz-p2-bg:#17
           <div class="fg"><label>Nama</label>
             <select id="sel-nama-db"><option value="">-- Pilih Nama --</option></select></div>
           <div class="fg"><label>PIN</label>
-            <input type="password" id="inp-pin-db" inputmode="numeric" autocomplete="off" placeholder="PIN dari guru"></div>
+            <div style="position:relative;"><input type="password" id="inp-pin-db" inputmode="numeric" autocomplete="off" placeholder="PIN dari guru" style="padding-right:46px;">
+              <button type="button" id="btn-lihat-pin" onclick="_dbLihatPin()" aria-label="Lihat PIN" title="Lihat / sembunyikan PIN" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:18px;cursor:pointer;padding:6px 8px;line-height:1;">&#128065;</button></div></div>
         </div>
         <div class="fg">
           <label>Token Ujian</label>
@@ -1264,6 +1289,13 @@ html[data-theme="dark"] .kz{--kz-p1-bg:#1E2A44;--kz-p1-bd:#7FA0E8;--kz-p2-bg:#17
     <div class="split-lock-dot"></div>
     Menunggu layar penuh kembali...
   </div>
+</div>
+
+<div id="fs-lock" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(10,18,40,.94);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px;color:#fff;">
+  <div style="font-size:44px;margin-bottom:10px;">&#9974;</div>
+  <h2 style="font-size:20px;font-weight:800;margin-bottom:8px;">Ujian harus dalam layar penuh</h2>
+  <p style="font-size:14px;opacity:.85;max-width:340px;line-height:1.6;margin-bottom:18px;">Anda keluar dari layar penuh. Waktu ujian tetap berjalan. Tekan tombol di bawah untuk melanjutkan mengerjakan.</p>
+  <button type="button" onclick="_fsKembali()" style="padding:13px 26px;border:none;border-radius:12px;background:linear-gradient(135deg,#1A73E8,#4F8EF7);color:#fff;font-weight:800;font-size:15px;cursor:pointer;">Kembali ke Layar Penuh</button>
 </div>
 
 <!-- EXAM -->
@@ -1336,7 +1368,10 @@ html[data-theme="dark"] .kz{--kz-p1-bg:#1E2A44;--kz-p1-bd:#7FA0E8;--kz-p2-bg:#17
     </div>
   </div>
 
+  <div id="nav-backdrop" onclick="navToggle(false)"></div>
+  <button type="button" id="nav-pill" onclick="navToggle(true)" aria-label="Tampilkan panel navigasi soal"><span class="np-ikon">&#9638;</span><span>Navigasi</span><span class="np-hitung" id="nav-pill-t">0/0</span></button>
   <div class="right-panel">
+    <button type="button" class="nav-x" onclick="navToggle(false)" aria-label="Sembunyikan panel navigasi" title="Sembunyikan panel">&#10005;</button>
     <h3>Navigasi Soal</h3>
     <div class="legenda">
       <div class="leg-row"><div class="leg-dot" style="background:var(--green);"></div>Sudah dijawab</div>
@@ -2177,6 +2212,13 @@ function _dbOpsi(sel, judul, arr) {   // opsi dibuat lewat DOM (nama bisa memuat
   let o0 = document.createElement('option'); o0.value = ''; o0.textContent = judul; sel.appendChild(o0);
   arr.forEach(function (t) { let o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o); });
 }
+function _dbLihatPin() {
+  let i = document.getElementById('inp-pin-db'), b = document.getElementById('btn-lihat-pin');
+  let tampil = i.type === 'password';
+  i.type = tampil ? 'text' : 'password';
+  b.style.opacity = tampil ? '.55' : '1';
+  b.setAttribute('aria-pressed', tampil ? 'true' : 'false');
+}
 function _dbIsiNama() {
   let kls = document.getElementById('sel-kelas-db').value, sn = document.getElementById('sel-nama-db');
   let k = (_dbRoster || []).filter(function (x) { return x.k === kls; })[0];
@@ -2309,6 +2351,8 @@ async function mulaiUjian() {
   P_SCREENS.forEach(s => { let el=document.getElementById(s); if(el) el.style.display='none'; });
   document.getElementById('hasil-screen').style.display = 'none';
   document.getElementById('exam-screen').style.display  = 'flex';
+  _navAwal();
+  _fsPaksaAktif(true);   // FITUR (2026-11): layar penuh wajib selama ujian
   buatGrid();
   tampil();
   mulaiTimer();
@@ -2338,13 +2382,36 @@ function _tampilNoticeInline(html) {
 // ═══════════════════════════════════════════════
 //  TAMPIL SOAL
 // ═══════════════════════════════════════════════
+// FITUR (2026-11): tampil/sembunyi panel navigasi (state di data-nav; bawaan: lanskap terbuka, potret tertutup)
+function _navPotret() { return window.matchMedia('(max-width:768px)').matches; }
+function navToggle(buka) {
+  let e = document.getElementById('exam-screen'); if (!e) return;
+  e.dataset.nav = buka ? 'buka' : 'tutup';
+  try { if (!_navPotret()) localStorage.setItem('cbt_nav_lanskap', buka ? 'buka' : 'tutup'); } catch (x) {}
+  _navPillUpdate();
+}
+function _navAwal() {
+  let e = document.getElementById('exam-screen'); if (!e) return;
+  let v = 'buka';
+  if (_navPotret()) v = 'tutup';
+  else { try { v = localStorage.getItem('cbt_nav_lanskap') === 'tutup' ? 'tutup' : 'buka'; } catch (x) {} }
+  e.dataset.nav = v;
+}
+function _navPillUpdate() {
+  let t = document.getElementById('nav-pill-t'); if (!t) return;
+  let n = document.querySelectorAll('#grid-nomor .btn-no').length, d = document.querySelectorAll('#grid-nomor .btn-no.dijawab').length;
+  t.textContent = d + '/' + n;
+}
+setInterval(_navPillUpdate, 1000);
+try { window.matchMedia('(max-width:768px)').addEventListener('change', _navAwal); } catch (x) {}
+document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && _navPotret()) { let e = document.getElementById('exam-screen'); if (e && e.dataset.nav === 'buka') navToggle(false); } });
 function buatGrid() {
   let g = document.getElementById('grid-nomor'); g.innerHTML = '';
   soalData.forEach((s,i) => {
     let b = document.createElement('button');
     b.className = 'btn-no' + (s.tipe === 'esai' ? ' esai-m' : '');
     b.textContent = s.no_tampil; b.id = 'nn' + i;
-    b.onclick = () => { idx = i; tampil(); };
+    b.onclick = () => { idx = i; tampil(); if (_navPotret()) navToggle(false); };
     g.appendChild(b);
   });
 }
@@ -4271,6 +4338,7 @@ function selesaiFinal() {
 
   document.getElementById('modal-konfirmasi').classList.remove('aktif');
   document.getElementById('exam-screen').style.display = 'none';
+  _fsPaksaAktif(false);
 
   // Simpan ke localStorage agar device tidak bisa mengerjakan ulang
   simpanStatusSelesai({
@@ -4889,6 +4957,23 @@ document.addEventListener('keydown', e => {
 });
 function _kaburkanLayar(ms){ document.body.style.filter='blur(20px) brightness(0.3)'; setTimeout(()=>{document.body.style.filter='';},ms||1000); }
 (function(){ var s=document.createElement('style'); s.textContent='*{-webkit-user-select:none!important;user-select:none!important;}input,textarea,select{-webkit-user-select:text!important;user-select:text!important;}img{pointer-events:none;}@media print{body{display:none!important;}}'; document.head.appendChild(s); })();
+// FITUR (2026-11): layar penuh WAJIB selama ujian. Bila keluar dari layar penuh, tampil penghalang
+// dengan tombol "Kembali ke Layar Penuh" (requestFullscreen butuh klik pengguna). Perangkat yang tidak
+// mendukung layar penuh (mis. iPhone) tidak dikunci.
+function _fsDidukung() { return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled); }
+function _fsAktif() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+function _fsCek() {
+  let o = document.getElementById('fs-lock');
+  if (!o) return;
+  let perlu = _ujianBerjalanFs && !ujianSelesai && _fsDidukung() && !_fsAktif();
+  o.style.display = perlu ? 'flex' : 'none';
+}
+let _ujianBerjalanFs = false;
+function _fsPaksaAktif(v) { _ujianBerjalanFs = !!v; _fsCek(); }
+function _fsKembali() { fullscreen(); setTimeout(_fsCek, 300); }
+document.addEventListener('fullscreenchange', function () { setTimeout(_fsCek, 150); });
+document.addEventListener('webkitfullscreenchange', function () { setTimeout(_fsCek, 150); });
+setInterval(_fsCek, 1000);
 function fullscreen() { let el=document.documentElement; if(el.requestFullscreen) el.requestFullscreen(); else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen(); }
 function _pesanWarning(n,sisa) {
   const D1 = PESAN_1 || `⚠️ Peringatan ${n}/${MAKS_P}: Jangan keluar halaman! Sisa: ${sisa} kali.`;
