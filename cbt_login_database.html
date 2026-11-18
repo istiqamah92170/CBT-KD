@@ -377,27 +377,32 @@ html[data-theme="dark"] .kg-btn{background:#262B30;border-color:#33393F;color:va
 .btn-print-analisis:hover{opacity:.88;}
 
 
-/* FITUR (2026-11): panel navigasi soal bisa disembunyikan/ditampilkan.
-   Lanskap/desktop: panel samping, disembunyikan -> soal selebar penuh + tombol melayang.
-   Potret/HP: panel jadi lembar bawah (bottom sheet) yang meluncur naik, ada latar redup. */
+/* FITUR (2026-11): panel navigasi soal -- disembunyikan/ditampilkan lewat panah (chevron).
+   Lanskap/desktop: panel samping; panah di pojok panel menyembunyikannya, tab panah di tepi kanan membukanya lagi.
+   Potret/HP: panel jadi lembar bawah; panah ke bawah menutup, tab panah ke atas di tepi bawah membukanya. */
 .right-panel{position:sticky;}
-.nav-x{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:none;background:var(--gray-bg);color:var(--gray-mid);font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;}
-.nav-x:hover{background:var(--gray-line);transform:rotate(90deg);}
-.right-panel h3{padding-right:38px;}
-#nav-pill{display:none;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:8000;align-items:center;gap:8px;padding:11px 16px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:linear-gradient(135deg,rgba(26,115,232,.95),rgba(79,142,247,.95));color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(26,115,232,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:navPillMasuk .25s ease;}
-#nav-pill:active{transform:scale(.96);}
-#nav-pill .np-ikon{font-size:16px;line-height:1;}
-#nav-pill .np-hitung{background:rgba(255,255,255,.22);border-radius:999px;padding:2px 9px;font-size:12px;}
-@keyframes navPillMasuk{from{opacity:0;transform:translateY(12px) scale(.9);}to{opacity:1;transform:none;}}
-#exam-screen[data-nav="tutup"] #nav-pill{display:flex;}
+.nav-x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:1px solid var(--gray-line);background:var(--white);color:var(--gray-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .2s,color .2s,transform .2s;}
+.nav-x:hover{background:var(--blue-light);color:var(--blue-main);}
+.nav-x:active{transform:scale(.92);}
+.nav-x svg,.nav-tab svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;display:block;}
+.right-panel h3{padding-right:42px;}
+.nav-tab{display:none;position:fixed;z-index:8000;border:1px solid var(--gray-line);background:var(--white);color:var(--blue-main);cursor:pointer;align-items:center;justify-content:center;padding:0;box-shadow:var(--sh-md);transition:background .2s;animation:navTabMasuk .25s ease;}
+.nav-tab:hover{background:var(--blue-light);}
+/* lanskap: tab vertikal di tepi kanan, panah menunjuk ke kiri (membuka) */
+.nav-tab{right:0;top:50%;transform:translateY(-50%);width:26px;height:72px;border-right:none;border-radius:14px 0 0 14px;}
+.nav-tab svg{transform:rotate(180deg);}
+@keyframes navTabMasuk{from{opacity:0;}to{opacity:1;}}
+#exam-screen[data-nav="tutup"] .nav-tab{display:flex;}
 #exam-screen[data-nav="tutup"] .right-panel{display:none;}
 #nav-backdrop{display:none;}
 @media(max-width:768px){
   .right-panel{position:fixed!important;left:0;right:0;bottom:0;top:auto!important;width:100%!important;max-height:64vh!important;overflow-y:auto;z-index:9000;border-radius:22px 22px 0 0!important;box-shadow:0 -12px 40px rgba(0,0,0,.28)!important;padding-bottom:calc(20px + env(safe-area-inset-bottom))!important;transform:translateY(0);transition:transform .3s cubic-bezier(.2,.8,.2,1);}
-  .right-panel::before{content:'';display:block;width:42px;height:4px;border-radius:4px;background:var(--gray-line);margin:-8px auto 12px;}
+  .nav-x svg{transform:rotate(90deg);}
+  /* potret: tab horizontal di tepi bawah, panah menunjuk ke atas (membuka) */
+  .nav-tab{top:auto;bottom:0;right:16px;transform:none;width:72px;height:26px;border:1px solid var(--gray-line);border-bottom:none;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom);box-sizing:content-box;}
+  .nav-tab svg{transform:rotate(-90deg);}
   #exam-screen[data-nav="tutup"] .right-panel{display:block;transform:translateY(108%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.8,.2,1),visibility 0s .3s;}
-  #exam-screen[data-nav="buka"] #nav-backdrop{display:block;position:fixed;inset:0;z-index:8900;background:rgba(10,18,40,.45);animation:navPillMasuk .2s ease;}
-  #exam-screen[data-nav="buka"] .grid-nomor{grid-template-columns:repeat(7,1fr);}
+  #exam-screen[data-nav="buka"] #nav-backdrop{display:block;position:fixed;inset:0;z-index:8900;background:rgba(10,18,40,.45);animation:navTabMasuk .2s ease;}
 }
 @media(max-width:768px) and (orientation:landscape){ .right-panel{max-height:80vh!important;} }
 
@@ -714,7 +719,7 @@ html[data-theme="dark"] .theme-toggle-btn .ico-moon{display:block;}
    (:root) sehingga mode malam ikut otomatis. Satu-satunya token baru: palet 6
    warna pasangan (.kz) beserta varian mode malamnya.
    ═══════════════════════════════════════════════════════════ */
-.badge.kuis{background:var(--blue-pale);color:var(--title-accent);border:1px solid var(--blue-light);}
+.badge.kuis{background:var(--blue-light);color:var(--blue-main);border:1px solid #BDD4F5;}   /* seragam dengan .badge.pg_teks */
 #area-kuis{width:100%;margin-bottom:24px;}
 .kz{--kz-p1-bg:#E8F0FE;--kz-p1-bd:#3B5998;--kz-p2-bg:#E3F4EA;--kz-p2-bd:#2D7A55;--kz-p3-bg:#FDEDE4;--kz-p3-bd:#C2602F;
   --kz-p4-bg:#F3EAF8;--kz-p4-bd:#7C4D8B;--kz-p5-bg:#FCE8F1;--kz-p5-bd:#B0487A;--kz-p6-bg:#FBF3DF;--kz-p6-bd:#B08D2F;
@@ -815,7 +820,7 @@ html[data-theme="dark"] .kz{--kz-p1-bg:#1E2A44;--kz-p1-bd:#7FA0E8;--kz-p2-bg:#17
 /* pembahasan tipe baru */
 .ana-head.sebagian{background:var(--yellow-light);}
 .ana-badge.sebagian{background:var(--yellow);color:#fff;}
-.kz-tipe{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:10px;background:var(--blue-light);color:var(--title-accent);font-size:10px;font-weight:700;vertical-align:middle;}
+.kz-tipe{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:8px;background:var(--blue-light);color:var(--blue-main);border:1px solid #BDD4F5;font-size:10px;font-weight:700;vertical-align:middle;}   /* seragam dengan label PG Teks di analisis */
 .kz-rv{padding:10px 14px;border-top:1px solid var(--gray-line);background:var(--white);font-size:13px;line-height:1.55;color:var(--gray-dark);}
 .kz-rv-ttl{margin:8px 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-soft);}
 .kz-rv-row{display:flex;gap:8px;align-items:flex-start;padding:4px 0;}
@@ -1369,9 +1374,9 @@ html[data-theme="dark"] .kz{--kz-p1-bg:#1E2A44;--kz-p1-bd:#7FA0E8;--kz-p2-bg:#17
   </div>
 
   <div id="nav-backdrop" onclick="navToggle(false)"></div>
-  <button type="button" id="nav-pill" onclick="navToggle(true)" aria-label="Tampilkan panel navigasi soal"><span class="np-ikon">&#9638;</span><span>Navigasi</span><span class="np-hitung" id="nav-pill-t">0/0</span></button>
+  <button type="button" id="nav-pill" class="nav-tab" onclick="navToggle(true)" aria-label="Tampilkan panel navigasi soal" title="Tampilkan navigasi"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
   <div class="right-panel">
-    <button type="button" class="nav-x" onclick="navToggle(false)" aria-label="Sembunyikan panel navigasi" title="Sembunyikan panel">&#10005;</button>
+    <button type="button" class="nav-x" onclick="navToggle(false)" aria-label="Sembunyikan panel navigasi" title="Sembunyikan panel"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
     <h3>Navigasi Soal</h3>
     <div class="legenda">
       <div class="leg-row"><div class="leg-dot" style="background:var(--green);"></div>Sudah dijawab</div>
@@ -2388,7 +2393,6 @@ function navToggle(buka) {
   let e = document.getElementById('exam-screen'); if (!e) return;
   e.dataset.nav = buka ? 'buka' : 'tutup';
   try { if (!_navPotret()) localStorage.setItem('cbt_nav_lanskap', buka ? 'buka' : 'tutup'); } catch (x) {}
-  _navPillUpdate();
 }
 function _navAwal() {
   let e = document.getElementById('exam-screen'); if (!e) return;
@@ -2397,12 +2401,6 @@ function _navAwal() {
   else { try { v = localStorage.getItem('cbt_nav_lanskap') === 'tutup' ? 'tutup' : 'buka'; } catch (x) {} }
   e.dataset.nav = v;
 }
-function _navPillUpdate() {
-  let t = document.getElementById('nav-pill-t'); if (!t) return;
-  let n = document.querySelectorAll('#grid-nomor .btn-no').length, d = document.querySelectorAll('#grid-nomor .btn-no.dijawab').length;
-  t.textContent = d + '/' + n;
-}
-setInterval(_navPillUpdate, 1000);
 try { window.matchMedia('(max-width:768px)').addEventListener('change', _navAwal); } catch (x) {}
 document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && _navPotret()) { let e = document.getElementById('exam-screen'); if (e && e.dataset.nav === 'buka') navToggle(false); } });
 function buatGrid() {
@@ -2883,8 +2881,18 @@ KZ_RENDER.pasangkan = function (wrap, s) {
 };
 
 // klasifikasi -- jawaban: nomor kelompok per kartu menurut urutan kartu, 0 = belum ("1,3,0,2")
+// Urutan TAMPIL kartu diacak per siswa (Fisher-Yates, Math.random) dan tetap stabil selama soal yang sama
+// dirender ulang pada sesi ini. Pengkodean jawaban tetap memakai urutan asli (huruf), jadi penilaian tidak berubah.
+var _kzUrutTampil = {};
+function kzUrutAcak(kunci, daftar) {
+  const kk = String(kunci) + '|' + daftar.join('');
+  if (_kzUrutTampil[kk]) return _kzUrutTampil[kk];
+  const a = daftar.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return (_kzUrutTampil[kk] = a);
+}
 KZ_RENDER.klasifikasi = function (wrap, s) {
-  const huruf = kzHuruf(s), kat = s.kv.kategori || [], body = kzEl('div', 'kz'); wrap.appendChild(body);
+  const huruf = kzHuruf(s), urut = kzUrutAcak('kls' + s.no, huruf), kat = s.kv.kategori || [], body = kzEl('div', 'kz'); wrap.appendChild(body);
   const asg = {};
   String(kzJaw()).split(',').forEach(function (v, i) { const n = parseInt(v, 10); if (n > 0 && n <= kat.length && huruf[i]) asg[huruf[i]] = n - 1; });
   let pilih = null;
@@ -2905,10 +2913,10 @@ KZ_RENDER.klasifikasi = function (wrap, s) {
   }
   function gambar() {
     body.innerHTML = '';
-    const belum = huruf.filter(function (L) { return asg[L] === undefined; });
+    const belum = urut.filter(function (L) { return asg[L] === undefined; });
     body.appendChild(zona('Belum dikelompokkan (' + belum.length + ')', -1, belum, 'Semua kartu sudah ditempatkan.'));
     const bins = kzEl('div', 'kz-bins');
-    kat.forEach(function (nm, i) { bins.appendChild(zona('Kelompok: ' + nm, i, huruf.filter(function (L) { return asg[L] === i; }), 'Belum ada kartu.')); });
+    kat.forEach(function (nm, i) { bins.appendChild(zona('Kelompok: ' + nm, i, urut.filter(function (L) { return asg[L] === i; }), 'Belum ada kartu.')); });
     body.appendChild(bins);
   }
   gambar();
